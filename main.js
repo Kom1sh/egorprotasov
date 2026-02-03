@@ -74,9 +74,6 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeMenu();
     });
-
-    // Prevent sticky header overlap on anchor jumps: add top padding via scroll-margin in CSS? (not used)
-    // Here keep it minimal.
   }
 
   // Accordion: only one open at a time
@@ -102,7 +99,6 @@
         await navigator.clipboard.writeText(text);
         toast("Email скопирован");
       } catch {
-        // fallback
         const ta = document.createElement("textarea");
         ta.value = text;
         ta.setAttribute("readonly", "");
@@ -135,7 +131,7 @@
     }, 1800);
   }
 
-  // Improve UX: add class when scrolled
+  // Subtle header shadow on scroll
   const onScroll = () => {
     if (!header) return;
     const y = window.scrollY || 0;

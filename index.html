@@ -8,13 +8,18 @@
     <title>Егор Протасов — SEO Project Manager и SEO-специалист</title>
     <meta
       name="description"
-      content="Портфолио Егора Протасова: SEO Project Manager / SEO-специалист. Проект Мапка.рф, SEO-аудит бота и система лояльности для кофеен Cupster. Аудиты, стратегия, рост и процессы."
+      content="Портфолио Егора Протасова: SEO Project Manager / SEO-специалист. Проект Мапка.рф, Cupster (система лояльности для кофеен), SEOracle (SEO-аудит бот). Аудиты, стратегия, рост и процессы."
     />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <meta name="theme-color" content="#0b0f17" />
 
     <!-- Canonical -->
     <link rel="canonical" href="https://egorprotasov.ru/" />
+
+    <!-- Favicons -->
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="./favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
 
     <!-- Open Graph -->
     <meta property="og:locale" content="ru_RU" />
@@ -23,7 +28,7 @@
     <meta property="og:title" content="Егор Протасов — SEO Project Manager и SEO-специалист" />
     <meta
       property="og:description"
-      content="SEO Project Manager / SEO-специалист. Мапка.рф, Cupster. Аудиты, стратегия, техничка, контент, процессы."
+      content="SEO Project Manager / SEO-специалист. Мапка.рф, Cupster, SEOracle. Аудиты, стратегия, техничка, контент, процессы."
     />
     <meta property="og:url" content="https://egorprotasov.ru/" />
     <!-- Подключи реальную картинку для шаринга, когда будет -->
@@ -47,7 +52,7 @@
       document.documentElement.classList.add("js");
     </script>
 
-    <!-- Structured Data: Person + Website -->
+    <!-- Structured Data: Person + Website + Projects -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -57,10 +62,13 @@
             "@id": "https://egorprotasov.ru/#egor",
             "name": "Егор Протасов",
             "jobTitle": ["SEO Project Manager", "SEO-специалист"],
-            "description": "SEO Project Manager / SEO-специалист. Создатель проекта Мапка.рф. Работал над SEO-аудитом бота и системой лояльности для кофеен Cupster.",
+            "email": "mailto:egorprotasov06@gmail.com",
+            "description": "SEO Project Manager / SEO-специалист. Создатель проекта Мапка.рф. Cupster — система лояльности для кофеен (бот: @master_cupster_bot). SEOracle — SEO-аудит бот (@seoracle_bot).",
             "url": "https://egorprotasov.ru/",
             "sameAs": [
-              "https://maпка.рф"
+              "https://t.me/Kom1sh",
+              "https://vk.com/kom1sh",
+              "https://xn--80aa3agq.xn--p1ai/"
             ]
           },
           {
@@ -72,6 +80,28 @@
             "publisher": {
               "@id": "https://egorprotasov.ru/#egor"
             }
+          },
+          {
+            "@type": "CreativeWork",
+            "name": "Мапка.рф",
+            "url": "https://xn--80aa3agq.xn--p1ai/",
+            "author": { "@id": "https://egorprotasov.ru/#egor" }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "Cupster",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Telegram",
+            "url": "https://t.me/master_cupster_bot",
+            "author": { "@id": "https://egorprotasov.ru/#egor" }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "SEOracle",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Telegram",
+            "url": "https://t.me/seoracle_bot",
+            "author": { "@id": "https://egorprotasov.ru/#egor" }
           }
         ]
       }
@@ -87,7 +117,7 @@
           <span class="brand__mark" aria-hidden="true"></span>
           <span class="brand__text">
             <span class="brand__name">Егор Протасов</span>
-            <span class="brand__role">SEO Project Manager · SEO</span>
+            <span class="brand__role">SEO PM · SEO Specialist</span>
           </span>
         </a>
 
@@ -100,7 +130,7 @@
           <div class="nav__menu" id="navMenu" data-nav-menu>
             <a class="nav__link" href="#about">Обо мне</a>
             <a class="nav__link" href="#services">Экспертиза</a>
-            <a class="nav__link" href="#cases">Кейсы</a>
+            <a class="nav__link" href="#cases">Проекты</a>
             <a class="nav__link" href="#process">Процесс</a>
             <a class="nav__link" href="#faq">FAQ</a>
             <a class="nav__link nav__link--cta" href="#contact">Связаться</a>
@@ -120,12 +150,10 @@
         <div class="container hero__grid">
           <div class="hero__copy">
             <p class="eyebrow">SEO Care · Project Management · Growth</p>
-            <h1 class="h1">
-              Делаю SEO управляемым: стратегия → выполнение → результат
-            </h1>
+            <h1 class="h1">Делаю SEO управляемым: стратегия → внедрение → рост</h1>
             <p class="lead">
               Я — <strong>Егор Протасов</strong>, SEO Project Manager / SEO-специалист.
-              Веду проекты от аудита до внедрения: техничка, контент, структура, аналитика, процессы и контроль качества.
+              Веду проекты от аудита до релиза: техничка, контент, структура, аналитика и контроль качества.
             </p>
 
             <ul class="chips" aria-label="Ключевые направления">
@@ -138,8 +166,19 @@
             </ul>
 
             <div class="hero__actions">
-              <a class="btn btn--primary" href="#cases">Смотреть кейсы</a>
-              <a class="btn btn--ghost" href="#contact">Обсудить проект</a>
+              <a class="btn btn--primary" href="#cases">Смотреть проекты</a>
+              <a class="btn btn--ghost" href="#contact">Написать</a>
+            </div>
+
+            <div class="socialRow" aria-label="Соцсети">
+              <a class="socialBtn" href="https://t.me/Kom1sh" target="_blank" rel="me noopener noreferrer">
+                <span class="socialBtn__icon" aria-hidden="true">TG</span>
+                <span class="socialBtn__text">Telegram</span>
+              </a>
+              <a class="socialBtn" href="https://vk.com/kom1sh" target="_blank" rel="me noopener noreferrer">
+                <span class="socialBtn__icon" aria-hidden="true">VK</span>
+                <span class="socialBtn__text">ВКонтакте</span>
+              </a>
             </div>
 
             <div class="hero__meta" aria-label="Коротко обо мне">
@@ -149,17 +188,16 @@
               </div>
               <div class="metaCard">
                 <div class="metaCard__k">Проекты</div>
-                <div class="metaCard__v">Мапка.рф · Cupster · SEO-аудит бота</div>
+                <div class="metaCard__v">Мапка.рф · Cupster · SEOracle</div>
               </div>
               <div class="metaCard">
-                <div class="metaCard__k">Фокус</div>
-                <div class="metaCard__v">Качество, скорость, предсказуемость</div>
+                <div class="metaCard__k">Контакт</div>
+                <div class="metaCard__v">в приоритете Telegram / VK</div>
               </div>
             </div>
           </div>
 
           <div class="hero__visual" aria-hidden="true">
-            <!-- Лёгкая SVG-иллюстрация: без внешних картинок, быстро грузится -->
             <svg class="heroArt" viewBox="0 0 520 520" role="img" aria-label="">
               <defs>
                 <radialGradient id="g1" cx="40%" cy="25%" r="70%">
@@ -174,7 +212,6 @@
                 </radialGradient>
               </defs>
 
-              <rect x="0" y="0" width="520" height="520" fill="rgba(0,0,0,0)" />
               <circle cx="210" cy="160" r="210" fill="url(#g1)" />
               <circle cx="360" cy="360" r="230" fill="url(#g2)" />
 
@@ -183,10 +220,8 @@
                 <rect x="120" y="150" width="240" height="14" rx="7" fill="rgba(255,255,255,0.35)" />
                 <rect x="120" y="182" width="190" height="10" rx="5" fill="rgba(255,255,255,0.22)" />
                 <rect x="120" y="220" width="280" height="90" rx="18" fill="rgba(255,255,255,0.05)" />
-
                 <rect x="120" y="330" width="132" height="52" rx="16" fill="rgba(255,255,255,0.07)" />
                 <rect x="268" y="330" width="132" height="52" rx="16" fill="rgba(255,255,255,0.07)" />
-
                 <circle cx="394" cy="156" r="10" fill="rgba(34,211,238,0.8)" />
                 <circle cx="420" cy="156" r="10" fill="rgba(129,140,248,0.85)" />
               </g>
@@ -201,7 +236,7 @@
           <div class="section__head">
             <h2 class="h2">Обо мне</h2>
             <p class="section__sub">
-              Соединяю SEO-экспертизу и PM-подход: прозрачная приоритизация, контроль внедрения, измеримый прогресс.
+              Соединяю SEO-экспертизу и PM-подход: прозрачная приоритизация, контроль внедрения и измеримый прогресс.
             </p>
           </div>
 
@@ -210,8 +245,8 @@
               <h3 class="h3">Чем полезен</h3>
               <ul class="list">
                 <li>Провожу аудит и собираю <strong>план работ</strong> с приоритетами (impact/effort).</li>
-                <li>Закрываю техничку: индексация, скорость, структура, дубли, каноникал, перелинковка.</li>
-                <li>Делаю SEO-структуру и контент под интенты: категории, посадочные, FAQ, микроразметка.</li>
+                <li>Закрываю техничку: индексация, скорость, структура, дубли, canonical, перелинковка.</li>
+                <li>Делаю структуру и контент под интенты: категории, посадочные, FAQ, микроразметка.</li>
                 <li>Настраиваю аналитику: события, цели, сегменты, дашборды, KPI.</li>
               </ul>
             </article>
@@ -224,17 +259,21 @@
                   <div class="fact__v">SEO Care — Project Manager / SEO</div>
                 </div>
                 <div class="fact">
-                  <div class="fact__k">Свои продукты</div>
+                  <div class="fact__k">Свой продукт</div>
                   <div class="fact__v">Создатель проекта «Мапка.рф»</div>
                 </div>
                 <div class="fact">
-                  <div class="fact__k">Коммерция</div>
-                  <div class="fact__v">Cupster: SEO-аудит бота и системы лояльности</div>
+                  <div class="fact__k">Cupster</div>
+                  <div class="fact__v">Система лояльности для кофеен · бот: <a class="inlineLink" href="https://t.me/master_cupster_bot" target="_blank" rel="noopener noreferrer">@master_cupster_bot</a></div>
+                </div>
+                <div class="fact">
+                  <div class="fact__k">SEOracle</div>
+                  <div class="fact__v">SEO-аудит бот (по необходимости) · <a class="inlineLink" href="https://t.me/seoracle_bot" target="_blank" rel="noopener noreferrer">@seoracle_bot</a></div>
                 </div>
               </div>
 
               <div class="note">
-                <strong>Важно:</strong> я не “знаю секретные фишки”, я строю систему: чтобы рост не был случайностью.
+                <strong>Важно:</strong> я строю систему — чтобы рост был предсказуемым и повторяемым.
               </div>
             </article>
           </div>
@@ -246,9 +285,7 @@
         <div class="container">
           <div class="section__head">
             <h2 class="h2">Экспертиза</h2>
-            <p class="section__sub">
-              Набор работ, из которого собирается предсказуемый SEO-результат.
-            </p>
+            <p class="section__sub">Набор работ, из которого собирается стабильный SEO-результат.</p>
           </div>
 
           <div class="cards3">
@@ -268,7 +305,7 @@
             <article class="card card--tight">
               <h3 class="h3">Техническое SEO</h3>
               <p class="p">
-                Индексация, sitemap/robots, каноникал, редиректы, дубли, скорость, CWV, микроразметка.
+                Индексация, sitemap/robots, canonical, редиректы, дубли, скорость, CWV, микроразметка.
               </p>
               <ul class="mini">
                 <li>индексация</li>
@@ -281,7 +318,6 @@
               <h3 class="h3">PM и внедрение</h3>
               <p class="p">
                 Декомпозиция задач, постановки, контроль реализации, приемка, документация.
-                SEO без “в воздухе”.
               </p>
               <ul class="mini">
                 <li>таск-менеджмент</li>
@@ -293,48 +329,74 @@
         </div>
       </section>
 
-      <!-- CASES -->
+      <!-- PROJECTS -->
       <section class="section" id="cases">
         <div class="container">
           <div class="section__head">
-            <h2 class="h2">Кейсы и проекты</h2>
+            <h2 class="h2">Проекты</h2>
             <p class="section__sub">
-              Без выдуманных цифр: только то, что можно честно описать. Метрики — добавишь позже при желании.
+              Три штуки, которые можно быстро “пробить” по смыслу: продукт, B2B-система и инструмент для SEO.
             </p>
           </div>
 
           <div class="cases">
             <article class="case card">
               <div class="case__top">
-                <h3 class="h3">Мапка.рф</h3>
-                <span class="badge">Свой проект</span>
+                <div class="case__brand">
+                  <span class="case__logoWrap" aria-hidden="true">
+                    <picture>
+                      <source srcset="./assets/mapka.webp" type="image/webp" />
+                      <img class="case__logo" src="./assets/mapka.png" alt="" loading="lazy" decoding="async" />
+                    </picture>
+                  </span>
+                  <div>
+                    <h3 class="h3">Мапка.рф</h3>
+                    <div class="muted small">Свой проект · агрегатор кружков</div>
+                  </div>
+                </div>
+                <span class="badge">Product</span>
               </div>
+
               <p class="p">
-                Каталог кружков и секций. Фокус на структуре, посадочных под интенты, техничке и UX для поиска.
+                Каталог кружков и секций. Фокус на структуре, посадочных под интенты и качественной индексации.
               </p>
               <ul class="list">
-                <li>Проработка архитектуры и посадочных страниц.</li>
-                <li>Оптимизация индексации и внутренних связей.</li>
-                <li>Чистая семантика шаблонов (h1–h3, мета, хлебные крошки).</li>
+                <li>Архитектура и посадочные страницы под спрос.</li>
+                <li>Индексация, внутренняя перелинковка, чистые шаблоны.</li>
+                <li>SEO-UX: чтобы родитель быстро нашёл подходящий вариант.</li>
               </ul>
+
               <div class="case__actions">
-                <a class="link" href="https://мапка.рф" target="_blank" rel="noopener noreferrer">Открыть проект</a>
+                <a class="link" href="https://xn--80aa3agq.xn--p1ai/" target="_blank" rel="noopener noreferrer">Открыть мапка.рф</a>
               </div>
             </article>
 
             <article class="case card">
               <div class="case__top">
-                <h3 class="h3">Cupster</h3>
-                <span class="badge badge--soft">Коммерция</span>
+                <div class="case__brand">
+                  <span class="case__logoWrap" aria-hidden="true">
+                    <picture>
+                      <source srcset="./assets/cupster.webp" type="image/webp" />
+                      <img class="case__logo" src="./assets/cupster.png" alt="" loading="lazy" decoding="async" />
+                    </picture>
+                  </span>
+                  <div>
+                    <h3 class="h3">Cupster</h3>
+                    <div class="muted small">Система лояльности для кофеен</div>
+                  </div>
+                </div>
+                <span class="badge badge--soft">B2B</span>
               </div>
+
               <p class="p">
-                SEO-аудит бота и системы лояльности для кофеен: структура, индексация, контентные точки роста.
+                SEO-аудит и рекомендации для продукта: структура, точки роста, приоритизация внедрения.
               </p>
               <ul class="list">
-                <li>Аудит и приоритизация задач.</li>
+                <li>Декомпозиция и roadmap работ по SEO.</li>
                 <li>Рекомендации по структуре и контенту.</li>
-                <li>Фреймворк контроля внедрения.</li>
+                <li>Telegram-бот для владельца кофейни: <a class="inlineLink" href="https://t.me/master_cupster_bot" target="_blank" rel="noopener noreferrer">@master_cupster_bot</a></li>
               </ul>
+
               <div class="case__actions">
                 <span class="muted">Публичная ссылка: добавишь при необходимости</span>
               </div>
@@ -342,19 +404,32 @@
 
             <article class="case card">
               <div class="case__top">
-                <h3 class="h3">SEO Care</h3>
-                <span class="badge badge--soft">Работа</span>
+                <div class="case__brand">
+                  <span class="case__logoWrap" aria-hidden="true">
+                    <picture>
+                      <source srcset="./assets/seoracle.webp" type="image/webp" />
+                      <img class="case__logo" src="./assets/seoracle.png" alt="" loading="lazy" decoding="async" />
+                    </picture>
+                  </span>
+                  <div>
+                    <h3 class="h3">SEOracle</h3>
+                    <div class="muted small">SEO-аудит бот (по необходимости)</div>
+                  </div>
+                </div>
+                <span class="badge badge--soft">Tooling</span>
               </div>
+
               <p class="p">
-                Управление SEO-задачами: постановки, планирование, качество, отчётность, коммуникации.
+                Быстрый SEO-аудит в формате бота: удобно для первичного разбора и подсветки приоритетов.
               </p>
               <ul class="list">
-                <li>Roadmap, KPI, контроль сроков.</li>
-                <li>Согласование решений между командами.</li>
-                <li>QA по SEO-шаблонам и релизам.</li>
+                <li>Включается “по ситуации”, когда нужно быстро оценить состояние.</li>
+                <li>Формирует список проблем/гипотез и следующий шаг.</li>
+                <li>Telegram: <a class="inlineLink" href="https://t.me/seoracle_bot" target="_blank" rel="noopener noreferrer">@seoracle_bot</a></li>
               </ul>
+
               <div class="case__actions">
-                <span class="muted">Детали под NDA — обсуждается</span>
+                <a class="link" href="https://t.me/seoracle_bot" target="_blank" rel="noopener noreferrer">Открыть SEOracle</a>
               </div>
             </article>
           </div>
@@ -366,9 +441,7 @@
         <div class="container">
           <div class="section__head">
             <h2 class="h2">Как я работаю</h2>
-            <p class="section__sub">
-              Понятный цикл, который можно масштабировать и повторять — без хаоса.
-            </p>
+            <p class="section__sub">Понятный цикл, который можно повторять — без хаоса.</p>
           </div>
 
           <ol class="steps" aria-label="Этапы работы">
@@ -383,21 +456,21 @@
               <div class="step__n">02</div>
               <div class="step__b">
                 <h3 class="h3">План и KPI</h3>
-                <p class="p">Roadmap, оценка, impact/effort, контрольные точки, отчётность.</p>
+                <p class="p">Roadmap, impact/effort, контрольные точки и отчётность.</p>
               </div>
             </li>
             <li class="step card">
               <div class="step__n">03</div>
               <div class="step__b">
                 <h3 class="h3">Внедрение</h3>
-                <p class="p">Постановки, сопровождение разработки/контента, QA, релизы.</p>
+                <p class="p">Постановки, сопровождение, QA, релизы.</p>
               </div>
             </li>
             <li class="step card">
               <div class="step__n">04</div>
               <div class="step__b">
                 <h3 class="h3">Рост</h3>
-                <p class="p">Повторяем цикл: новые гипотезы, расширение структуры, оптимизации.</p>
+                <p class="p">Новые гипотезы, расширение структуры, оптимизации.</p>
               </div>
             </li>
           </ol>
@@ -409,9 +482,7 @@
         <div class="container">
           <div class="section__head">
             <h2 class="h2">Инструменты и стек</h2>
-            <p class="section__sub">
-              Подход “сначала данные, потом решения”. Ниже — типичный набор.
-            </p>
+            <p class="section__sub">Подход “сначала данные, потом решения”. Ниже — типичный набор.</p>
           </div>
 
           <div class="pillGrid" aria-label="Инструменты">
@@ -441,32 +512,21 @@
             <details class="faq__item">
               <summary class="faq__q">Ты больше PM или больше SEO?</summary>
               <div class="faq__a">
-                Я закрываю обе части: понимаю SEO глубоко и умею довести внедрение до продакшна
-                через процессы, постановки и контроль качества.
+                Закрываю обе части: понимаю SEO глубоко и довожу внедрение до продакшна через процессы, постановки и QA.
               </div>
             </details>
 
             <details class="faq__item">
               <summary class="faq__q">С чего стартуем, если проект “горит”?</summary>
               <div class="faq__a">
-                С диагностики и быстрых wins: индексация, критичная техничка, основные шаблоны,
-                затем — roadmap и распределение задач.
+                С диагностики и быстрых wins: индексация, критичная техничка, основные шаблоны, затем — roadmap.
               </div>
             </details>
 
             <details class="faq__item">
-              <summary class="faq__q">Делаешь ли ты контент?</summary>
+              <summary class="faq__q">Как связаться быстрее всего?</summary>
               <div class="faq__a">
-                Могу: структуру, ТЗ, стандарты качества, “скелеты” страниц. В продакшне часто работаю
-                в связке с редактором/копирайтером и контролем качества.
-              </div>
-            </details>
-
-            <details class="faq__item">
-              <summary class="faq__q">Как измеряем результат?</summary>
-              <div class="faq__a">
-                KPI зависят от модели: лиды/заявки, органический трафик по кластерам, видимость,
-                доля бренд/небренд, конверсия, скорость и индексация.
+                Лучше всего через Telegram или VK. Почта — вторым приоритетом.
               </div>
             </details>
           </div>
@@ -478,21 +538,29 @@
         <div class="container">
           <div class="cta card">
             <div class="cta__copy">
-              <h2 class="h2">Давай обсудим задачу</h2>
+              <h2 class="h2">Связаться</h2>
               <p class="p">
-                Напиши, что за проект, какая цель и что уже сделано — я отвечу с понятным планом следующих шагов.
+                Предпочтительно соцсети: так быстрее. Если нужно — можно и на почту.
               </p>
+
               <div class="cta__actions">
-                <!-- ЗАМЕНИ на реальные контакты -->
-                <a class="btn btn--primary" href="mailto:hello@egorprotasov.ru?subject=SEO%20задача%20—%20EgorProtasov.ru">
-                  Написать на почту
+                <a class="btn btn--primary" href="https://t.me/Kom1sh" target="_blank" rel="me noopener noreferrer">
+                  Написать в Telegram
                 </a>
-                <button class="btn btn--ghost" type="button" data-copy="hello@egorprotasov.ru">
+                <a class="btn btn--ghost" href="https://vk.com/kom1sh" target="_blank" rel="me noopener noreferrer">
+                  Написать в VK
+                </a>
+                <a class="btn btn--ghost" href="mailto:egorprotasov06@gmail.com?subject=SEO%20задача%20—%20egorprotasov.ru">
+                  Почта
+                </a>
+                <button class="btn btn--ghost" type="button" data-copy="egorprotasov06@gmail.com">
                   Скопировать email
                 </button>
               </div>
+
               <p class="muted">
-                *Если почта другая — поменяй её в двух местах: здесь и в кнопке выше.
+                Telegram: <a class="inlineLink" href="https://t.me/Kom1sh" target="_blank" rel="me noopener noreferrer">@Kom1sh</a>
+                · VK: <a class="inlineLink" href="https://vk.com/kom1sh" target="_blank" rel="me noopener noreferrer">vk.com/kom1sh</a>
               </p>
             </div>
 
@@ -523,6 +591,10 @@
         </div>
 
         <div class="footer__right">
+          <a class="footer__link" href="https://t.me/Kom1sh" target="_blank" rel="me noopener noreferrer">Telegram</a>
+          <span class="footer__dot" aria-hidden="true">•</span>
+          <a class="footer__link" href="https://vk.com/kom1sh" target="_blank" rel="me noopener noreferrer">VK</a>
+          <span class="footer__dot" aria-hidden="true">•</span>
           <a class="footer__link" href="#top">Наверх</a>
           <span class="footer__dot" aria-hidden="true">•</span>
           <span class="footer__muted">© <span data-year></span></span>
@@ -535,7 +607,7 @@
     <script src="./main.js" defer></script>
     <noscript>
       <div class="noscript">
-        Для полной функциональности включите JavaScript (меню/тема/копирование email).
+        Для полной функциональности включите JavaScript (меню/тема/копирование).
       </div>
     </noscript>
   </body>
