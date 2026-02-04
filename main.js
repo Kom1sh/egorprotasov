@@ -6,21 +6,14 @@
   const yearEl = $("[data-year]");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-  // Theme: auto -> saved -> system
+  // Theme
   const themeKey = "egorprotasov-theme";
   const root = document.documentElement;
-
   const getSystemTheme = () =>
-    window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches
-      ? "light"
-      : "dark";
+    window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  const applyTheme = (t) => root.setAttribute("data-theme", t);
 
-  const applyTheme = (t) => {
-    root.setAttribute("data-theme", t);
-  };
-
-  const savedTheme = localStorage.getItem(themeKey);
-  applyTheme(savedTheme || getSystemTheme());
+  applyTheme(localStorage.getItem(themeKey) || getSystemTheme());
 
   const themeBtn = $("[data-theme-toggle]");
   if (themeBtn) {
@@ -56,27 +49,20 @@
       isOpen ? closeMenu() : openMenu();
     });
 
-    // Close on nav click
-    $$(".nav__link", menu).forEach((a) => {
-      a.addEventListener("click", () => closeMenu());
-    });
+    $$(".nav__link", menu).forEach((a) => a.addEventListener("click", closeMenu));
 
-    // Close on outside click
     document.addEventListener("click", (e) => {
       if (!menu.classList.contains("is-open")) return;
-      const target = e.target;
-      const insideMenu = menu.contains(target);
-      const insideBtn = toggleBtn.contains(target);
-      if (!insideMenu && !insideBtn) closeMenu();
+      const t = e.target;
+      if (!menu.contains(t) && !toggleBtn.contains(t)) closeMenu();
     });
 
-    // Close on ESC
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeMenu();
     });
   }
 
-  // Accordion: only one open at a time
+  // Accordion: only one open
   const accRoot = $("[data-accordion]");
   if (accRoot) {
     const items = $$("details", accRoot);
@@ -90,7 +76,7 @@
     });
   }
 
-  // Copy-to-clipboard
+  // Copy
   const copyBtn = $("[data-copy]");
   if (copyBtn) {
     copyBtn.addEventListener("click", async () => {
@@ -120,18 +106,15 @@
   // Toast
   const toastEl = $("[data-toast]");
   let toastTimer = null;
-
   function toast(msg) {
     if (!toastEl) return;
     toastEl.textContent = msg;
     toastEl.classList.add("is-show");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => {
-      toastEl.classList.remove("is-show");
-    }, 1800);
+    toastTimer = setTimeout(() => toastEl.classList.remove("is-show"), 1800);
   }
 
-  // Subtle header shadow on scroll
+  // Header shadow on scroll
   const onScroll = () => {
     if (!header) return;
     const y = window.scrollY || 0;
@@ -139,4 +122,30 @@
   };
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  // Active nav link
+  const navLinks = $$(".nav__link").filter((a) => a.getAttribute("href")?.startsWith("#"));
+  const map = new Map(navLinks.map((a) => [a.getAttribute("href"), a]));
+  const sections = ["#about", "#services", "#cases", "#process", "#faq", "#contact"]
+    .map((id) => document.querySelector(id))
+    .filter(Boolean);
+
+  if ("IntersectionObserver" in window && sections.length) {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (!visible) return;
+        const id = "#" + visible.target.id;
+        navLinks.forEach((a) => a.classList.remove("is-active"));
+        const link = map.get(id);
+        if (link) link.classList.add("is-active");
+      },
+      { threshold: [0.25, 0.5, 0.75] }
+    );
+
+    sections.forEach((s) => obs.observe(s));
+  }
 })();

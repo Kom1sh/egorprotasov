@@ -13,7 +13,6 @@
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <meta name="theme-color" content="#0b0f17" />
 
-    <!-- Canonical -->
     <link rel="canonical" href="https://egorprotasov.ru/" />
 
     <!-- Favicons -->
@@ -31,28 +30,21 @@
       content="SEO Project Manager / SEO-специалист. Мапка.рф, Cupster, SEOracle. Аудиты, стратегия, техничка, контент, процессы."
     />
     <meta property="og:url" content="https://egorprotasov.ru/" />
-    <!-- Подключи реальную картинку для шаринга, когда будет -->
     <meta property="og:image" content="https://egorprotasov.ru/og-image.jpg" />
 
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Егор Протасов — SEO Project Manager и SEO-специалист" />
-    <meta
-      name="twitter:description"
-      content="Портфолио: SEO, проекты, кейсы и процессы."
-    />
+    <meta name="twitter:description" content="Портфолио: SEO, проекты, кейсы и процессы." />
     <meta name="twitter:image" content="https://egorprotasov.ru/og-image.jpg" />
 
-    <!-- Styles -->
     <link rel="stylesheet" href="./styles.css" />
 
-    <!-- JS early hint -->
     <script>
       document.documentElement.classList.remove("no-js");
       document.documentElement.classList.add("js");
     </script>
 
-    <!-- Structured Data: Person + Website + Projects -->
+    <!-- Structured Data -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -77,9 +69,7 @@
             "url": "https://egorprotasov.ru/",
             "name": "Портфолио — Егор Протасов",
             "inLanguage": "ru",
-            "publisher": {
-              "@id": "https://egorprotasov.ru/#egor"
-            }
+            "publisher": { "@id": "https://egorprotasov.ru/#egor" }
           },
           {
             "@type": "CreativeWork",
@@ -122,7 +112,13 @@
         </a>
 
         <nav class="nav" aria-label="Основная навигация">
-          <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="navMenu">
+          <button
+            class="nav__toggle"
+            type="button"
+            data-nav-toggle
+            aria-expanded="false"
+            aria-controls="navMenu"
+          >
             <span class="nav__toggleIcon" aria-hidden="true"></span>
             <span class="nav__toggleText">Меню</span>
           </button>
@@ -149,21 +145,27 @@
       <section class="hero" id="top">
         <div class="container hero__grid">
           <div class="hero__copy">
-            <p class="eyebrow">SEO Care · Project Management · Growth</p>
-            <h1 class="h1">Делаю SEO управляемым: стратегия → внедрение → рост</h1>
+            <p class="eyebrow">SEO CARE · PROJECT MANAGEMENT · GROWTH</p>
+
+            <h1 class="h1">
+              Делаю SEO управляемым:
+              <span class="h1__muted">стратегия → внедрение → рост</span>
+            </h1>
+
             <p class="lead">
               Я — <strong>Егор Протасов</strong>, SEO Project Manager / SEO-специалист.
               Веду проекты от аудита до релиза: техничка, контент, структура, аналитика и контроль качества.
             </p>
 
-            <ul class="chips" aria-label="Ключевые направления">
-              <li class="chip">Технический SEO</li>
-              <li class="chip">SEO-стратегия</li>
-              <li class="chip">Контент и структура</li>
-              <li class="chip">Семантика и интенты</li>
-              <li class="chip">Аналитика и KPI</li>
-              <li class="chip">Управление задачами</li>
-            </ul>
+            <div class="heroFocus" aria-label="Фокус">
+              <div class="heroFocus__label">Фокус</div>
+              <ul class="heroFocus__list">
+                <li class="focusPill focusPill--a">Tech SEO</li>
+                <li class="focusPill focusPill--b">SEO-стратегия</li>
+                <li class="focusPill">Контент & структура</li>
+                <li class="focusPill">PM-внедрение</li>
+              </ul>
+            </div>
 
             <div class="hero__actions">
               <a class="btn btn--primary" href="#cases">Смотреть проекты</a>
@@ -172,25 +174,33 @@
 
             <div class="socialRow" aria-label="Соцсети">
               <a class="socialBtn" href="https://t.me/Kom1sh" target="_blank" rel="me noopener noreferrer">
-                <span class="socialBtn__icon" aria-hidden="true">TG</span>
+                <span class="socialBtn__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path
+                      fill="currentColor"
+                      d="M9.03 15.5 8.86 19c.56 0 .8-.24 1.1-.53l2.64-2.52 5.47 4c1 .55 1.7.26 1.96-.92L23.6 4.9c.32-1.48-.53-2.05-1.5-1.7L1.7 10.99c-1.4.55-1.38 1.33-.24 1.68l5.23 1.63L18.9 6.8c.58-.38 1.11-.17.67.22L9.03 15.5Z"
+                    />
+                  </svg>
+                </span>
                 <span class="socialBtn__text">Telegram</span>
               </a>
+
               <a class="socialBtn" href="https://vk.com/kom1sh" target="_blank" rel="me noopener noreferrer">
-                <span class="socialBtn__icon" aria-hidden="true">VK</span>
+                <span class="socialBtn__icon socialBtn__icon--vk" aria-hidden="true">VK</span>
                 <span class="socialBtn__text">ВКонтакте</span>
               </a>
             </div>
 
             <div class="hero__meta" aria-label="Коротко обо мне">
-              <div class="metaCard">
+              <div class="metaCard card--hover">
                 <div class="metaCard__k">Роль</div>
-                <div class="metaCard__v">SEO PM / SEO Specialist</div>
+                <div class="metaCard__v">SEO PM / SEO</div>
               </div>
-              <div class="metaCard">
+              <div class="metaCard card--hover">
                 <div class="metaCard__k">Проекты</div>
                 <div class="metaCard__v">Мапка.рф · Cupster · SEOracle</div>
               </div>
-              <div class="metaCard">
+              <div class="metaCard card--hover">
                 <div class="metaCard__k">Контакт</div>
                 <div class="metaCard__v">в приоритете Telegram / VK</div>
               </div>
@@ -198,34 +208,38 @@
           </div>
 
           <div class="hero__visual" aria-hidden="true">
-            <svg class="heroArt" viewBox="0 0 520 520" role="img" aria-label="">
-              <defs>
-                <radialGradient id="g1" cx="40%" cy="25%" r="70%">
-                  <stop offset="0%" stop-color="rgba(129,140,248,0.7)" />
-                  <stop offset="65%" stop-color="rgba(129,140,248,0.1)" />
-                  <stop offset="100%" stop-color="rgba(129,140,248,0)" />
-                </radialGradient>
-                <radialGradient id="g2" cx="70%" cy="70%" r="70%">
-                  <stop offset="0%" stop-color="rgba(34,211,238,0.65)" />
-                  <stop offset="65%" stop-color="rgba(34,211,238,0.12)" />
-                  <stop offset="100%" stop-color="rgba(34,211,238,0)" />
-                </radialGradient>
-              </defs>
+            <div class="glassFrame">
+              <svg class="heroArt" viewBox="0 0 520 520" role="img" aria-label="">
+                <defs>
+                  <radialGradient id="g1" cx="40%" cy="25%" r="70%">
+                    <stop offset="0%" stop-color="rgba(129,140,248,0.65)" />
+                    <stop offset="65%" stop-color="rgba(129,140,248,0.12)" />
+                    <stop offset="100%" stop-color="rgba(129,140,248,0)" />
+                  </radialGradient>
+                  <radialGradient id="g2" cx="70%" cy="70%" r="70%">
+                    <stop offset="0%" stop-color="rgba(34,211,238,0.6)" />
+                    <stop offset="65%" stop-color="rgba(34,211,238,0.14)" />
+                    <stop offset="100%" stop-color="rgba(34,211,238,0)" />
+                  </radialGradient>
+                </defs>
 
-              <circle cx="210" cy="160" r="210" fill="url(#g1)" />
-              <circle cx="360" cy="360" r="230" fill="url(#g2)" />
+                <circle cx="210" cy="160" r="210" fill="url(#g1)" />
+                <circle cx="360" cy="360" r="230" fill="url(#g2)" />
 
-              <g opacity="0.85">
-                <rect x="96" y="120" width="328" height="280" rx="24" fill="rgba(255,255,255,0.06)" />
-                <rect x="120" y="150" width="240" height="14" rx="7" fill="rgba(255,255,255,0.35)" />
-                <rect x="120" y="182" width="190" height="10" rx="5" fill="rgba(255,255,255,0.22)" />
-                <rect x="120" y="220" width="280" height="90" rx="18" fill="rgba(255,255,255,0.05)" />
-                <rect x="120" y="330" width="132" height="52" rx="16" fill="rgba(255,255,255,0.07)" />
-                <rect x="268" y="330" width="132" height="52" rx="16" fill="rgba(255,255,255,0.07)" />
-                <circle cx="394" cy="156" r="10" fill="rgba(34,211,238,0.8)" />
-                <circle cx="420" cy="156" r="10" fill="rgba(129,140,248,0.85)" />
-              </g>
-            </svg>
+                <g opacity="0.9">
+                  <rect x="96" y="120" width="328" height="280" rx="24" fill="rgba(255,255,255,0.08)" />
+                  <rect x="120" y="150" width="240" height="14" rx="7" fill="rgba(255,255,255,0.42)" />
+                  <rect x="120" y="182" width="190" height="10" rx="5" fill="rgba(255,255,255,0.26)" />
+                  <rect x="120" y="220" width="280" height="90" rx="18" fill="rgba(255,255,255,0.06)" />
+                  <rect x="120" y="330" width="132" height="52" rx="16" fill="rgba(255,255,255,0.10)" />
+                  <rect x="268" y="330" width="132" height="52" rx="16" fill="rgba(255,255,255,0.10)" />
+                  <circle cx="394" cy="156" r="10" fill="rgba(34,211,238,0.85)" />
+                  <circle cx="420" cy="156" r="10" fill="rgba(129,140,248,0.9)" />
+                </g>
+              </svg>
+
+              <div class="glassFrame__badge">Roadmap · QA · Growth</div>
+            </div>
           </div>
         </div>
       </section>
@@ -241,39 +255,49 @@
           </div>
 
           <div class="grid2">
-            <article class="card">
+            <article class="card card--hover">
               <h3 class="h3">Чем полезен</h3>
-              <ul class="list">
-                <li>Провожу аудит и собираю <strong>план работ</strong> с приоритетами (impact/effort).</li>
-                <li>Закрываю техничку: индексация, скорость, структура, дубли, canonical, перелинковка.</li>
-                <li>Делаю структуру и контент под интенты: категории, посадочные, FAQ, микроразметка.</li>
-                <li>Настраиваю аналитику: события, цели, сегменты, дашборды, KPI.</li>
+              <ul class="list list--accent">
+                <li><span class="kw">Roadmap</span>: аудит → план работ с приоритетами (impact/effort) → дедлайны.</li>
+                <li><span class="kw">Техничка</span>: индексация, скорость, структура, дубли, canonical, перелинковка.</li>
+                <li><span class="kw">Контент</span>: структура под интенты, посадочные, FAQ, микроразметка.</li>
+                <li><span class="kw">Аналитика</span>: события, цели, сегменты, дашборды, KPI.</li>
               </ul>
             </article>
 
-            <article class="card">
+            <article class="card card--hover">
               <h3 class="h3">Контекст</h3>
+
               <div class="facts">
-                <div class="fact">
+                <div class="fact card--hover">
                   <div class="fact__k">Роль</div>
                   <div class="fact__v">SEO Care — Project Manager / SEO</div>
                 </div>
-                <div class="fact">
+
+                <div class="fact card--hover">
                   <div class="fact__k">Свой продукт</div>
                   <div class="fact__v">Создатель проекта «Мапка.рф»</div>
                 </div>
-                <div class="fact">
+
+                <div class="fact card--hover">
                   <div class="fact__k">Cupster</div>
-                  <div class="fact__v">Система лояльности для кофеен · бот: <a class="inlineLink" href="https://t.me/master_cupster_bot" target="_blank" rel="noopener noreferrer">@master_cupster_bot</a></div>
+                  <div class="fact__v">
+                    Система лояльности для кофеен · бот:
+                    <a class="inlineLink" href="https://t.me/master_cupster_bot" target="_blank" rel="noopener noreferrer">@master_cupster_bot</a>
+                  </div>
                 </div>
-                <div class="fact">
+
+                <div class="fact card--hover">
                   <div class="fact__k">SEOracle</div>
-                  <div class="fact__v">SEO-аудит бот (по необходимости) · <a class="inlineLink" href="https://t.me/seoracle_bot" target="_blank" rel="noopener noreferrer">@seoracle_bot</a></div>
+                  <div class="fact__v">
+                    SEO-аудит бот (по необходимости) ·
+                    <a class="inlineLink" href="https://t.me/seoracle_bot" target="_blank" rel="noopener noreferrer">@seoracle_bot</a>
+                  </div>
                 </div>
               </div>
 
-              <div class="note">
-                <strong>Важно:</strong> я строю систему — чтобы рост был предсказуемым и повторяемым.
+              <div class="note note--strong">
+                <strong>Подход:</strong> строю систему, чтобы рост был предсказуемым и повторяемым.
               </div>
             </article>
           </div>
@@ -289,7 +313,7 @@
           </div>
 
           <div class="cards3">
-            <article class="card card--tight">
+            <article class="card card--tight card--hover">
               <h3 class="h3">Аудит и стратегия</h3>
               <p class="p">
                 Технический аудит, контентный аудит, конкуренты, интенты, карта структуры.
@@ -302,7 +326,7 @@
               </ul>
             </article>
 
-            <article class="card card--tight">
+            <article class="card card--tight card--hover">
               <h3 class="h3">Техническое SEO</h3>
               <p class="p">
                 Индексация, sitemap/robots, canonical, редиректы, дубли, скорость, CWV, микроразметка.
@@ -314,7 +338,7 @@
               </ul>
             </article>
 
-            <article class="card card--tight">
+            <article class="card card--tight card--hover">
               <h3 class="h3">PM и внедрение</h3>
               <p class="p">
                 Декомпозиция задач, постановки, контроль реализации, приемка, документация.
@@ -340,16 +364,16 @@
           </div>
 
           <div class="cases">
-            <article class="case card">
+            <article class="case card card--hover">
               <div class="case__top">
                 <div class="case__brand">
                   <span class="case__logoWrap" aria-hidden="true">
-                    <picture>
+                    <picture class="case__logoPic">
                       <source srcset="./assets/mapka.webp" type="image/webp" />
                       <img class="case__logo" src="./assets/mapka.png" alt="" loading="lazy" decoding="async" />
                     </picture>
                   </span>
-                  <div>
+                  <div class="case__title">
                     <h3 class="h3">Мапка.рф</h3>
                     <div class="muted small">Свой проект · агрегатор кружков</div>
                   </div>
@@ -360,6 +384,7 @@
               <p class="p">
                 Каталог кружков и секций. Фокус на структуре, посадочных под интенты и качественной индексации.
               </p>
+
               <ul class="list">
                 <li>Архитектура и посадочные страницы под спрос.</li>
                 <li>Индексация, внутренняя перелинковка, чистые шаблоны.</li>
@@ -367,20 +392,22 @@
               </ul>
 
               <div class="case__actions">
-                <a class="link" href="https://xn--80aa3agq.xn--p1ai/" target="_blank" rel="noopener noreferrer">Открыть мапка.рф</a>
+                <a class="btn btn--small btn--ghost" href="https://xn--80aa3agq.xn--p1ai/" target="_blank" rel="noopener noreferrer">
+                  Открыть мапка.рф <span class="btn__arrow" aria-hidden="true">↗</span>
+                </a>
               </div>
             </article>
 
-            <article class="case card">
+            <article class="case card card--hover">
               <div class="case__top">
                 <div class="case__brand">
                   <span class="case__logoWrap" aria-hidden="true">
-                    <picture>
+                    <picture class="case__logoPic">
                       <source srcset="./assets/cupster.webp" type="image/webp" />
                       <img class="case__logo" src="./assets/cupster.png" alt="" loading="lazy" decoding="async" />
                     </picture>
                   </span>
-                  <div>
+                  <div class="case__title">
                     <h3 class="h3">Cupster</h3>
                     <div class="muted small">Система лояльности для кофеен</div>
                   </div>
@@ -388,30 +415,29 @@
                 <span class="badge badge--soft">B2B</span>
               </div>
 
-              <p class="p">
-                SEO-аудит и рекомендации для продукта: структура, точки роста, приоритизация внедрения.
-              </p>
-              <ul class="list">
-                <li>Декомпозиция и roadmap работ по SEO.</li>
-                <li>Рекомендации по структуре и контенту.</li>
-                <li>Telegram-бот для владельца кофейни: <a class="inlineLink" href="https://t.me/master_cupster_bot" target="_blank" rel="noopener noreferrer">@master_cupster_bot</a></li>
-              </ul>
+              <p class="p">Система лояльности для кофеен: цифровая карта гостя, награды и акции, удобный сценарий через Telegram и понятная аналитика по вовлечению.</p>
+
+              <ul class="list"><li>Удержание и повторные визиты: бонусы/штампы, награды, промо.</li>
+                <li>Сбор базы гостей и коммуникации (без лишней сложности для команды).</li>
+                <li>Инструмент для владельца кофейни в Telegram: <a class="inlineLink" href="https://t.me/master_cupster_bot" target="_blank" rel="noopener noreferrer">@master_cupster_bot</a></li></ul>
 
               <div class="case__actions">
-                <span class="muted">Публичная ссылка: добавишь при необходимости</span>
+                <a class="btn btn--small btn--ghost" href="https://t.me/master_cupster_bot" target="_blank" rel="noopener noreferrer">
+                  Открыть бота <span class="btn__arrow" aria-hidden="true">↗</span>
+                </a>
               </div>
             </article>
 
-            <article class="case card">
+            <article class="case card card--hover">
               <div class="case__top">
                 <div class="case__brand">
                   <span class="case__logoWrap" aria-hidden="true">
-                    <picture>
+                    <picture class="case__logoPic">
                       <source srcset="./assets/seoracle.webp" type="image/webp" />
                       <img class="case__logo" src="./assets/seoracle.png" alt="" loading="lazy" decoding="async" />
                     </picture>
                   </span>
-                  <div>
+                  <div class="case__title">
                     <h3 class="h3">SEOracle</h3>
                     <div class="muted small">SEO-аудит бот (по необходимости)</div>
                   </div>
@@ -422,6 +448,7 @@
               <p class="p">
                 Быстрый SEO-аудит в формате бота: удобно для первичного разбора и подсветки приоритетов.
               </p>
+
               <ul class="list">
                 <li>Включается “по ситуации”, когда нужно быстро оценить состояние.</li>
                 <li>Формирует список проблем/гипотез и следующий шаг.</li>
@@ -429,7 +456,9 @@
               </ul>
 
               <div class="case__actions">
-                <a class="link" href="https://t.me/seoracle_bot" target="_blank" rel="noopener noreferrer">Открыть SEOracle</a>
+                <a class="btn btn--small btn--ghost" href="https://t.me/seoracle_bot" target="_blank" rel="noopener noreferrer">
+                  Открыть SEOracle <span class="btn__arrow" aria-hidden="true">↗</span>
+                </a>
               </div>
             </article>
           </div>
@@ -445,28 +474,28 @@
           </div>
 
           <ol class="steps" aria-label="Этапы работы">
-            <li class="step card">
+            <li class="step card card--hover">
               <div class="step__n">01</div>
               <div class="step__b">
                 <h3 class="h3">Диагностика</h3>
                 <p class="p">Аудит, цели, ограничения, приоритеты, быстрые wins.</p>
               </div>
             </li>
-            <li class="step card">
+            <li class="step card card--hover">
               <div class="step__n">02</div>
               <div class="step__b">
                 <h3 class="h3">План и KPI</h3>
                 <p class="p">Roadmap, impact/effort, контрольные точки и отчётность.</p>
               </div>
             </li>
-            <li class="step card">
+            <li class="step card card--hover">
               <div class="step__n">03</div>
               <div class="step__b">
                 <h3 class="h3">Внедрение</h3>
                 <p class="p">Постановки, сопровождение, QA, релизы.</p>
               </div>
             </li>
-            <li class="step card">
+            <li class="step card card--hover">
               <div class="step__n">04</div>
               <div class="step__b">
                 <h3 class="h3">Рост</h3>
@@ -509,24 +538,38 @@
           </div>
 
           <div class="faq" data-accordion>
-            <details class="faq__item">
+            <details class="faq__item card--hover">
               <summary class="faq__q">Ты больше PM или больше SEO?</summary>
               <div class="faq__a">
                 Закрываю обе части: понимаю SEO глубоко и довожу внедрение до продакшна через процессы, постановки и QA.
               </div>
             </details>
 
-            <details class="faq__item">
+            <details class="faq__item card--hover">
               <summary class="faq__q">С чего стартуем, если проект “горит”?</summary>
               <div class="faq__a">
                 С диагностики и быстрых wins: индексация, критичная техничка, основные шаблоны, затем — roadmap.
               </div>
             </details>
 
-            <details class="faq__item">
+            <details class="faq__item card--hover">
               <summary class="faq__q">Как связаться быстрее всего?</summary>
               <div class="faq__a">
                 Лучше всего через Telegram или VK. Почта — вторым приоритетом.
+              </div>
+            </details>
+
+            <details class="faq__item card--hover">
+              <summary class="faq__q">Что входит в аудит и roadmap?</summary>
+              <div class="faq__a">
+                Снимаю текущее состояние (индексация, техничка, шаблоны, структура, контент, ссылки) и собираю план работ с приоритетами и понятными next steps.
+              </div>
+            </details>
+
+            <details class="faq__item card--hover">
+              <summary class="faq__q">Какие доступы обычно нужны на старте?</summary>
+              <div class="faq__a">
+                Минимум: Google Search Console и GA4. По ситуации — CMS/репозиторий, хостинг, логи, трекер задач. Если доступа пока нет — начинаем с краулинга и чеклиста.
               </div>
             </details>
           </div>
@@ -536,11 +579,19 @@
       <!-- CONTACT -->
       <section class="section" id="contact">
         <div class="container">
-          <div class="cta card">
+          <div class="cta card cta--polished">
             <div class="cta__copy">
-              <h2 class="h2">Связаться</h2>
+              <div class="cta__top">
+                <h2 class="h2">Связаться</h2>
+                <div class="cta__chips" aria-label="Быстрые контакты">
+                  <a class="chipLink" href="https://t.me/Kom1sh" target="_blank" rel="me noopener noreferrer">Telegram</a>
+                  <a class="chipLink" href="https://vk.com/kom1sh" target="_blank" rel="me noopener noreferrer">VK</a>
+                  <span class="chipLink chipLink--muted">почта — по ситуации</span>
+                </div>
+              </div>
+
               <p class="p">
-                Предпочтительно соцсети: так быстрее. Если нужно — можно и на почту.
+                Предпочтительно соцсети: так быстрее. Почта — по ситуации.
               </p>
 
               <div class="cta__actions">
@@ -558,24 +609,25 @@
                 </button>
               </div>
 
-              <p class="muted">
-                Telegram: <a class="inlineLink" href="https://t.me/Kom1sh" target="_blank" rel="me noopener noreferrer">@Kom1sh</a>
-                · VK: <a class="inlineLink" href="https://vk.com/kom1sh" target="_blank" rel="me noopener noreferrer">vk.com/kom1sh</a>
-              </p>
             </div>
 
             <div class="cta__aside">
-              <div class="miniCard">
+              <div class="miniCard card--hover">
                 <div class="miniCard__k">Формат</div>
                 <div class="miniCard__v">Аудит · Roadmap · Ведение</div>
               </div>
-              <div class="miniCard">
+              <div class="miniCard card--hover">
                 <div class="miniCard__k">География</div>
                 <div class="miniCard__v">Удалённо</div>
               </div>
-              <div class="miniCard">
+              <div class="miniCard card--hover">
                 <div class="miniCard__k">Скорость старта</div>
                 <div class="miniCard__v">По договорённости</div>
+              </div>
+
+              <div class="miniCard miniCard--accent card--hover">
+                <div class="miniCard__k">Идеальный старт</div>
+                <div class="miniCard__v">Короткий созвон + доступы + список приоритетов</div>
               </div>
             </div>
           </div>
@@ -584,27 +636,43 @@
     </main>
 
     <footer class="footer">
-      <div class="container footer__row">
-        <div class="footer__left">
-          <div class="footer__brand">Егор Протасов</div>
-          <div class="footer__muted">SEO Project Manager · SEO Specialist</div>
-        </div>
+  <div class="container footer__grid">
+    <div class="footer__left">
+      <span class="footer__name">Егор Протасов</span>
+      <span class="footer__sep">·</span>
+      <span class="footer__role">SEO Project Manager · SEO Specialist</span>
+      <span class="footer__sep">·</span>
+      <a class="footer__domain" href="https://egorprotasov.ru/" rel="home">egorprotasov.ru</a>
+    </div>
 
-        <div class="footer__right">
-          <a class="footer__link" href="https://t.me/Kom1sh" target="_blank" rel="me noopener noreferrer">Telegram</a>
-          <span class="footer__dot" aria-hidden="true">•</span>
-          <a class="footer__link" href="https://vk.com/kom1sh" target="_blank" rel="me noopener noreferrer">VK</a>
-          <span class="footer__dot" aria-hidden="true">•</span>
-          <a class="footer__link" href="#top">Наверх</a>
-          <span class="footer__dot" aria-hidden="true">•</span>
-          <span class="footer__muted">© <span data-year></span></span>
-        </div>
-      </div>
-    </footer>
+    <nav class="footer__nav" aria-label="Навигация в подвале">
+      <a class="footer__link" href="#about">Обо мне</a>
+      <a class="footer__link" href="#services">Экспертиза</a>
+      <a class="footer__link" href="#cases">Проекты</a>
+      <a class="footer__link" href="#contact">Связаться</a>
+    </nav>
+
+    <div class="footer__right">
+      <a class="footer__iconLink" href="https://t.me/Kom1sh" target="_blank" rel="me noopener noreferrer" aria-label="Telegram">
+        <span class="footerIcon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path fill="currentColor" d="M9.03 15.5 8.86 19c.56 0 .8-.24 1.1-.53l2.64-2.52 5.47 4c1 .55 1.7.26 1.96-.92L23.6 4.9c.32-1.48-.53-2.05-1.5-1.7L1.7 10.99c-1.4.55-1.38 1.33-.24 1.68l5.23 1.63L18.9 6.8c.58-.38 1.11-.17.67.22L9.03 15.5Z"/>
+          </svg>
+        </span></a>
+
+      <a class="footer__iconLink" href="https://vk.com/kom1sh" target="_blank" rel="me noopener noreferrer" aria-label="VK">
+        <span class="footerIcon footerIcon--vk" aria-hidden="true">VK</span></a>
+
+      <a class="footer__link footer__toTop" href="#top">Наверх</a>
+      <span class="footer__copy">© <span data-year></span></span>
+    </div>
+  </div>
+</footer>
 
     <div class="toast" role="status" aria-live="polite" aria-atomic="true" data-toast></div>
 
     <script src="./main.js" defer></script>
+
     <noscript>
       <div class="noscript">
         Для полной функциональности включите JavaScript (меню/тема/копирование).
