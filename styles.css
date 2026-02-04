@@ -497,14 +497,22 @@ img { max-width: 100%; display: block; }
 .case__logoWrap {
   overflow: hidden;
   width: 76px;
-  height: 48px;
+  height: 76px;
   border-radius: 16px;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--border);
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  padding: 6px 8px;
+  padding: 8px;
+}
+
+@media (max-width: 520px){
+  .case__logoWrap{
+    width: 64px;
+    height: 64px;
+    padding: 6px;
+  }
 }
 .case__logo {
   width: 100%;
