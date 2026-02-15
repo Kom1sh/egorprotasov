@@ -593,10 +593,20 @@ img { max-width: 100%; display: block; }
 .service-list__item {
   padding: 20px 0;
   border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 16px;
+  align-items: start;
 }
 .service-list__item:first-child { padding-top: 0; }
-.service-list__term { font-size: var(--h3); font-weight: 700; margin: 0 0 0.375rem; color: var(--text); font-family: var(--font); }
-.service-list__def { margin: 0; color: var(--muted); line-height: 1.55; font-size: var(--body); font-family: var(--font); }
+.service-icon { color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+.service-list__term { font-size: var(--h3); font-weight: 700; margin: 0 0 0.375rem; color: var(--text); font-family: var(--font); grid-column: 2; }
+.service-list__def { margin: 0; color: var(--muted); line-height: 1.55; font-size: var(--body); font-family: var(--font); grid-column: 2; }
+@media (max-width: 640px) {
+  .service-list__item { grid-template-columns: 1fr; gap: 8px; }
+  .service-icon { display: none; }
+  .service-list__term, .service-list__def { grid-column: 1; }
+}
 
 /* Процесс: полоса */
 .process-strip {
@@ -619,6 +629,12 @@ img { max-width: 100%; display: block; }
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  position: relative;
+}
+.process-strip__icon {
+  color: var(--accent);
+  margin: 0 auto 8px;
+  display: block;
 }
 .process-strip__num {
   display: block;
