@@ -289,6 +289,7 @@ img { max-width: 100%; display: block; }
   margin: 0 0 1.5rem;
   max-width: 60ch;
 }
+.subheader--tools{ margin-bottom: 0; }
 .section__title + .subheader { margin-top: 0.5rem; }
 
 .section { padding: 72px 0; }
@@ -930,11 +931,19 @@ details[open] .faq__q::after { content: "—"; }
    Tools carousel (v6)
 ========================= */
 .tools-carousel{ position: relative; }
+.tools-carousel__head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom: 12px;
+}
+.tools-carousel__copy{ min-width: 0; }
 .tools-carousel__controls{
   display:flex;
-  justify-content:flex-end;
   gap:10px;
-  margin-bottom:12px;
+  margin-top: 6px;
+  flex: 0 0 auto;
 }
 .carousel-btn{
   width:44px;
@@ -1016,7 +1025,15 @@ details[open] .faq__q::after { content: "—"; }
   background: rgba(184,134,11,.10);
   border-color: rgba(184,134,11,.24);
 }
-.tool-slide__logo img{ width:44px; height:44px; object-fit:contain; }
+.tool-slide__logo img{ width:44px; height:44px; object-fit:contain; border-radius: 12px; }
+
+.tool-logo-stack{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+}
+.tool-logo-stack img{ width:24px; height:24px; object-fit:contain; border-radius: 8px; }
 
 .tool-slide__name{
   margin:0 0 6px;
