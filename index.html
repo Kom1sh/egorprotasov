@@ -67,11 +67,7 @@
         <div class="container">
           <div class="hero__grid">
             <div class="hero__photo">
-              <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="70" cy="70" r="70" fill="#d4a574" opacity="0.2"/>
-                <circle cx="70" cy="55" r="20" fill="#d4a574" opacity="0.6"/>
-                <path d="M35 105C35 85 50 75 70 75C90 75 105 85 105 105" fill="#d4a574" opacity="0.6"/>
-              </svg>
+              <img src="./assets/egor-photo.jpg" width="140" height="140" alt="Егор Протасов" fetchpriority="high" decoding="async" />
             </div>
             <div class="hero__content">
               <h1 class="hero__title">Егор Протасов — SEO Project Manager и SEO-специалист</h1>
@@ -92,15 +88,10 @@
             <div class="showcase__main">
               <div class="showcase__head">
                 <span class="showcase__logo" aria-hidden="true">
-                  <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="80" height="80" rx="16" fill="#d4a574" fill-opacity=".15"/>
-                    <path d="M40 20L50 35H30L40 20Z" fill="#d4a574"/>
-                    <circle cx="40" cy="50" r="8" fill="#d4a574" fill-opacity=".6"/>
-                    <path d="M25 55H55V60H25V55Z" fill="#d4a574" fill-opacity=".4"/>
-                  </svg>
+                  <img src="./assets/mapka.webp" width="80" height="80" alt="Логотип Мапка.рф" loading="lazy" decoding="async" />
                 </span>
                 <div>
-                  <h3 class="showcase__name" itemprop="name">Мапка.рф</h3>
+                  <h3 class="showcase__name"><span class="showcase__tag">Каталог</span> <span itemprop="name">Мапка.рф</span></h3>
                   <p class="showcase__meta">Свой проект · каталог кружков и секций</p>
                 </div>
               </div>
@@ -117,14 +108,10 @@
             <article class="showcase showcase--card" itemscope itemtype="https://schema.org/SoftwareApplication">
               <div class="showcase__head">
                 <span class="showcase__logo showcase__logo--sm" aria-hidden="true">
-                  <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="56" height="56" rx="12" fill="#d4a574" fill-opacity=".12"/>
-                    <circle cx="28" cy="28" r="12" stroke="#d4a574" stroke-width="2"/>
-                    <path d="M28 22V28L32 30" stroke="#d4a574" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
+                  <img src="./assets/cupster.webp" width="56" height="56" alt="Логотип Cupster" loading="lazy" decoding="async" />
                 </span>
                 <div>
-                  <h3 class="showcase__name" itemprop="name">Cupster</h3>
+                  <h3 class="showcase__name"><span class="showcase__tag">Лояльность</span> <span itemprop="name">Cupster</span></h3>
                   <p class="showcase__meta">Система лояльности для кофеен</p>
                 </div>
               </div>
@@ -134,14 +121,10 @@
             <article class="showcase showcase--card" itemscope itemtype="https://schema.org/SoftwareApplication">
               <div class="showcase__head">
                 <span class="showcase__logo showcase__logo--sm" aria-hidden="true">
-                  <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="56" height="56" rx="12" fill="#d4a574" fill-opacity=".12"/>
-                    <rect x="18" y="20" width="20" height="16" rx="2" stroke="#d4a574" stroke-width="2"/>
-                    <path d="M22 26H34M22 30H30" stroke="#d4a574" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
+                  <img src="./assets/seoracle.webp" width="56" height="56" alt="Логотип SEOracle" loading="lazy" decoding="async" />
                 </span>
                 <div>
-                  <h3 class="showcase__name" itemprop="name">SEOracle</h3>
+                  <h3 class="showcase__name"><span class="showcase__tag">SEO-бот</span> <span itemprop="name">SEOracle</span></h3>
                   <p class="showcase__meta">Бот для быстрого SEO-аудита</p>
                 </div>
               </div>
@@ -230,56 +213,87 @@
         <div class="container">
           <h2 id="tools-heading" class="section__title">Инструменты</h2>
           <p class="subheader">С чем работаю: аналитика, аудит, проектное управление.</p>
-          <div class="tools-grid">
-            <div class="tool-card">
-              <svg class="tool-card__icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="48" height="48" rx="12" fill="#d4a574" fill-opacity="0.1"/>
-                <path d="M24 14L28 22H20L24 14Z" fill="#d4a574"/>
-                <circle cx="24" cy="30" r="4" fill="#d4a574" opacity="0.6"/>
-              </svg>
-              <h3 class="tool-card__name">Google Search Console</h3>
+                    <div class="tools-carousel" data-carousel>
+            <div class="tools-carousel__controls">
+              <button class="carousel-btn" type="button" data-carousel-prev aria-label="Предыдущие инструменты">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button class="carousel-btn" type="button" data-carousel-next aria-label="Следующие инструменты">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
             </div>
-            <div class="tool-card">
-              <svg class="tool-card__icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="48" height="48" rx="12" fill="#d4a574" fill-opacity="0.1"/>
-                <circle cx="24" cy="24" r="10" stroke="#d4a574" stroke-width="2"/>
-                <path d="M28 20L32 16M32 16H28M32 16V20" stroke="#d4a574" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              <h3 class="tool-card__name">Ahrefs</h3>
+
+            <div class="tools-carousel__track" data-carousel-track tabindex="0" role="region" aria-label="Карусель инструментов (можно прокручивать)">
+              <article class="tool-slide">
+                <div class="tool-slide__logo">
+                  <img src="./assets/tool-gsc.svg" width="44" height="44" alt="" loading="lazy" decoding="async" />
+                </div>
+                <h3 class="tool-slide__name">Google Search Console</h3>
+                <p class="tool-slide__desc">Запросы и страницы, индексация/покрытие, CWV и диагностика.</p>
+              </article>
+
+              <article class="tool-slide">
+                <div class="tool-slide__logo">
+                  <img src="./assets/tool-ahrefs.svg" width="44" height="44" alt="" loading="lazy" decoding="async" />
+                </div>
+                <h3 class="tool-slide__name">Ahrefs</h3>
+                <p class="tool-slide__desc">Ключи и кластеры, конкуренты, ссылочный профиль и контент‑гэпы.</p>
+              </article>
+
+              <article class="tool-slide">
+                <div class="tool-slide__logo">
+                  <img src="./assets/tool-sfrog.svg" width="44" height="44" alt="" loading="lazy" decoding="async" />
+                </div>
+                <h3 class="tool-slide__name">Screaming Frog</h3>
+                <p class="tool-slide__desc">Краулинг, дубли, редиректы, мета/заголовки и тех‑ошибки.</p>
+              </article>
+
+              <article class="tool-slide">
+                <div class="tool-slide__logo">
+                  <img src="./assets/tool-ga4.svg" width="44" height="44" alt="" loading="lazy" decoding="async" />
+                </div>
+                <h3 class="tool-slide__name">GA4 + Looker Studio</h3>
+                <p class="tool-slide__desc">События, воронки и дашборды — чтобы видно было «что работает».</p>
+              </article>
+
+              <article class="tool-slide">
+                <div class="tool-slide__logo">
+                  <img src="./assets/tool-psi.svg" width="44" height="44" alt="" loading="lazy" decoding="async" />
+                </div>
+                <h3 class="tool-slide__name">Lighthouse / PSI</h3>
+                <p class="tool-slide__desc">Core Web Vitals, производительность и быстрые точки роста по фронту.</p>
+              </article>
+
+              <article class="tool-slide">
+                <div class="tool-slide__logo">
+                  <img src="./assets/tool-jira.svg" width="44" height="44" alt="" loading="lazy" decoding="async" />
+                </div>
+                <h3 class="tool-slide__name">Jira &amp; Confluence</h3>
+                <p class="tool-slide__desc">Постановки, документация, приоритизация и QA по чек‑листам.</p>
+              </article>
+
+              <article class="tool-slide">
+                <div class="tool-slide__logo">
+                  <img src="./assets/seoracle.webp" width="44" height="44" alt="" loading="lazy" decoding="async" />
+                </div>
+                <h3 class="tool-slide__name">SEOracle</h3>
+                <p class="tool-slide__desc">Мой бот для быстрого аудита: проблемы, приоритеты и следующий шаг.</p>
+              </article>
+
+              <article class="tool-slide tool-slide--more">
+                <div class="tool-slide__logo">
+                  <img src="./assets/tool-more.svg" width="44" height="44" alt="" loading="lazy" decoding="async" />
+                </div>
+                <h3 class="tool-slide__name">И прочие</h3>
+                <p class="tool-slide__desc">Логи, парсеры, Sheets и небольшие скрипты — по задаче.</p>
+              </article>
             </div>
-            <div class="tool-card">
-              <svg class="tool-card__icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="48" height="48" rx="12" fill="#d4a574" fill-opacity="0.1"/>
-                <path d="M16 28L24 20L28 24L32 18" stroke="#d4a574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="24" cy="20" r="2" fill="#d4a574"/>
-              </svg>
-              <h3 class="tool-card__name">PageSpeed Insights</h3>
-            </div>
-            <div class="tool-card">
-              <svg class="tool-card__icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="48" height="48" rx="12" fill="#d4a574" fill-opacity="0.1"/>
-                <rect x="16" y="18" width="16" height="12" rx="2" stroke="#d4a574" stroke-width="2"/>
-                <path d="M20 22H28M20 26H26" stroke="#d4a574" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              <h3 class="tool-card__name">Jira & Confluence</h3>
-            </div>
-            <div class="tool-card">
-              <svg class="tool-card__icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="48" height="48" rx="12" fill="#d4a574" fill-opacity="0.1"/>
-                <rect x="16" y="18" width="16" height="12" rx="2" stroke="#d4a574" stroke-width="2"/>
-                <path d="M20 22H28M20 26H24" stroke="#d4a574" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              <h3 class="tool-card__name">SEOracle</h3>
-            </div>
-            <div class="tool-card tool-card--more">
-              <svg class="tool-card__icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="48" height="48" rx="12" fill="#d4a574" fill-opacity="0.1"/>
-                <circle cx="18" cy="24" r="2" fill="#d4a574"/>
-                <circle cx="24" cy="24" r="2" fill="#d4a574"/>
-                <circle cx="30" cy="24" r="2" fill="#d4a574"/>
-              </svg>
-              <h3 class="tool-card__name">И прочие</h3>
-            </div>
+
+            <p class="tools-carousel__hint">Можно прокручивать колёсиком/тачем или стрелками ← →.</p>
           </div>
         </div>
       </section>

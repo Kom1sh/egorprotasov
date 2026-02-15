@@ -123,10 +123,62 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
+  // Tools carousel
+  const carousels = $$("[data-carousel]");
+  carousels.forEach((wrap) => {
+    const track = $("[data-carousel-track]", wrap);
+    const prev = $("[data-carousel-prev]", wrap);
+    const next = $("[data-carousel-next]", wrap);
+    if (!track) return;
+
+    const getStep = () => {
+      const item = track.querySelector(".tool-slide");
+      if (!item) return 280;
+      const gap = parseFloat(getComputedStyle(track).gap || "0") || 0;
+      return item.getBoundingClientRect().width + gap;
+    };
+
+    const scrollByDir = (dir) => track.scrollBy({ left: dir * getStep(), behavior: "smooth" });
+
+    if (prev) prev.addEventListener("click", () => scrollByDir(-1));
+    if (next) next.addEventListener("click", () => scrollByDir(1));
+
+    const updateButtons = () => {
+      const max = track.scrollWidth - track.clientWidth - 2;
+      const x = track.scrollLeft;
+      if (prev) prev.disabled = x <= 2;
+      if (next) next.disabled = x >= max;
+    };
+
+    let raf = 0;
+    track.addEventListener(
+      "scroll",
+      () => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(updateButtons);
+      },
+      { passive: true }
+    );
+
+    window.addEventListener("resize", updateButtons, { passive: true });
+    updateButtons();
+
+    track.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        scrollByDir(-1);
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        scrollByDir(1);
+      }
+    });
+  });
+
   // Active nav link
   const navLinks = $$(".nav__link").filter((a) => a.getAttribute("href")?.startsWith("#"));
   const map = new Map(navLinks.map((a) => [a.getAttribute("href"), a]));
-  const sections = ["#projects", "#services", "#about", "#process", "#faq", "#contact"]
+  const sections = ["#projects", "#services", "#about", "#tools", "#faq", "#contact"]
     .map((id) => document.querySelector(id))
     .filter(Boolean);
 
