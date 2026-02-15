@@ -126,7 +126,7 @@
   // Active nav link
   const navLinks = $$(".nav__link").filter((a) => a.getAttribute("href")?.startsWith("#"));
   const map = new Map(navLinks.map((a) => [a.getAttribute("href"), a]));
-  const sections = ["#about", "#services", "#cases", "#process", "#faq", "#contact"]
+  const sections = ["#projects", "#services", "#about", "#process", "#faq", "#contact"]
     .map((id) => document.querySelector(id))
     .filter(Boolean);
 
