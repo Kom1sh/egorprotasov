@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Исходник og-обложки — не для индексации</title>
+    <!--
+      Заготовка для og-cover.jpg. Как пересобрать:
+      1. поднять статику из корня репозитория (python3 -m http.server 8899)
+      2. открыть /tools/og.html при вьюпорте ровно 1200×630
+      3. снять скриншот вьюпорта и сохранить как og-cover.jpg в корень
+      При смене цифр на главной их нужно поменять и здесь.
+    -->
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      html { scroll-behavior: auto; }
+      body {
+        width: 1200px;
+        height: 630px;
+        margin: 0;
+        padding: 62px 68px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: var(--paper);
+        overflow: hidden;
+      }
+      .og-top { display: flex; justify-content: space-between; align-items: baseline; }
+      .og-name {
+        font-size: 116px;
+        font-weight: 800;
+        letter-spacing: -0.05em;
+        line-height: 0.84;
+        margin: 26px 0 0;
+      }
+      .og-name em { font-style: normal; display: block; }
+      .og-lead {
+        font-size: 25px;
+        line-height: 1.32;
+        letter-spacing: -0.015em;
+        color: var(--ink-70);
+        max-width: 30ch;
+        margin: 30px 0 0;
+      }
+      .og-band { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); }
+      .og-cell { padding: 22px 26px 0; border-left: 1px solid var(--rule-soft); }
+      .og-cell:first-child { border-left: 0; padding-left: 0; }
+      .og-num {
+        font-size: 60px; font-weight: 800; letter-spacing: -0.045em;
+        color: var(--accent); line-height: 0.9; display: block;
+        font-variant-numeric: tabular-nums;
+      }
+      .og-cap { margin: 12px 0 0; font-size: 16px; line-height: 1.35; color: var(--ink-70); }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div>
+      <div class="og-top mono" style="color: var(--ink-45)">
+        <span>SEO Project Manager · SEO-специалист</span>
+        <span>egorprotasov.ru</span>
+      </div>
+      <h1 class="og-name">Егор <em>Протасов</em></h1>
+      <p class="og-lead">
+        Семантика на тысячи запросов, архитектура под сотни страниц — и
+        доведение до релиза.
+      </p>
+    </div>
+
+    <div class="og-band">
+      <div class="og-cell">
+        <span class="og-num">×23</span>
+        <p class="og-cap">рост трафика adtech-платформы за 8 месяцев</p>
+      </div>
+      <div class="og-cell">
+        <span class="og-num">10</span>
+        <p class="og-cap">стран в одном семантическом ядре</p>
+      </div>
+      <div class="og-cell">
+        <span class="og-num">600</span>
+        <p class="og-cap">страниц — 10 000 показов за 5 дней</p>
+      </div>
+    </div>
+  </body>
+</html>
