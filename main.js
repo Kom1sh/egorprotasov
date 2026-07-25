@@ -17,21 +17,18 @@
     toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2200);
   };
 
-  // Тема. Начальное значение проставляет инлайновый скрипт в <head>,
-  // здесь только переключение.
-  const root = document.documentElement;
-  const themeBtn = $("[data-theme-toggle]");
-  if (themeBtn) {
-    themeBtn.addEventListener("click", () => {
-      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      try {
-        localStorage.setItem("ep-theme", next);
-      } catch (e) {
-        /* приватный режим — просто не запоминаем */
-      }
-      toast(next === "dark" ? "Тёмная тема" : "Светлая тема");
-    });
+  // Высота шапки в переменную: герой считает от неё свою высоту, и без
+  // уточнения по факту он не дотягивает до края экрана на несколько пикселей.
+  const hdr = $(".hdr");
+  if (hdr) {
+    const syncHdr = () =>
+      document.documentElement.style.setProperty(
+        "--hdr",
+        hdr.getBoundingClientRect().height + "px"
+      );
+    syncHdr();
+    if ("ResizeObserver" in window) new ResizeObserver(syncHdr).observe(hdr);
+    else window.addEventListener("resize", syncHdr, { passive: true });
   }
 
   // Мобильное меню

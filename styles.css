@@ -61,7 +61,10 @@
   --w: 1320px;
   --gut: 22px;
   --label-col: 9.5rem;
-  --hdr: 63px; /* высота залипающей шапки: 14+34+14 + 1px линейка */
+  /* Высота залипающей шапки. Значение по умолчанию посчитано под текущую
+     вёрстку (14 + строка + 14 + 1px линейка); main.js уточняет его по факту,
+     чтобы герой ровно совпадал с экраном при любом размере шрифта. */
+  --hdr: 54px;
 
   --fs-display: clamp(3rem, 10.5vw, 8.5rem);
   --fs-h1: clamp(2.25rem, 6.5vw, 5rem);
@@ -72,20 +75,8 @@
   --fs-body: clamp(1rem, 1.05vw, 1.125rem);
   --fs-meta: 0.75rem;
 
-  --sec-y: clamp(64px, 9vw, 132px);
+  --sec-y: clamp(76px, 9.5vw, 150px);
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-
-:root[data-theme="dark"] {
-  --paper: #100e0b;
-  --paper-2: #191510;
-  --ink: #f0ece3;
-  --ink-70: rgba(240, 236, 227, 0.68);
-  --ink-45: rgba(240, 236, 227, 0.44);
-  --rule: rgba(240, 236, 227, 0.18);
-  --rule-soft: rgba(240, 236, 227, 0.1);
-  --accent: #ff5a2b;
-  --on-accent: #14100c;
 }
 
 /* --- Основа ------------------------------------------------------------ */
@@ -235,6 +226,15 @@ svg {
   gap: 10px;
 }
 
+/* После удаления переключателя темы здесь остаётся только бургер.
+   На десктопе контейнер прячем целиком, иначе он держит пустой слот
+   и навигация не прижимается к правому краю. */
+@media (min-width: 781px) {
+  .hdr__tools {
+    display: none;
+  }
+}
+
 .icon-btn {
   background: none;
   border: 1px solid var(--rule);
@@ -254,15 +254,6 @@ svg {
 .icon-btn svg {
   width: 15px;
   height: 15px;
-}
-.i-sun {
-  display: none;
-}
-:root[data-theme="dark"] .i-sun {
-  display: block;
-}
-:root[data-theme="dark"] .i-moon {
-  display: none;
 }
 
 .burger {
@@ -341,11 +332,14 @@ svg {
   }
 }
 
+/* Не space-between: он раздувал пустоту между именем и текстом на всю
+   свободную высоту — на больших экранах получался провал в треть экрана.
+   Отступ задан явно и ограничен сверху, чтобы ритм был ровным. */
 .hero__type {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(28px, 4vw, 56px);
+  justify-content: flex-start;
+  gap: clamp(38px, 6vh, 84px);
   min-height: 0;
 }
 
@@ -370,9 +364,9 @@ svg {
 .hero__say {
   display: flex;
   flex-direction: column;
-  gap: clamp(18px, 2.4vw, 26px);
+  gap: clamp(22px, 2.8vh, 34px);
   align-items: flex-start;
-  padding-bottom: clamp(16px, 2.4vw, 30px);
+  padding-bottom: clamp(16px, 2vw, 26px);
 }
 
 .hero__lead {
@@ -424,13 +418,6 @@ svg {
   object-position: 50% 6%;
 }
 
-/* На тёмной теме светлый кадр остаётся — это осознанный приём «отпечаток
-   на бумаге»; хайрлайн делает его намеренным, а не случайным. */
-:root[data-theme="dark"] .hero__portrait img {
-  outline: 1px solid var(--rule);
-  filter: brightness(0.94);
-}
-
 /* Ноутбуки с низким вьюпортом: одного clamp по ширине мало — на 1366×700
    лид разъезжается на пять строк и выталкивает кнопку за край экрана. */
 @media (min-width: 900px) and (max-height: 820px) {
@@ -442,10 +429,10 @@ svg {
     padding-bottom: 12px;
   }
   .hero__type {
-    gap: 22px;
+    gap: 30px;
   }
   .hero__say {
-    gap: 14px;
+    gap: 18px;
     padding-bottom: 12px;
   }
   .hero__lead {
@@ -504,7 +491,7 @@ svg {
 }
 
 .band__cell {
-  padding: clamp(22px, 3vw, 36px) 0;
+  padding: clamp(28px, 3.4vw, 44px) 0;
   border-bottom: 1px solid var(--rule-soft);
 }
 .band__cell:last-child {
@@ -592,7 +579,7 @@ svg {
   color: var(--ink-70);
 }
 .sec__text p {
-  margin: 0 0 1.1em;
+  margin: 0 0 1.35em;
 }
 .sec__text p:last-child {
   margin-bottom: 0;
@@ -617,7 +604,7 @@ svg {
     ".   res"
     ".   meta";
   gap: 7px 16px;
-  padding: clamp(22px, 3vw, 34px) 0;
+  padding: clamp(28px, 3.4vw, 42px) 0;
   border-bottom: 1px solid var(--rule);
   isolation: isolate;
   transition: color 0.28s var(--ease);
@@ -733,7 +720,7 @@ svg {
 }
 
 .step {
-  padding: clamp(18px, 2.4vw, 28px) 0;
+  padding: clamp(24px, 2.8vw, 34px) 0;
   border-bottom: 1px solid var(--rule-soft);
 }
 .step:last-child {
@@ -782,8 +769,8 @@ svg {
 
 .skill {
   display: grid;
-  gap: 4px 24px;
-  padding: clamp(16px, 2.2vw, 24px) 0;
+  gap: 8px 24px;
+  padding: clamp(22px, 2.8vw, 32px) 0;
   border-bottom: 1px solid var(--rule-soft);
 }
 
@@ -844,7 +831,7 @@ svg {
   list-style: none;
 }
 .facet__col li {
-  padding: 7px 0;
+  padding: 11px 0;
   border-bottom: 1px solid var(--rule-soft);
   font-size: 0.9375rem;
   letter-spacing: -0.01em;
@@ -898,11 +885,6 @@ svg {
   background: var(--ink);
   color: var(--paper);
   overflow-wrap: anywhere;
-  transition: background 0.2s var(--ease);
-}
-.facet__url:hover {
-  background: var(--accent);
-  color: var(--on-accent);
 }
 
 .own__list {
@@ -912,7 +894,7 @@ svg {
   border-top: 1px solid var(--rule);
 }
 .own__list li {
-  padding: 12px 0;
+  padding: 16px 0;
   border-bottom: 1px solid var(--rule-soft);
   color: var(--ink-70);
   font-size: 0.9375rem;
@@ -982,7 +964,7 @@ svg {
   align-items: baseline;
   justify-content: space-between;
   gap: 20px;
-  padding: clamp(16px, 2.4vw, 24px) 0;
+  padding: clamp(22px, 2.8vw, 32px) 0;
   border-bottom: 1px solid var(--rule);
   transition: padding-inline 0.28s var(--ease), color 0.2s var(--ease);
 }
@@ -1128,7 +1110,7 @@ svg {
 }
 
 .fact {
-  padding: clamp(16px, 2.2vw, 22px) 0;
+  padding: clamp(20px, 2.6vw, 28px) 0;
   border-bottom: 1px solid var(--rule-soft);
 }
 .fact:last-child {
@@ -1251,7 +1233,7 @@ svg {
 }
 .data th,
 .data td {
-  padding: 11px 10px;
+  padding: 14px 12px;
   border-bottom: 1px solid var(--rule-soft);
   text-align: right;
   white-space: nowrap;
@@ -1299,7 +1281,7 @@ svg {
   display: grid;
   grid-template-columns: 2.5rem minmax(0, 1fr);
   gap: 16px;
-  padding: clamp(14px, 2vw, 20px) 0;
+  padding: clamp(20px, 2.4vw, 28px) 0;
   border-bottom: 1px solid var(--rule-soft);
   color: var(--ink-70);
 }
