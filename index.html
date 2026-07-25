@@ -154,37 +154,47 @@
 
     <main id="main">
       <!-- Герой -->
-      <section class="hero wrap">
-        <p class="hero__eyebrow mono">
-          <span>SEO Project Manager</span>
-          <span>Ростов-на-Дону · удалённо</span>
-        </p>
-
-        <h1 class="hero__name">Егор <em>Протасов</em></h1>
-
-        <div class="hero__grid">
-          <p class="hero__lead">
-            Вывожу в поиск проекты, которым нужен объём: семантика на тысячи
-            запросов, архитектура под сотни страниц, контент — и доведение
-            всего этого до релиза руками разработки.
+      <section class="hero">
+        <div class="wrap hero__inner">
+          <p class="hero__eyebrow mono">
+            <span>SEO Project Manager · SEO-специалист</span>
+            <span>Ростов-на-Дону · удалённо</span>
           </p>
 
-          <div class="hero__aside">
-            <img
-              class="hero__photo"
-              src="/assets/egor-photo.jpg"
-              alt="Егор Протасов"
-              width="156"
-              height="156"
-              fetchpriority="high"
-            />
-            <p>
-              Сейчас веду adtech-платформу, швейцарский P2P-сервис и биржу
-              криптодеривативов. Открыт к новым проектам.
-            </p>
-            <a class="arrow-link" href="https://t.me/Kom1sh" rel="me noopener">
-              Написать в Telegram <span aria-hidden="true">→</span>
-            </a>
+          <div class="hero__stage">
+            <div class="hero__type">
+              <h1 class="hero__name">
+                Егор<em>Протасов<span class="hero__dot">.</span></em>
+              </h1>
+
+              <div class="hero__say">
+                <p class="hero__lead">
+                  Вывожу в поиск проекты, которым нужен объём: семантика на
+                  тысячи запросов, архитектура под сотни страниц, контент — и
+                  доведение всего этого до релиза руками разработки.
+                </p>
+                <p class="hero__now">
+                  Сейчас веду adtech-платформу, швейцарский P2P-сервис и биржу
+                  криптодеривативов. Открыт к новым проектам.
+                </p>
+                <a class="arrow-link" href="https://t.me/Kom1sh" rel="me noopener">
+                  Написать в Telegram <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+
+            <figure class="hero__portrait">
+              <picture>
+                <source srcset="/assets/egor.webp" type="image/webp" />
+                <img
+                  src="/assets/egor.jpg"
+                  alt="Егор Протасов"
+                  width="920"
+                  height="1320"
+                  fetchpriority="high"
+                />
+              </picture>
+            </figure>
           </div>
         </div>
       </section>
@@ -384,49 +394,88 @@
           <div>
             <h2 class="sec__h">Мапка.рф</h2>
 
-            <div class="own">
-              <div>
-                <div class="sec__text">
-                  <p>
-                    Каталог детских секций и кружков — мой собственный проект и
-                    полигон. Интересен он не трафиком, а движком:
-                    <strong>посадочные генерируются программно</strong> под
-                    пересечения фильтров, то есть под связки вида «район ×
-                    направление × возраст», а не пишутся руками по одной.
-                  </p>
-                  <p>
-                    Это тот же приём, который я применяю на клиентских проектах,
-                    только здесь я делаю его целиком сам — от структуры данных
-                    до вёрстки шаблона.
-                  </p>
+            <div class="sec__text">
+              <p>
+                Каталог детских секций и кружков — мой собственный проект и
+                полигон. Интересен он не трафиком, а движком: посадочные здесь
+                <strong>не пишутся руками по одной</strong>, а собираются
+                программно под каждое пересечение фильтров, за которым стоит
+                реальный спрос.
+              </p>
+              <p>
+                Это тот же приём, который я применяю на клиентских проектах,
+                только здесь делаю его целиком сам — от структуры данных до
+                вёрстки шаблона.
+              </p>
+            </div>
+
+            <div class="facet">
+              <p class="facet__k">Как устроена генерация</p>
+
+              <div class="facet__cols">
+                <div class="facet__col">
+                  <span class="facet__h mono">Категория</span>
+                  <ul>
+                    <li>Спортивные</li>
+                    <li>Художественные</li>
+                    <li>Языковые</li>
+                  </ul>
                 </div>
 
-                <ul class="own__list">
-                  <li>Фасетная архитектура: страница под каждое осмысленное пересечение</li>
-                  <li>Шаблоны и перелинковка, рассчитанные на рост каталога</li>
-                  <li>Своя админка для контентных переопределений поверх генерации</li>
-                </ul>
+                <span class="facet__x" aria-hidden="true">×</span>
 
-                <p style="margin-top: clamp(22px, 2.8vw, 32px)">
-                  <a
-                    class="arrow-link"
-                    href="https://xn--80aa3agq.xn--p1ai/"
-                    rel="noopener"
-                  >
-                    Открыть Мапка.рф <span aria-hidden="true">↗</span>
-                  </a>
-                </p>
+                <div class="facet__col">
+                  <span class="facet__h mono">Направление</span>
+                  <ul>
+                    <li>Плавание</li>
+                    <li>Футбол</li>
+                    <li>Гимнастика</li>
+                    <li>Единоборства</li>
+                    <li>Танцы</li>
+                    <li class="facet__more">рисование, музыка, английский…</li>
+                  </ul>
+                </div>
+
+                <span class="facet__x" aria-hidden="true">=</span>
+
+                <div class="facet__col">
+                  <span class="facet__h mono">Посадочная</span>
+                  <ul>
+                    <li>Свой заголовок и текст</li>
+                    <li>Отфильтрованная выдача</li>
+                    <li>Перелинковка с соседями</li>
+                    <li>Разметка и метаданные</li>
+                    <li class="facet__more">— и всё это без ручной вёрстки</li>
+                  </ul>
+                </div>
               </div>
 
-              <img
-                class="own__shot"
-                src="/assets/mapka-shot.jpg"
-                alt="Страница каталога на Мапка.рф"
-                width="1100"
-                height="825"
-                loading="lazy"
-              />
+              <p class="facet__out">
+                <span class="facet__note mono">Пример живой страницы</span>
+                <a
+                  class="facet__url"
+                  href="https://xn--80aa3agq.xn--p1ai/sektsii/sportivnye/plavanie"
+                  rel="noopener"
+                  >/sektsii/sportivnye/plavanie</a
+                >
+              </p>
             </div>
+
+            <ul class="own__list">
+              <li>Страница появляется только там, где за пересечением есть и спрос, и наполнение</li>
+              <li>Шаблоны и перелинковка рассчитаны на рост каталога без переделки структуры</li>
+              <li>Своя админка: ручные переопределения текста поверх генерации</li>
+            </ul>
+
+            <p style="margin-top: clamp(22px, 2.8vw, 32px)">
+              <a
+                class="arrow-link"
+                href="https://xn--80aa3agq.xn--p1ai/"
+                rel="noopener"
+              >
+                Открыть Мапка.рф <span aria-hidden="true">↗</span>
+              </a>
+            </p>
 
             <p class="tool-line">
               Отдельно держу <a href="https://t.me/seoracle_bot" rel="noopener">@seoracle_bot</a>

@@ -61,6 +61,7 @@
   --w: 1320px;
   --gut: 22px;
   --label-col: 9.5rem;
+  --hdr: 63px; /* высота залипающей шапки: 14+34+14 + 1px линейка */
 
   --fs-display: clamp(3rem, 10.5vw, 8.5rem);
   --fs-h1: clamp(2.25rem, 6.5vw, 5rem);
@@ -294,84 +295,194 @@ svg {
   }
 }
 
-/* --- Герой ------------------------------------------------------------- */
+/* --- Герой -------------------------------------------------------------
+   Занимает ровно один экран: имя сверху, портрет справа во всю высоту,
+   его нижний край стоит на линейке полосы с числами. */
 
 .hero {
-  padding-top: clamp(48px, 8vw, 104px);
-  padding-bottom: clamp(36px, 5vw, 64px);
+  min-height: calc(100svh - var(--hdr));
+  display: flex;
+  flex-direction: column;
+  padding-top: clamp(18px, 2.6vw, 32px);
+}
+
+.hero__inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .hero__eyebrow {
   color: var(--ink-45);
-  margin: 0 0 clamp(20px, 3vw, 40px);
+  margin: 0 0 clamp(18px, 2.6vw, 32px);
+  padding-bottom: clamp(14px, 2vw, 22px);
+  border-bottom: 1px solid var(--rule);
   display: flex;
-  gap: 14px;
-  align-items: center;
+  gap: 14px 28px;
+  align-items: baseline;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
-.hero__eyebrow::after {
-  content: "";
+
+.hero__stage {
   flex: 1;
-  height: 1px;
-  background: var(--rule);
-  min-width: 40px;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(24px, 3vw, 40px);
+}
+
+@media (min-width: 900px) {
+  .hero__stage {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.46fr);
+    gap: clamp(32px, 4.5vw, 72px);
+    align-items: stretch;
+  }
+}
+
+.hero__type {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(28px, 4vw, 56px);
+  min-height: 0;
 }
 
 .hero__name {
-  font-size: var(--fs-display);
+  /* второе слагаемое ограничено и по высоте экрана — иначе на ноутбуках
+     с низким вьюпортом имя вытесняет всё остальное за пределы экрана */
+  font-size: clamp(3rem, min(12.5vw, 19vh), 9.5rem);
   font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 0.85;
+  letter-spacing: -0.05em;
+  line-height: 0.82;
   margin: 0;
+  text-transform: uppercase;
 }
 .hero__name em {
   font-style: normal;
   display: block;
 }
-
-.hero__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(28px, 4vw, 48px);
-  margin-top: clamp(32px, 4.5vw, 60px);
-  align-items: end;
+.hero__name .hero__dot {
+  color: var(--accent);
 }
 
-@media (min-width: 900px) {
-  .hero__grid {
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-    gap: clamp(40px, 6vw, 96px);
-  }
+.hero__say {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2.4vw, 26px);
+  align-items: flex-start;
+  padding-bottom: clamp(16px, 2.4vw, 30px);
 }
 
 .hero__lead {
   font-size: var(--fs-lead);
-  line-height: 1.35;
+  line-height: 1.32;
   letter-spacing: -0.015em;
   margin: 0;
-  max-width: 34ch;
+  max-width: 32ch;
   text-wrap: pretty;
 }
 
-.hero__aside {
-  border-top: 1px solid var(--ink);
-  padding-top: 16px;
-}
-.hero__aside p {
-  margin: 0 0 14px;
+.hero__now {
+  margin: 0;
   color: var(--ink-70);
   font-size: 0.9375rem;
-  max-width: 40ch;
+  line-height: 1.45;
+  max-width: 42ch;
+  display: flex;
+  gap: 11px;
+}
+.hero__now::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  flex: none;
+  margin-top: 0.45em;
 }
 
-.hero__photo {
+/* Портрет: фон снимка сведён в цвет бумаги, поэтому кадр не читается
+   прямоугольником — на светлой теме фигура будто вырезана по контуру. */
+.hero__portrait {
+  margin: 0;
+  min-height: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+/* <picture> не должен становиться флекс-элементом — иначе height:100%
+   у картинки не от чего считать */
+.hero__portrait picture {
+  display: contents;
+}
+.hero__portrait img {
   width: 100%;
-  max-width: 156px;
-  aspect-ratio: 1;
+  height: 100%;
+  max-height: 100%;
   object-fit: cover;
-  object-position: center 22%;
-  filter: grayscale(1) contrast(1.05);
-  margin-bottom: 18px;
+  object-position: 50% 6%;
+}
+
+/* На тёмной теме светлый кадр остаётся — это осознанный приём «отпечаток
+   на бумаге»; хайрлайн делает его намеренным, а не случайным. */
+:root[data-theme="dark"] .hero__portrait img {
+  outline: 1px solid var(--rule);
+  filter: brightness(0.94);
+}
+
+/* Ноутбуки с низким вьюпортом: одного clamp по ширине мало — на 1366×700
+   лид разъезжается на пять строк и выталкивает кнопку за край экрана. */
+@media (min-width: 900px) and (max-height: 820px) {
+  .hero {
+    padding-top: 16px;
+  }
+  .hero__eyebrow {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+  .hero__type {
+    gap: 22px;
+  }
+  .hero__say {
+    gap: 14px;
+    padding-bottom: 12px;
+  }
+  .hero__lead {
+    font-size: 1.125rem;
+    max-width: 40ch;
+  }
+  .hero__now {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 899px) {
+  .hero {
+    min-height: 0;
+    padding-bottom: clamp(28px, 5vw, 48px);
+  }
+  /* Раскрываем колонку в контейнер, чтобы имя, портрет и текст стали
+     соседними строками: иначе портрет выталкивает H1 вниз. */
+  .hero__type {
+    display: contents;
+  }
+  .hero__name {
+    order: 1;
+  }
+  .hero__portrait {
+    order: 2;
+    justify-content: flex-start;
+  }
+  .hero__say {
+    order: 3;
+    padding-bottom: 0;
+  }
+  .hero__portrait img {
+    width: auto;
+    max-width: 66%;
+    height: auto;
+  }
 }
 
 /* --- Полоса чисел ------------------------------------------------------ */
@@ -695,22 +806,103 @@ svg {
 
 /* --- Свои проекты ------------------------------------------------------ */
 
-.own {
+/* Схема фасетной генерации: объясняет движок типографикой вместо скриншота,
+   который выбивался из стилистики страницы. */
+.facet {
+  margin-top: clamp(30px, 4vw, 48px);
+  border-top: 1px solid var(--ink);
+  padding-top: clamp(18px, 2.4vw, 26px);
+}
+
+.facet__k {
+  color: var(--ink-45);
+  margin: 0 0 clamp(18px, 2.4vw, 26px);
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.facet__cols {
   display: grid;
-  gap: clamp(28px, 4vw, 44px);
+  grid-template-columns: 1fr;
+  gap: 4px;
   align-items: start;
 }
 
-@media (min-width: 880px) {
-  .own {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
-    gap: clamp(40px, 5vw, 72px);
+@media (min-width: 620px) {
+  .facet__cols {
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: clamp(12px, 2vw, 28px);
   }
 }
 
-.own__shot {
-  border: 1px solid var(--rule);
-  width: 100%;
+.facet__col ul {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.facet__col li {
+  padding: 7px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+}
+.facet__col li:first-child {
+  border-top: 1px solid var(--rule-soft);
+}
+.facet__more {
+  color: var(--ink-45);
+}
+
+.facet__h {
+  color: var(--accent);
+  display: block;
+}
+
+/* Оператор выключен по первой строке списка, а не по центру группы:
+   колонки разной длины, и центрирование отрывало знак от содержимого. */
+.facet__x {
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink-45);
+  align-self: start;
+  justify-self: center;
+  /* 19px заголовок + 10px отступ списка + 19px половина первой строки
+     − 12px половина глифа: знак встаёт ровно на первую строку колонки */
+  padding-top: 36px;
+}
+@media (max-width: 619px) {
+  .facet__x {
+    padding: 10px 0 4px;
+    justify-self: start;
+  }
+}
+
+.facet__out {
+  margin-top: clamp(20px, 2.8vw, 30px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 20px;
+}
+.facet__note {
+  color: var(--ink-45);
+}
+.facet__url {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  letter-spacing: -0.01em;
+  padding: 9px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  overflow-wrap: anywhere;
+  transition: background 0.2s var(--ease);
+}
+.facet__url:hover {
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .own__list {
