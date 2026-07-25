@@ -69,11 +69,14 @@
   --fs-display: clamp(3rem, 10.5vw, 8.5rem);
   --fs-h1: clamp(2.25rem, 6.5vw, 5rem);
   --fs-h2: clamp(1.875rem, 4.4vw, 3.25rem);
-  --fs-h3: clamp(1.125rem, 1.9vw, 1.5rem);
+  --fs-h3: clamp(1.25rem, 2.1vw, 1.75rem);
   --fs-stat: clamp(2.5rem, 6vw, 4.25rem);
-  --fs-lead: clamp(1.0625rem, 1.7vw, 1.5rem);
-  --fs-body: clamp(1rem, 1.05vw, 1.125rem);
-  --fs-meta: 0.75rem;
+  --fs-lead: clamp(1.25rem, 2.2vw, 2rem);
+  --fs-body: clamp(1.0625rem, 1.25vw, 1.25rem);
+  /* Вторичный размер — для подписей и правых колонок. Раньше такие места
+     были прибиты к 0.875–0.9375rem и на широком экране выглядели мелко. */
+  --fs-sub: clamp(1.0625rem, 1.35vw, 1.3125rem);
+  --fs-meta: 0.8125rem;
 
   --sec-y: clamp(76px, 9.5vw, 150px);
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -154,6 +157,11 @@ svg {
   font-variant-numeric: tabular-nums;
 }
 
+/* Термины, которые нельзя рвать переносом по дефису */
+.nowrap {
+  white-space: nowrap;
+}
+
 .skip {
   position: absolute;
   left: -9999px;
@@ -195,7 +203,7 @@ svg {
 .hdr__name {
   font-weight: 700;
   letter-spacing: -0.02em;
-  font-size: 1rem;
+  font-size: 1.0625rem;
   white-space: nowrap;
 }
 .hdr__name span {
@@ -338,7 +346,9 @@ svg {
 .hero__type {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  /* по центру относительно портрета: воздух распределяется поровну сверху
+     и снизу, вместо провала под кнопкой */
+  justify-content: center;
   gap: clamp(38px, 6vh, 84px);
   min-height: 0;
 }
@@ -374,16 +384,21 @@ svg {
   line-height: 1.32;
   letter-spacing: -0.015em;
   margin: 0;
-  max-width: 32ch;
+  max-width: 40ch;
   text-wrap: pretty;
+}
+
+/* Главное действие первого экрана — набираем крупнее обычной ссылки */
+.hero__say .arrow-link {
+  font-size: clamp(1.125rem, 1.5vw, 1.4375rem);
 }
 
 .hero__now {
   margin: 0;
   color: var(--ink-70);
-  font-size: 0.9375rem;
+  font-size: var(--fs-sub);
   line-height: 1.45;
-  max-width: 42ch;
+  max-width: 48ch;
   display: flex;
   gap: 11px;
 }
@@ -435,12 +450,17 @@ svg {
     gap: 18px;
     padding-bottom: 12px;
   }
+  /* Ужимаем ровно настолько, чтобы кнопка осталась в экране, — но не
+     скатываемся в мелкий кегль: на 1366×700 лид держим около 24px. */
   .hero__lead {
-    font-size: 1.125rem;
-    max-width: 40ch;
+    font-size: clamp(1.25rem, 1.8vw, 1.625rem);
+    max-width: 42ch;
   }
   .hero__now {
-    font-size: 0.875rem;
+    font-size: 1.0625rem;
+  }
+  .hero__say .arrow-link {
+    font-size: 1.125rem;
   }
 }
 
@@ -523,9 +543,9 @@ svg {
 .band__cap {
   margin: 12px 0 0;
   color: var(--ink-70);
-  font-size: 0.9375rem;
+  font-size: var(--fs-sub);
   line-height: 1.4;
-  max-width: 30ch;
+  max-width: 34ch;
 }
 
 /* --- Секция с маргиналией --------------------------------------------- */
@@ -544,6 +564,13 @@ svg {
 .sec__inner {
   display: grid;
   gap: clamp(24px, 4vw, 40px);
+}
+
+/* У грид-элемента min-width по умолчанию auto: широкая таблица с
+   неразрывными ячейками раздвигала колонку шире контейнера и давала
+   горизонтальный скролл всей страницы вместо скролла внутри таблицы. */
+.sec__inner > * {
+  min-width: 0;
 }
 
 @media (min-width: 960px) {
@@ -575,7 +602,7 @@ svg {
 }
 
 .sec__text {
-  max-width: 62ch;
+  max-width: 66ch;
   color: var(--ink-70);
 }
 .sec__text p {
@@ -656,7 +683,7 @@ svg {
 .case__num {
   grid-area: num;
   font-family: var(--mono);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: var(--accent);
   letter-spacing: 0.06em;
 }
@@ -673,7 +700,7 @@ svg {
 .case__res {
   grid-area: res;
   color: var(--ink-70);
-  font-size: 0.9375rem;
+  font-size: var(--fs-sub);
   font-variant-numeric: tabular-nums;
   transition: color 0.28s var(--ease);
 }
@@ -756,7 +783,7 @@ svg {
 .step__d {
   margin: 0;
   color: var(--ink-45);
-  font-size: 0.875rem;
+  font-size: var(--fs-sub);
   line-height: 1.45;
 }
 
@@ -787,7 +814,7 @@ svg {
 }
 .skill__v {
   color: var(--ink-70);
-  font-size: 0.9375rem;
+  font-size: var(--fs-sub);
   max-width: 62ch;
 }
 
@@ -833,7 +860,7 @@ svg {
 .facet__col li {
   padding: 11px 0;
   border-bottom: 1px solid var(--rule-soft);
-  font-size: 0.9375rem;
+  font-size: var(--fs-sub);
   letter-spacing: -0.01em;
 }
 .facet__col li:first-child {
@@ -867,25 +894,6 @@ svg {
   }
 }
 
-.facet__out {
-  margin-top: clamp(20px, 2.8vw, 30px);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 10px 20px;
-}
-.facet__note {
-  color: var(--ink-45);
-}
-.facet__url {
-  font-family: var(--mono);
-  font-size: 0.875rem;
-  letter-spacing: -0.01em;
-  padding: 9px 14px;
-  background: var(--ink);
-  color: var(--paper);
-  overflow-wrap: anywhere;
-}
 
 .own__list {
   margin: clamp(20px, 2.6vw, 28px) 0 0;
@@ -897,7 +905,7 @@ svg {
   padding: 16px 0;
   border-bottom: 1px solid var(--rule-soft);
   color: var(--ink-70);
-  font-size: 0.9375rem;
+  font-size: var(--fs-sub);
   display: flex;
   gap: 14px;
 }
@@ -912,7 +920,7 @@ svg {
   padding-top: clamp(18px, 2.4vw, 24px);
   border-top: 1px solid var(--rule);
   color: var(--ink-45);
-  font-size: 0.9375rem;
+  font-size: var(--fs-sub);
   max-width: 64ch;
 }
 .tool-line a {
@@ -1137,7 +1145,7 @@ svg {
 .fact__v {
   font-weight: 600;
   letter-spacing: -0.02em;
-  font-size: 1rem;
+  font-size: var(--fs-body);
   line-height: 1.35;
 }
 
@@ -1220,7 +1228,7 @@ svg {
   margin-top: clamp(26px, 3.4vw, 40px);
   font-variant-numeric: tabular-nums;
   font-family: var(--mono);
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
 }
 .data caption {
   text-align: left;
