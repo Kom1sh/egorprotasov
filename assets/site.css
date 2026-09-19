@@ -293,7 +293,7 @@ h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
 .quote footer { margin-top: 26px; font-size: 13px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--lime-mute); }
 .quote footer::before { content: ""; display: inline-block; width: 26px; height: 1px; background: var(--lime); vertical-align: middle; margin-right: 12px; }
 .who-line { margin-top: 40px; font-size: 25px; font-weight: 600; letter-spacing: -.01em; color: #fff; }
-.who-line span { display: block; margin-top: 8px; font-size: 13px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: #9b9b9b; }
+.who-role { margin-top: 8px; font-size: 13px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: #9b9b9b; }
 
 /* ——— контур круга в фоне ——— */
 .bp .lap { transform: translate3d(0, calc(var(--p) * -40px), 0); }

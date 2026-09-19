@@ -73,7 +73,8 @@ def hero(*, quote_lines, quote_author, name_line, role, now_text, traces, nav):
   </div>
   <div class="hero-mid">
     <blockquote class="quote"><p>{q}</p><footer>{quote_author}</footer></blockquote>
-    <h1 class="who-line">{name_line}<span>{role}</span></h1>
+    <h1 class="who-line">{name_line}</h1>
+    <p class="who-role">{role}</p>
     <div class="hero-act">
       <a class="btn-contact" href="https://t.me/Kom1sh">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.4c-.9.3-.9 1.6 0 1.9l4.7 1.5 1.8 5.6c.3.8 1.3 1 1.9.4l2.6-2.5 4.7 3.5c.7.5 1.7.1 1.9-.7l3.1-15c.2-1-.7-1.8-1.6-1.4Z" fill="currentColor" stroke="none"/></svg>
