@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultracker. Егор Протасов</title>
+<meta name="description" content="Ultracker: личный трекер проектов с дорожками, окнами передачи клиенту и базой знаний для ИИ-агентов. Next.js, SQLite, MCP-сервер.">
+<link rel="canonical" href="https://egorprotasov.ru/projects/ultracker/">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css?v=98b31108">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Егор Протасов">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Ultracker. Егор Протасов">
+<meta property="og:description" content="Ultracker: личный трекер проектов с дорожками, окнами передачи клиенту и базой знаний для ИИ-агентов. Next.js, SQLite, MCP-сервер.">
+<meta property="og:url" content="https://egorprotasov.ru/projects/ultracker/">
+<meta property="og:image" content="https://egorprotasov.ru/assets/og/ultracker.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://egorprotasov.ru/projects/ultracker/#article","url":"https://egorprotasov.ru/projects/ultracker/","headline":"Ultracker","description":"Ultracker: личный трекер проектов с дорожками, окнами передачи клиенту и базой знаний для ИИ-агентов. Next.js, SQLite, MCP-сервер.","inLanguage":"ru","dateModified":"2026-09-20","author":{"@type":"Person","@id":"https://egorprotasov.ru/#person","name":"Егор Протасов"},"image":"https://egorprotasov.ru/assets/og/ultracker.png"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Егор Протасов","item":"https://egorprotasov.ru/"},{"@type":"ListItem","position":2,"name":"Проекты","item":"https://egorprotasov.ru/#projects"},{"@type":"ListItem","position":3,"name":"Ultracker","item":"https://egorprotasov.ru/projects/ultracker/"}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Перейти к содержимому</a>
+<header class="topbar"><nav class="wrap" aria-label="Навигация"><a class="home" href="/">Егор Протасов</a><span class="sep" aria-hidden="true">/</span><a href="/#projects">Проекты</a></nav></header>
+<main id="main">
+<article class="wrap">
+<header class="ph">
+  <p class="kind"><span class="st wip">в работе</span><span>Свой проект.</span></p>
+  <h1>Ultracker</h1>
+  <p class="lead">Мой трекер проектов вместо Jira. У каждого проекта дорожки со своим ритмом, трекер сам считает, когда отдать работу клиенту, и хранит проверенные факты, чтобы <span class="nw">ИИ-агенты</span> не путали их между сессиями.</p>
+  <dl class="facts"><div><dt>Роль</dt><dd>Продукт и архитектура, я же главный пользователь</dd></div><div><dt>Период</dt><dd>С сентября 2026</dd></div><div><dt>Команда</dt><dd>Я и Claude Code, который пишет код</dd></div><div><dt>Стек</dt><dd>Next.js 16, SQLite, <span class="nw">MCP-сервер</span>, вход по passkey</dd></div></dl>
+</header>
+
+<section class="blk" aria-labelledby="t-h"><h2 id="t-h">Задача</h2><div class="prose"><p>Агентство отказывается от Jira, и мне нужен был свой инструмент. У клиентов двухнедельные спринты, у меня свой темп, и в одном ритме эти дорожки не живут.</p><p>Хотелось видеть обе дорожки рядом и заранее знать крайний момент, когда нужно отдать работу, чтобы она попала в нужный спринт клиента. И держать по каждому проекту базу проверенных фактов, из которой <span class="nw">ИИ-агенты</span> берут данные для текстов.</p></div></section>
+
+<section class="blk" aria-labelledby="d-h"><h2 id="d-h">Что сделал</h2><ol class="done"><li><time datetime="2026-09-10">10 сентября 2026</time><p>Первая версия в работе: таймлайн с дорожками, окна передачи и риски.</p></li><li><time datetime="2026-09-10">10 сентября 2026</time><p>Метрики проектов из Search Console, Метрики и Вебмастера, отчёты клиентам и база знаний со <span class="nw">стоп-словами</span>.</p></li><li><time datetime="2026-09-11">11 сентября 2026</time><p><span class="nw">MCP-сервер</span> и <span class="nw">Telegram-бот</span>: задачи и факты заводятся прямо из рабочих сессий с <span class="nw">ИИ-агентами</span>.</p></li><li><time datetime="2026-09-14">14 сентября 2026</time><p>Доступ для участников с изоляцией по проектам.</p></li><li><time datetime="2026-09-15">15 сентября 2026</time><p>Канбан, напоминания, журнал действий с откатом и командная палитра.</p></li></ol></section>
+
+<section class="blk" aria-labelledby="r-h"><h2 id="r-h">Результат</h2><div class="prose"><p>С 10 по 18 сентября <span class="nw">ИИ-агенты</span> обратились к трекеру 727 раз и завели 177 проверенных фактов в базу знаний. Код покрыт 49 автоматическими тестами.</p></div><figure class="scheme">
+<svg viewBox="0 0 860 190" role="img" aria-label="Как Ultracker считает окно передачи: задача на моей дорожке привязана ко второму спринту клиента, трекер считает крайний момент передачи — начало второго спринта — и подсвечивает риск, если задача не успевает.">
+<style>.sch-box{fill:#f5f5f7;stroke:#d2d2d7}.sch-t{font:13px var(--font);fill:#1d1d1f}.sch-l{font:600 13px var(--font);fill:#6e6e73}.sch-a{font:13px var(--font);fill:#0a6ee0}.sch-line{stroke:#ececef}</style>
+<text x="0" y="52" class="sch-l">Моя дорожка</text>
+<line x1="120" x2="860" y1="47" y2="47" class="sch-line"/>
+<rect x="190" y="30" width="96" height="34" rx="6" style="fill:#e8f0fb;stroke:#0a6ee0"/>
+<text x="202" y="52" class="sch-t">Задача</text>
+<text x="0" y="118" class="sch-l">Клиент</text>
+<line x1="120" x2="860" y1="113" y2="113" class="sch-line"/>
+<rect x="130" y="96" width="172" height="34" rx="6" class="sch-box"/><text x="142" y="118" class="sch-t">Спринт 1</text><rect x="310" y="96" width="172" height="34" rx="6" class="sch-box"/><text x="322" y="118" class="sch-t">Спринт 2</text><rect x="490" y="96" width="172" height="34" rx="6" class="sch-box"/><text x="502" y="118" class="sch-t">Спринт 3</text><rect x="670" y="96" width="172" height="34" rx="6" class="sch-box"/><text x="682" y="118" class="sch-t">Спринт 4</text>
+<line x1="310" y1="30" x2="310" y2="150" style="stroke:#0a6ee0;stroke-width:1.5"/>
+<path d="M286,47 L306,47" style="stroke:#0a6ee0;stroke-width:1.5;fill:none"/>
+<text x="318" y="168" class="sch-a">окно передачи: крайний момент,</text>
+<text x="318" y="184" class="sch-a">чтобы задача попала во второй спринт</text>
+</svg></figure></section>
+
+<section class="blk" aria-labelledby="f-h"><h2 id="f-h">Что не сработало</h2><ol class="failed"><li>Несколько версий интерфейса подряд получились «ИИшными»: пастельные плашки, «чертёжная ведомость», «табло». Принял дизайн только после сверки со списком таких примет. Этот сайт собран по тому же списку.</li><li>Инструмент пакетной записи задач при частичном вызове стирал остальные поля. На одном проекте так пропали статусы 12 задач, восстанавливал их руками. Теперь это правило прописано в инструкции для агентов.</li><li>Автосбор метрик по клиентским проектам не работает: сервисный аккаунт нельзя добавить в их Search Console. Эти данные снимаю вручную.</li></ol></section>
+
+<section class="blk" aria-labelledby="n-h"><h2 id="n-h">Сейчас</h2>
+  <div class="now"><p class="asof">На 20 сентября 2026</p><p>Работает на отдельном поддомене, в нём все мои проекты. Следующий шаг — уведомления для участников.</p></div>
+</section>
+<nav class="next" aria-label="Другие проекты"><div><span class="lbl">Следующий проект</span><a class="title" href="/projects/ad-network/">Международная рекламная сеть</a></div><div><span class="lbl">Все проекты</span><a href="/#projects">на главной</a></div></nav>
+</article>
+</main>
+<footer class="site-foot"><div class="wrap"><div class="contacts"><a href="mailto:egorprotasov06@gmail.com">egorprotasov06@gmail.com</a><a href="https://t.me/Kom1sh" rel="me noopener">Telegram</a><a href="https://github.com/Kom1sh" rel="me noopener">GitHub</a></div><p class="made">Сайт собирается собственным генератором на Python. <a href="https://github.com/Kom1sh/egorprotasov" rel="noopener">Код на GitHub</a>.</p></div></footer>
+<script>document.querySelectorAll('[data-born]').forEach(function(e){var b=new Date(e.dataset.born),n=new Date(),a=n.getFullYear()-b.getFullYear();if(n.getMonth()<b.getMonth()||(n.getMonth()==b.getMonth()&&n.getDate()<b.getDate()))a--;e.textContent=a})</script>
+</body>
+</html>

@@ -1,13 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Егор Протасов">
-  <!-- Знак повторяет приём первого экрана: буква имени и акцентная точка.
-       Буква собрана прямоугольниками, а не текстом, — не зависит от наличия
-       шрифта и остаётся резкой на 16px. Скруглений нет, как и во всей вёрстке. -->
-  <rect width="64" height="64" fill="#17140F"/>
-  <g fill="#F4F1EA">
-    <rect x="10" y="13" width="11" height="38"/>
-    <rect x="10" y="13" width="31" height="10"/>
-    <rect x="10" y="27" width="25" height="9"/>
-    <rect x="10" y="41" width="31" height="10"/>
-  </g>
-  <circle cx="51" cy="46" r="6.5" fill="#D93B0B"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<rect width="64" height="64" rx="14" fill="#0a6ee0"/>
+<path d="M12 46 L22 45 L29 40 L35 30 L42 26 L48 18 L53 15" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="53" cy="15" r="4.5" fill="#fff"/>
 </svg>
