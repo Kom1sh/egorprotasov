@@ -11,9 +11,12 @@ from .text import esc
 
 # ширины, которые реально используются в вёрстке (1x и 2x)
 WIDTHS = {
-    "egor": [192, 384],
-    "winners": [600],
-    "track": [800, 1280],
+    "egor": [380, 760],
+    "winners": [520, 1040],
+    "track": [800, 1600],
+    "mapka-shot": [1240, 1800],
+    "techkio-shot": [1240, 1800],
+    "mediachef-shot": [1240, 1800],
 }
 
 

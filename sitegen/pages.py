@@ -2,6 +2,7 @@
 import datetime as dt
 import re
 
+from .hero import ICON_SET, hero, path_section
 from .images import picture
 from .text import esc, inline, num, plain
 
@@ -36,127 +37,183 @@ def iso(s):
     return m.group(1) if m else ""
 
 
-def status_badge(key):
-    return f'<span class="st {key}">{STATUS[key]}</span>'
+def url(p):
+    return f"/projects/{p['slug']}/"
 
 
 # ——— главная ———
 
-def _project_rows(projects, sparks):
-    rows = []
-    own = projects[0]["kind"] == "own"
-    for p in projects:
-        sp = f'<td class="sp">{sparks.get(p["slug"], "")}</td>' if own else ""
-        what = f'<td class="what">{inline(p["what"])}</td>' if own else ""
-        rows.append(f'<tr><td class="name"><a href="/projects/{p["slug"]}/">{inline(p["title"])}</a></td>{what}{sp}'
-                    f'<td class="res num">{inline(p["row"])}</td><td class="stc">{status_badge(p["status"])}</td></tr>')
-    head = ('<tr><th scope="col">Проект</th><th scope="col">Что это</th><th scope="col" colspan="2">Результат</th>'
-            '<th scope="col"><span class="sr-only">Состояние</span></th></tr>') if own else \
-           ('<tr><th scope="col">Проект</th><th scope="col">Результат</th>'
-            '<th scope="col"><span class="sr-only">Состояние</span></th></tr>')
-    return f'<table class="ptable"><thead>{head}</thead><tbody>{"".join(rows)}</tbody></table>'
+def _own_section(p, img):
+    """Блок своего проекта: его цвет, спецификация, снимок и вертикальный знак."""
+    spec = "".join(f"<div><dt>{esc(k)}</dt><dd>{inline(v)}</dd></div>" for k, v in p["spec"])
+    if p.get("shot"):
+        media = (f'<figure class="shot">{picture(img, p["shot"], p["shot_alt"], display_w=1240)}</figure>')
+    else:
+        media = ultracker_scheme()
+    return f"""<section class="proj" id="{p['slug']}" style="--bg:{p['color']};--fg:{p['fg']};--fg2:{p['fg2']}">
+  <div class="proj-head"><dl class="spec">{spec}</dl></div>
+  <div class="proj-media">{media}<div class="vert" style="font-size:{p['vert_size']}px" aria-hidden="true">{esc(p['vert'])}</div></div>
+  <div class="proj-cap">
+    <h3><b>{inline(p['title'])}</b> — {inline(p['what'])}</h3>
+    <div class="proj-meta"><p>{inline(p['home_meta'])}</p>
+      <a class="btn btn-{p['slug']}" href="{url(p)}">{ICON_SET[p['icon']]}<span>{esc(p['btn_label'])}</span></a></div>
+  </div>
+</section>"""
 
 
-def home(site, own, client, img, chart_html, sparks, age):
+def _client_list(client):
+    rows = "".join(
+        f'<li><a href="{url(p)}"><span class="c-idx" aria-hidden="true">0{i + 1}</span>'
+        f'<span class="c-name">{inline(p["title"])}</span><span class="c-res">{inline(p["row"])}</span>'
+        f'<span class="c-when">{esc(p["home_when"])}</span></a></li>' for i, p in enumerate(client))
+    return f'<ul class="c-list">{rows}</ul>'
+
+
+def home(site, own, client, img, chart_html, traces, age, nav):
     person = site["person"]
-    lead = inline(person["lead"]).replace("{age}", f'<span data-born="{person["born"]}">{age}</span>')
-
-    path_items, prev_year = [], None
-    for item in site["path"]:
-        year = item["year"] if item["year"] != prev_year else ""
-        prev_year = item["year"]
-        photo = ""
-        if item.get("photo"):
-            photo = (f'<figure>{picture(img, item["photo"], item["photo_alt"], display_w=520)}'
-                     f'<figcaption class="cap">{inline(item["caption"])}</figcaption></figure>')
-        year_html = f'<span class="year">{year}</span>' if year else '<span class="year" aria-hidden="true"></span>'
-        path_items.append(f'<li>{year_html}<div><p>{inline(item["text"])}</p>{photo}</div></li>')
-
+    q = site["quote"]
+    age_html = '<b data-born="' + person["born"] + f'">{age}</b>'
+    bio = "".join("<p>" + inline(t).replace("{age}", age_html) + "</p>" for t in site["bio"])
     life = site["life"]
     ideas = "".join(f"<li>{inline(t)}</li>" for t in life["items"])
+    path_items = [(it["year"] if i == 0 or site["path"][i - 1]["year"] != it["year"] else "", inline(it["text"]),
+                   (it["photo"], it["photo_alt"], it.get("fig", ""), it.get("caption", "")) if it.get("photo") else None)
+                  for i, it in enumerate(site["path"])]
 
-    return f"""<header class="hero"><div class="wrap">
-  <div class="who">
-    {picture(img, "egor", "Егор Протасов", display_w=96, cls="ava", eager=True)}
-    <div class="text">
-      <h1>{esc(person["name"])}</h1>
-      <p class="lead">{lead}</p>
-      <p class="about">{inline(person["about"])}</p>
+    return f"""{hero(quote_lines=[(c, esc(t)) for c, t in q["lines"]], quote_author=esc(q["author"]),
+                     name_line=esc(person["name"]), role=esc(person["role_line"]),
+                     now_text=inline(person["now"]), traces=traces, nav=nav)}
+  <div class="bio">
+    <div class="bio-text">{bio}</div>
+    <div class="rule" aria-hidden="true"><i></i></div>
+    <figure class="portrait">{picture(img, "egor", "Егор Протасов", display_w=380, eager=True)}
+      <figcaption><span class="nm">{esc(person["name"])}</span><span class="rl">{esc(person["role_line"])}</span></figcaption></figure>
+  </div>
+</header>
+
+<section class="tele" id="telemetry">
+  <div class="wrap">
+    <p class="lbl">Телеметрия</p>
+    <h2 class="cap">{inline(site["chart"]["caption"])}</h2>
+    {chart_html}
+  </div>
+</section>
+
+{''.join(_own_section(p, img) for p in own)}
+
+<section class="clients" id="clients">
+  <div class="wrap">
+    <p class="lbl">Клиентские проекты</p>
+    <h2 class="cap">{inline(site["clients_caption"])}</h2>
+    {_client_list(client)}
+  </div>
+</section>
+
+{path_section(path_items, img)}
+
+<section class="life" id="life">
+  <div class="wrap life-row">
+    <figure class="life-photo"><span class="fr" aria-hidden="true"></span>{picture(img, life["photo"], life["photo_alt"], display_w=800)}</figure>
+    <div>
+      <p class="lbl">Вне работы</p>
+      <p class="life-lead">{inline(life["lead"])}</p>
+      <ul class="ideas">{ideas}</ul>
     </div>
   </div>
-  {chart_html}
-</div></header>
-
-<section class="sec tone" aria-labelledby="path-h"><div class="wrap">
-  <h2 id="path-h">Путь</h2>
-  <ol class="path">{"".join(path_items)}</ol>
-</div></section>
-
-<section class="sec" id="projects" aria-labelledby="projects-h"><div class="wrap">
-  <h2 id="projects-h">Проекты</h2>
-  <h3>Свои</h3>
-  {_project_rows(own, sparks)}
-  <h3>Клиентские</h3>
-  <p class="note">Названия не указываю по договорённости с клиентами.</p>
-  {_project_rows(client, sparks)}
-</div></section>
-
-<section class="sec tone" aria-labelledby="life-h"><div class="wrap">
-  <h2 id="life-h">Вне работы</h2>
-  <div class="life-row">
-    {picture(img, life["photo"], life["photo_alt"], display_w=620)}
-    <div><p class="life-lead">{inline(life["lead"])}</p><ul class="ideas">{ideas}</ul></div>
-  </div>
-</div></section>"""
+</section>"""
 
 
 # ——— страница проекта ———
 
-def _facts(p):
-    f = p["facts"]
-    items = [("Роль", f["role"]), ("Период", f["period"]), ("Команда", f["team"])]
-    if p["kind"] == "own":
-        items.append(("Стек", f["stack"]))
-    else:
-        items.append(("Ниша", f["niche"]))
-    if p.get("site"):
-        items[-1:] = [items[-1]]
-    dl = "".join(f"<div><dt>{esc(k)}</dt><dd>{inline(v)}</dd></div>" for k, v in items)
-    return f'<dl class="facts">{dl}</dl>'
+def _spec_strip(spec):
+    items = "".join(f"<div><dt>{esc(k)}</dt><dd>{inline(v)}</dd></div>" for k, v in spec)
+    return f'<div class="spec-strip"><div class="wrap"><dl class="spec">{items}</dl></div></div>'
 
+
+def _block(label, inner, cls=""):
+    return (f'<section class="blk {cls}"><div class="wrap two"><p class="lbl">{esc(label)}</p>'
+            f'<div>{inner}</div></div></section>')
+
+
+def _work_list(done):
+    li = "".join(f'<li><span class="p-year"><time datetime="{iso(d["date"])}">{esc(fmt_date(d["date"]))}</time></span>'
+                 f'<span class="p-node" aria-hidden="true"></span><div><p>{inline(d["text"])}</p></div></li>'
+                 for d in done)
+    return f'<ol class="p-list small">{li}</ol>'
+
+
+def project(p, *, img, result_extra, next_p, asof):
+    kind = "Свой проект" if p["kind"] == "own" else "Клиентский проект"
+    site_link = ""
+    if p.get("site"):
+        site_link = (f'<a class="ph-site" href="{esc(p["site"])}" rel="noopener">{ICON_SET["link"]}'
+                     f'<span>{esc(p["site_label"])}</span></a>')
+    note = f'<p class="ph-note">{inline(p["note"])}</p>' if p.get("note") else ""
+    media = ""
+    if p.get("shot"):
+        media = (f'<div class="wrap"><figure class="shot ph-shot">'
+                 f'{picture(img, p["shot"], p["shot_alt"], display_w=1240)}</figure></div>')
+    elif p.get("scheme"):
+        media = f'<div class="wrap">{ultracker_scheme(cls="shot ui ph-shot")}</div>'
+
+    failed = ""
+    if p.get("failed"):
+        failed = _block("Что не сработало",
+                        '<ol class="failed">' + "".join(f"<li>{inline(t)}</li>" for t in p["failed"]) + "</ol>")
+    result = "".join(f"<p>{inline(t)}</p>" for t in p["result"])
+
+    return f"""<header class="ph{'' if media else ' no-media'}" id="top" style="--bg:{p['color']};--fg:{p['fg']};--fg2:{p['fg2']}">
+  <div class="wrap">
+    <a class="ph-back" href="/#projects">{ICON_SET["back"]}<span>Все проекты</span></a>
+    <p class="ph-kind">{kind}, {STATUS[p["status"]]}</p>
+    <h1>{inline(p["title"])}</h1>
+    <div class="ph-sub">
+      <div><p class="ph-lead">{inline(p["lead"])}</p>{note}</div>
+      <div>{site_link}</div>
+    </div>
+  </div>
+  {media}
+</header>
+
+<main id="main">
+{_spec_strip(p["spec"])}
+{_block("Задача", "".join(f"<p>{inline(t)}</p>" for t in p["task"]), cls="task")}
+{_block("Что сделал", _work_list(p["done"]))}
+<section class="blk res"><div class="wrap">
+  <p class="lbl">Результат</p>
+  <h2 class="cap">{inline(p["cap"])}</h2>
+  <div class="prose">{result}</div>
+  {result_extra}
+</div></section>
+{failed}
+<section class="blk"><div class="wrap">
+  <div class="now-card">
+    <div class="now-head"><p class="lbl">Сейчас</p><p class="asof">на {esc(asof)}</p></div>
+    <p class="now-text">{inline(p["now"])}</p>
+  </div>
+</div></section>
+</main>
+
+<nav class="nextp" style="--bg:{next_p['color']};--fg:{next_p['fg']};--fg2:{next_p['fg2']}" aria-label="Следующий проект">
+  <a href="{url(next_p)}"><span class="np-lbl">Следующий проект</span>
+    <span class="np-title">{inline(next_p["title"])}</span><span class="np-what">{inline(next_p["what"])}</span>
+    {ICON_SET["next"]}</a>
+</nav>"""
+
+
+# ——— данные внутри страниц ———
 
 def bars(sources, total_label):
+    """Одна величина, прямые подписи: класс dbar, потому что .bar — это липкая шапка."""
     total = sum(s["value"] for s in sources)
     mx = max(s["value"] for s in sources)
     rows = "".join(
-        f'<li><span>{esc(s["label"])}</span><span class="bar{"" if s.get("accent") else " muted"}" '
+        f'<li><span>{esc(s["label"])}</span><span class="dbar{"" if s.get("accent") else " muted"}" '
         f'style="width:{100 * s["value"] / mx:.1f}%"></span><span class="v">{num(s["value"])}</span></li>'
         for s in sources)
     return (f'<figure class="chart"><figcaption class="chart-head"><span class="chart-title">{esc(total_label)}</span>'
             f'</figcaption><ul class="bars" aria-label="{esc(total_label)}">{rows}</ul>'
             f'<p class="chart-src">Всего {num(total)} визитов. Яндекс.Метрика, 29 августа — 18 сентября 2026.</p></figure>')
-
-
-def ultracker_scheme():
-    """Схема: наша дорожка и дорожка клиента, задача привязана к спринту клиента, трекер считает окно передачи."""
-    sprints = "".join(
-        f'<rect x="{130 + i * 180}" y="96" width="172" height="34" rx="6" class="sch-box"/>'
-        f'<text x="{130 + i * 180 + 12}" y="118" class="sch-t">Спринт {i + 1}</text>' for i in range(4))
-    return f"""<figure class="scheme">
-<svg viewBox="0 0 860 190" role="img" aria-label="Как Ultracker считает окно передачи: задача на моей дорожке привязана ко второму спринту клиента, трекер считает крайний момент передачи — начало второго спринта — и подсвечивает риск, если задача не успевает.">
-<style>.sch-box{{fill:#f5f5f7;stroke:#d2d2d7}}.sch-t{{font:13px var(--font);fill:#1d1d1f}}.sch-l{{font:600 13px var(--font);fill:#6e6e73}}.sch-a{{font:13px var(--font);fill:#0a6ee0}}.sch-line{{stroke:#ececef}}</style>
-<text x="0" y="52" class="sch-l">Моя дорожка</text>
-<line x1="120" x2="860" y1="47" y2="47" class="sch-line"/>
-<rect x="190" y="30" width="96" height="34" rx="6" style="fill:#e8f0fb;stroke:#0a6ee0"/>
-<text x="202" y="52" class="sch-t">Задача</text>
-<text x="0" y="118" class="sch-l">Клиент</text>
-<line x1="120" x2="860" y1="113" y2="113" class="sch-line"/>
-{sprints}
-<line x1="310" y1="30" x2="310" y2="150" style="stroke:#0a6ee0;stroke-width:1.5"/>
-<path d="M286,47 L306,47" style="stroke:#0a6ee0;stroke-width:1.5;fill:none"/>
-<text x="318" y="168" class="sch-a">окно передачи: крайний момент,</text>
-<text x="318" y="184" class="sch-a">чтобы задача попала во второй спринт</text>
-</svg></figure>"""
 
 
 def quarter_table(rows, caption, note):
@@ -167,45 +224,30 @@ def quarter_table(rows, caption, note):
             f'<tbody>{body}</tbody><tfoot><tr><td colspan="4">{esc(note)}</td></tr></tfoot></table>')
 
 
-def project(p, *, result_extra, next_p, asof):
-    kind_label = "Свой проект" if p["kind"] == "own" else "Клиентский проект, без названия по договорённости"
-    site_link = ""
-    if p.get("site"):
-        site_link = f' <a href="{esc(p["site"])}" rel="noopener">{esc(p["site_label"])}</a>'
-    done = "".join(f'<li><time datetime="{iso(d["date"])}">{esc(fmt_date(d["date"]))}</time>'
-                   f'<p>{inline(d["text"])}</p></li>' for d in p["done"])
-    task = "".join(f"<p>{inline(t)}</p>" for t in p["task"])
-    result = "".join(f"<p>{inline(t)}</p>" for t in p.get("result", []))
-    failed = "".join(f"<li>{inline(t)}</li>" for t in p.get("failed", []))
-    failed_blk = (f'<section class="blk" aria-labelledby="f-h"><h2 id="f-h">Что не сработало</h2>'
-                  f'<ol class="failed">{failed}</ol></section>') if failed else ""
-    nxt = ""
-    if next_p:
-        nxt = (f'<nav class="next" aria-label="Другие проекты"><div><span class="lbl">Следующий проект</span>'
-               f'<a class="title" href="/projects/{next_p["slug"]}/">{inline(next_p["title"])}</a></div>'
-               f'<div><span class="lbl">Все проекты</span><a href="/#projects">на главной</a></div></nav>')
-    return f"""<article class="wrap">
-<header class="ph">
-  <p class="kind">{status_badge(p["status"])}<span>{kind_label}.{site_link}</span></p>
-  <h1>{inline(p["title"])}</h1>
-  <p class="lead">{inline(p["lead"])}</p>
-  {_facts(p)}
-</header>
+def ultracker_scheme(cls="shot ui"):
+    """Схема: моя дорожка и спринты клиента, задача привязана ко второму спринту, трекер считает окно передачи."""
+    sprints = "".join(
+        f'<rect x="{300 + i * 312}" y="450" width="296" height="80" rx="12" fill="#fff" stroke="#cfd6e0" stroke-width="2"/>'
+        f'<text x="{324 + i * 312}" y="498">Спринт {i + 1}</text>' for i in range(4))
+    return f"""<figure class="{cls}"><svg viewBox="0 0 1600 1000" role="img" aria-label="Схема Ultracker: моя дорожка и спринты клиента, задача привязана ко второму спринту, трекер считает окно передачи">
+<rect width="1600" height="1000" fill="#f2f4f8"/><rect width="250" height="1000" fill="#0f1b2d"/>
+<rect x="36" y="44" width="120" height="16" rx="4" fill="#e8edf5"/>
+<g fill="#223352"><rect x="36" y="110" width="178" height="34" rx="8"/><rect x="36" y="160" width="150" height="14" rx="4" fill="#182740"/><rect x="36" y="192" width="130" height="14" rx="4" fill="#182740"/><rect x="36" y="224" width="160" height="14" rx="4" fill="#182740"/></g>
+<rect x="300" y="60" width="420" height="30" rx="6" fill="#0f1b2d"/><rect x="300" y="104" width="260" height="16" rx="4" fill="#98a2b3"/>
+<g font-family="system-ui, sans-serif" font-size="22" fill="#6b7788"><text x="300" y="224">Моя дорожка</text><text x="300" y="424">Спринты клиента</text></g>
+<line x1="300" x2="1540" y1="250" y2="250" stroke="#e4e8ef" stroke-width="2"/>
+<rect x="420" y="262" width="300" height="70" rx="12" fill="#e6eeff" stroke="#2f6bff" stroke-width="2"/>
+<text x="446" y="306" font-family="system-ui, sans-serif" font-size="24" fill="#1d4ed8" font-weight="600">Батч текстов</text>
+<g font-family="system-ui, sans-serif" font-size="22" fill="#3d4a5c">{sprints}</g>
+<line x1="612" x2="612" y1="240" y2="620" stroke="#f5a623" stroke-width="4"/>
+<path d="M720 297 C 680 297, 650 297, 616 297" stroke="#2f6bff" stroke-width="3" fill="none"/>
+<rect x="628" y="590" width="360" height="56" rx="28" fill="#fff1d6"/>
+<text x="652" y="626" font-family="system-ui, sans-serif" font-size="22" fill="#8a4b00" font-weight="600">окно передачи: вт, 20:00</text>
+<g fill="#dfe4ec"><rect x="300" y="720" width="1240" height="16" rx="4"/><rect x="300" y="760" width="980" height="16" rx="4"/><rect x="300" y="800" width="1120" height="16" rx="4"/><rect x="300" y="840" width="760" height="16" rx="4"/></g>
+</svg></figure>"""
 
-<section class="blk" aria-labelledby="t-h"><h2 id="t-h">Задача</h2><div class="prose">{task}</div></section>
 
-<section class="blk" aria-labelledby="d-h"><h2 id="d-h">Что сделал</h2><ol class="done">{done}</ol></section>
-
-<section class="blk" aria-labelledby="r-h"><h2 id="r-h">Результат</h2><div class="prose">{result}</div>{result_extra}</section>
-
-{failed_blk}
-
-<section class="blk" aria-labelledby="n-h"><h2 id="n-h">Сейчас</h2>
-  <div class="now"><p class="asof">На {esc(asof)}</p><p>{inline(p["now"])}</p></div>
-</section>
-{nxt}
-</article>"""
-
+# ——— служебные страницы ———
 
 def redirect(to):
     return f"""<!doctype html>
@@ -219,11 +261,11 @@ def redirect(to):
 
 
 def not_found():
-    return """<section class="sec"><div class="wrap">
-  <h1 style="font-size:clamp(32px,4vw,48px);letter-spacing:-.02em;margin-bottom:16px">Такой страницы нет</h1>
-  <p class="lead" style="margin-bottom:24px">Возможно, адрес изменился после переделки сайта.</p>
-  <p><a href="/">На главную</a></p>
-</div></section>"""
+    return """<main id="main"><section class="blk nf"><div class="wrap">
+  <p class="lbl">404</p>
+  <h1 class="cap"><b>Такой страницы нет.</b> Возможно, адрес изменился после переделки сайта</h1>
+  <p class="nf-links"><a class="ph-site" href="/"><span>На главную</span></a></p>
+</div></section></main>"""
 
 
 def sitemap(urls, updated):
@@ -238,4 +280,4 @@ def age_on(born, today):
 
 
 __all__ = ["home", "project", "redirect", "not_found", "sitemap", "bars", "quarter_table",
-           "ultracker_scheme", "age_on", "plain", "fmt_date"]
+           "ultracker_scheme", "age_on", "plain", "fmt_date", "iso", "url"]

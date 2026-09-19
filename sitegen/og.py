@@ -11,28 +11,31 @@ import subprocess
 import tempfile
 import time
 
+from .hero import LOGO as LOGO_SVG
 from .text import esc, plain
 
 CHROME = os.environ.get("CHROME", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 
 FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-<rect width="64" height="64" rx="14" fill="#0a6ee0"/>
-<path d="M12 46 L22 45 L29 40 L35 30 L42 26 L48 18 L53 15" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="53" cy="15" r="4.5" fill="#fff"/>
+<rect width="64" height="64" rx="14" fill="#000"/>
+<g fill="#f4f4f2"><rect x="14" y="16" width="10" height="34"/><rect x="14" y="16" width="27" height="9"/>
+<rect x="14" y="28" width="22" height="8"/><rect x="14" y="41" width="27" height="9"/></g>
+<circle cx="49" cy="45" r="5.5" fill="#bfe828"/>
 </svg>
 """
 
-OG_CSS = """*{box-sizing:border-box}html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:#fff}
-body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;color:#1d1d1f;-webkit-font-smoothing:antialiased;
-padding:64px 72px;display:flex;flex-direction:column}
-.top{display:flex;align-items:center;gap:18px;font-size:26px;color:#6e6e73}
-.top img{width:56px;height:70px;object-fit:cover;object-position:50% 18%;border-radius:12px}
-.top b{color:#1d1d1f;font-weight:600}
-h1{font-size:74px;line-height:1.02;letter-spacing:-.025em;font-weight:600;margin:44px 0 18px;max-width:1000px}
-p{font-size:32px;line-height:1.3;color:#6e6e73;margin:0;max-width:880px}
-svg.tr{position:absolute;right:72px;bottom:64px;width:470px;height:170px;overflow:visible}
+OG_CSS = """*{box-sizing:border-box}html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:#000}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;color:#f4f4f2;-webkit-font-smoothing:antialiased;
+padding:62px 72px;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:16px;font-size:25px;color:#9a9a9a}
+.top svg{width:44px;height:44px}
+.top svg g{fill:#f4f4f2}
+.top b{color:#fff;font-weight:600}
+h1{font-size:76px;line-height:1;letter-spacing:-.04em;font-weight:800;margin:40px 0 20px;max-width:1010px}
+p{font-size:31px;line-height:1.3;color:#a8a8a6;margin:0;max-width:900px}
+svg.tr{position:absolute;right:72px;bottom:62px;width:470px;height:170px;overflow:visible}
 svg.tr path{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
-.url{margin-top:auto;font-size:24px;color:#86868b}"""
+.url{margin-top:auto;font-size:23px;color:#6f6f6f}"""
 
 
 def _trace_svg(series):
@@ -93,7 +96,6 @@ def build(root, site, projects, traces):
     out = root / "assets" / "og"
     out.mkdir(parents=True, exist_ok=True)
     tmp = pathlib.Path(tempfile.mkdtemp(prefix="og-src-"))
-    ava = (root / "assets" / "img" / "egor-192.jpg").as_uri()
 
     pages = [("home", "Егор Протасов", "Свои проекты и клиентские кейсы на данных Search Console и Яндекс.Метрики",
               traces.get("home"), "egorprotasov.ru")]
@@ -102,7 +104,7 @@ def build(root, site, projects, traces):
                       f"egorprotasov.ru/projects/{p['slug']}/"))
 
     for slug, title, sub, tr, url in pages:
-        top = ('<div class="top"><img src="' + ava + '" alt=""><span><b>Егор Протасов</b>'
+        top = ('<div class="top">' + LOGO_SVG + '<span><b>Егор Протасов</b>'
                + ('' if slug == "home" else ', SEO Lead') + '</span></div>')
         heading = "SEO Lead и проектный менеджер" if slug == "home" else esc(title)
         html = (f'<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{OG_CSS}</style></head><body>'
@@ -116,7 +118,7 @@ def build(root, site, projects, traces):
 
     (root / "favicon.svg").write_text(FAVICON_SVG, encoding="utf-8")
     icon_html = tmp / "icon.html"
-    icon_html.write_text('<!doctype html><html><body style="margin:0;background:#fff">'
+    icon_html.write_text('<!doctype html><html><body style="margin:0;background:#000">'
                          f'<img src="{(root / "favicon.svg").as_uri()}" style="display:block;width:512px;height:512px">'
                          '</body></html>', encoding="utf-8")
     big = tmp / "icon-512.png"

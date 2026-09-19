@@ -1,14 +1,20 @@
-"""Каркас страницы: <head> с мета-тегами и JSON-LD, шапка внутренних страниц, подвал."""
+"""Каркас страницы: <head> с мета-тегами и JSON-LD, липкая шапка, подвал."""
 import json
+import pathlib
 
+from .hero import LOGO, sticky_header
 from .text import esc, inline
 
 SITE = "https://egorprotasov.ru"
+ICONS = pathlib.Path(__file__).resolve().parent.parent / "src" / "icons"
 
 # Возраст пересчитывается в браузере от даты рождения, чтобы «Мне 19» не устарело.
 AGE_JS = ("document.querySelectorAll('[data-born]').forEach(function(e){var b=new Date(e.dataset.born),n=new Date(),"
           "a=n.getFullYear()-b.getFullYear();if(n.getMonth()<b.getMonth()||(n.getMonth()==b.getMonth()&&n.getDate()<b.getDate()))a--;"
           "e.textContent=a})")
+
+MAIL_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" '
+             'stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>')
 
 
 def head(*, title, description, path, og_image, og_type, jsonld, css_v, noindex=False):
@@ -23,7 +29,7 @@ def head(*, title, description, path, og_image, og_type, jsonld, css_v, noindex=
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}">
 <link rel="canonical" href="{url}">
-{robots}<meta name="theme-color" content="#ffffff">
+{robots}<meta name="theme-color" content="#000000">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -42,31 +48,67 @@ def head(*, title, description, path, og_image, og_type, jsonld, css_v, noindex=
 </head>"""
 
 
-def topbar(crumbs):
-    """crumbs: [(подпись, адрес)] после имени."""
-    rest = "".join(f'<span class="sep" aria-hidden="true">/</span><a href="{esc(h)}">{esc(t)}</a>' for t, h in crumbs)
-    return (f'<header class="topbar"><nav class="wrap" aria-label="Навигация">'
-            f'<a class="home" href="/">Егор Протасов</a>{rest}</nav></header>')
+def _icon(name):
+    svg = (ICONS / f"{name}.svg").read_text(encoding="utf-8")
+    if "<title>" in svg:
+        svg = svg[:svg.index("<title>")] + svg[svg.index("</title>") + 8:]
+    return svg.strip()
 
 
-def footer(site):
-    links = "".join(f'<a href="{esc(c["href"])}"{" rel=\"me noopener\"" if c["href"].startswith("http") else ""}>'
-                    f'{esc(c["label"])}</a>' for c in site["contacts"])
-    return (f'<footer class="site-foot"><div class="wrap"><div class="contacts">{links}</div>'
-            f'<p class="made">{inline(site["footer_note"])}</p></div></footer>')
+def socials(site):
+    out = []
+    for c in site["contacts"]:
+        icon = MAIL_ICON if c["icon"] == "mail" else _icon(c["icon"])
+        out.append(f'<a class="soc" href="{esc(c["href"])}" aria-label="{esc(c["label"])}"'
+                   f'{" rel=\"me noopener\"" if c["href"].startswith("http") else ""}>{icon}</a>')
+    return "".join(out)
 
 
-def page(*, head_html, body, site, chart_js_v=None, top=None):
+def nav(own, client):
+    """Разделы в шапке: свои проекты, клиентские, обо мне."""
+    return [("Своё", [(p["nav_label"], f"/projects/{p['slug']}/") for p in own]),
+            ("Клиенты", [(p["nav_label"], f"/projects/{p['slug']}/") for p in client]),
+            ("Обо мне", [("путь", "/#path"), ("вне работы", "/#life"), ("контакты", "/#contacts")])]
+
+
+def footer(site, own, client):
+    own_links = "".join(f'<a href="/projects/{p["slug"]}/">{inline(p["nav_label"])}</a>' for p in own)
+    cl_links = "".join(f'<a href="/projects/{p["slug"]}/">{inline(p["nav_label"])}</a>' for p in client)
+    contacts = "".join(f'<a href="{esc(c["href"])}">{esc(c["foot_label"])}</a>'
+                       for c in site["contacts"] if c.get("foot_label"))
+    return f"""<footer class="foot" id="contacts">
+  <div class="wrap">
+    <div class="f-top">
+      <div class="f-id"><a class="logo big" href="/" aria-label="Егор Протасов, на главную">{LOGO}</a>
+        <p><b>{esc(site["person"]["name"])}</b><br>{esc(site["person"]["role_line"])}</p></div>
+      <div class="f-soc">{socials(site)}</div>
+    </div>
+    <div class="f-nav">
+      <div><p class="lbl">Своё</p>{own_links}</div>
+      <div><p class="lbl">Клиенты</p>{cl_links}</div>
+      <div><p class="lbl">Обо мне</p><a href="/#path">Путь</a><a href="/#life">Вне работы</a>
+        <a href="https://kom1sh.github.io/seo-course/">Факультатив по SEO и GEO</a></div>
+      <div><p class="lbl">Связаться</p>{contacts}</div>
+    </div>
+    <div class="f-bottom"><span>© {site["meta"]["updated"][:4]} {esc(site["person"]["name"])}</span>
+      <span>Данные на сайте обновлены {esc(site["meta"]["updated_label"])}</span>
+      <span>{inline(site["footer_note"])}</span></div>
+  </div>
+</footer>"""
+
+
+def page(*, head_html, body, site, own, client, nav_data, chart_js_v=None, sticky=False):
+    """sticky — липкая шапка отдельно: на главной она уже внутри первого экрана."""
+    bar = sticky_header(nav_data, home="/") if sticky else ""
     scripts = f'<script src="/assets/chart.js?v={chart_js_v}" defer></script>' if chart_js_v else ""
     return f"""{head_html}
 <body>
 <a class="skip" href="#main">Перейти к содержимому</a>
-{top or ''}
-<main id="main">
+{bar}
 {body}
-</main>
-{footer(site)}
-{scripts}<script>{AGE_JS}</script>
+{footer(site, own, client)}
+{scripts}<script src="/assets/motion.js" defer></script><script src="/assets/menu.js" defer></script>
+<script>{AGE_JS}</script>
 </body>
 </html>
 """

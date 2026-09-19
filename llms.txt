@@ -6,20 +6,21 @@
 
 ## Свои проекты
 
-- [мапка.рф](https://egorprotasov.ru/projects/mapka/): Каталог детских секций Ростова, из поиска с 2 до 97 визитов в день
-- [techkio.ru](https://egorprotasov.ru/projects/techkio/): Игровой проект: сервер, лаунчер и сайт, из поиска с нуля до 228 визитов в день
-- [MediaChef](https://egorprotasov.ru/projects/mediachef/): Программа для видео и расшифровки речи, 31% визитов приходят из ChatGPT
-- [Ultracker](https://egorprotasov.ru/projects/ultracker/): Трекер проектов с базой знаний для ИИ, 727 обращений ИИ-агентов за полторы недели
+- [мапка.рф](https://egorprotasov.ru/projects/mapka/): каталог детских секций Ростова, где посадочные собирает фасетный движок, из поиска с 2 до 97 визитов в день
+- [K.I.O](https://egorprotasov.ru/projects/techkio/): сервер Minecraft со своей сборкой модов, свой лаунчер и сайт с гайдами, из поиска с нуля до 228 визитов в день
+- [MediaChef](https://egorprotasov.ru/projects/mediachef/): программа для видео и расшифровки речи, которая работает без интернета, 31% визитов приходят из ChatGPT
+- [Ultracker](https://egorprotasov.ru/projects/ultracker/): мой трекер проектов: дорожки со своим ритмом, окна передачи и база фактов для ИИ-агентов, 727 обращений ИИ-агентов за полторы недели
 
 ## Клиентские проекты (без названий по договорённости с клиентами)
 
 - [Международная рекламная сеть](https://egorprotasov.ru/projects/ad-network/): клики в день ×4, позиция с 52 до 10
 - [Криптобиржа](https://egorprotasov.ru/projects/crypto-exchange/): показы в Google ×5 за год
 - [Сервис аренды жилья в Индии](https://egorprotasov.ru/projects/rental-india/): переезд сайта, 45 тысяч файлов медиатеки
-- [Сеть лидген-сайтов в сантехнике, США](https://egorprotasov.ru/projects/plumbing-network/): 10 сайтов на собственном генераторе
+- [Сеть лидген-сайтов в США](https://egorprotasov.ru/projects/plumbing-network/): 10 сайтов на собственном генераторе
 
 ## Контакты
 
-- egorprotasov06@gmail.com: mailto:egorprotasov06@gmail.com
+- Почта: mailto:egorprotasov06@gmail.com
 - Telegram: https://t.me/Kom1sh
 - GitHub: https://github.com/Kom1sh
+- ВКонтакте: https://vk.com/kom1sh
