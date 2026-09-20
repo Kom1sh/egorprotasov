@@ -113,6 +113,20 @@ def footer(site, own, client):
 </footer>"""
 
 
+def metrika(counter):
+    """Счётчик Яндекс.Метрики: нужен, чтобы видеть переходы из поиска и из ответов ИИ."""
+    if not counter:
+        return ""
+    return f"""<script>
+(function(m,e,t,r,i,k,a){{m[i]=m[i]||function(){{(m[i].a=m[i].a||[]).push(arguments)}};
+m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){{if(document.scripts[j].src===r){{return}}}}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}})
+(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id={counter}','ym');
+ym({counter},'init',{{ssr:true,webvisor:true,clickmap:true,accurateTrackBounce:true,trackLinks:true}});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/{counter}" style="position:absolute;left:-9999px" alt=""></div></noscript>"""
+
+
 def page(*, head_html, body, site, own, client, nav_data, chart_js_v=None, sticky=False):
     """sticky — липкая шапка отдельно: на главной она уже внутри первого экрана."""
     bar = sticky_header(nav_data, home="/") if sticky else ""
@@ -125,6 +139,7 @@ def page(*, head_html, body, site, own, client, nav_data, chart_js_v=None, stick
 {footer(site, own, client)}
 {scripts}<script src="/assets/motion.js" defer></script><script src="/assets/menu.js" defer></script>
 <script>{AGE_JS}</script>
+{metrika(site.get("analytics", {}).get("metrika"))}
 </body>
 </html>
 """
