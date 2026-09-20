@@ -11,7 +11,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/site.css?v=21601dfe">
+<link rel="stylesheet" href="/assets/site.css?v=3559f7f8">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Егор Протасов">
 <meta property="og:locale" content="ru_RU">
@@ -43,16 +43,15 @@
     <div class="ov-foot"><a class="btn-contact" href="https://t.me/Kom1sh"><span>Написать в Telegram</span></a></div>
   </div>
 </div>
-<header class="ph" id="top" style="--bg:#16243c;--fg:#e8edf5;--fg2:rgba(232,237,245,.74);--run:#bfe828">
+<main id="main">
+<div class="case">
+<section class="ph" id="top" style="--bg:#16243c;--fg:#e8edf5;--fg2:rgba(232,237,245,.74);--run:#bfe828">
   <svg class="ph-bp" viewBox="0 0 1440 1200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path class="pt-base" d="M260 880 L900 880 C 1040 880, 1120 820, 1120 750 C 1120 690, 1060 650, 990 644 C 930 638, 900 600, 918 562 C 936 524, 1000 512, 1058 532 C 1120 554, 1180 536, 1196 488 C 1214 434, 1160 386, 1090 386 L520 386 C 420 386, 360 420, 330 480 C 300 540, 300 620, 268 680 C 236 740, 200 800, 260 880 Z"/><path class="pt-run" d="M260 880 L900 880 C 1040 880, 1120 820, 1120 750 C 1120 690, 1060 650, 990 644 C 930 638, 900 600, 918 562 C 936 524, 1000 512, 1058 532 C 1120 554, 1180 536, 1196 488 C 1214 434, 1160 386, 1090 386 L520 386 C 420 386, 360 420, 330 480 C 300 540, 300 620, 268 680 C 236 740, 200 800, 260 880 Z"/></svg>
   <div class="wrap">
     <a class="ph-back" href="/#projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5 3.5 12 10 19M3.5 12H21"/></svg><span>Все проекты</span></a>
     <p class="ph-kind">Свой проект</p>
     <h1>Ultracker</h1>
-    <div class="ph-sub">
-      <div><p class="ph-lead">Мой трекер проектов вместо Jira. У каждого проекта дорожки со своим ритмом, трекер сам считает, когда отдать работу клиенту, и хранит проверенные факты, чтобы <span class="nw">ИИ-агенты</span> не путали их между сессиями.</p></div>
-      <div></div>
-    </div>
+    <div class="ph-sub"></div>
   </div>
   <div class="wrap"><figure class="shot ui ph-shot"><svg viewBox="0 0 1600 1000" role="img" aria-label="Схема Ultracker: моя дорожка и спринты клиента, задача привязана ко второму спринту, трекер считает окно передачи">
 <rect width="1600" height="1000" fill="#f2f4f8"/><rect width="250" height="1000" fill="#0f1b2d"/>
@@ -70,10 +69,10 @@
 <text x="652" y="626" font-family="system-ui, sans-serif" font-size="22" fill="#8a4b00" font-weight="600">окно передачи: вт, 20:00</text>
 <g fill="#dfe4ec"><rect x="300" y="720" width="1240" height="16" rx="4"/><rect x="300" y="760" width="980" height="16" rx="4"/><rect x="300" y="800" width="1120" height="16" rx="4"/><rect x="300" y="840" width="760" height="16" rx="4"/></g>
 </svg></figure></div>
-</header>
+</section>
 
-<main id="main">
-<div class="spec-strip"><div class="wrap"><dl class="spec"><div><dt>Роль</dt><dd>продукт и архитектура</dd></div><div><dt>Период</dt><dd>с сентября 2026</dd></div><div><dt>Стек</dt><dd>Next.js 16, SQLite, MCP</dd></div><div><dt>Обращений агентов</dt><dd>727 за полторы недели</dd></div></dl></div></div>
+<div class="ph-body">
+<div class="spec-strip"><div class="wrap"><p class="lead-line">Мой трекер проектов вместо Jira. У каждого проекта дорожки со своим ритмом, трекер сам считает, когда отдать работу клиенту, и хранит проверенные факты, чтобы <span class="nw">ИИ-агенты</span> не путали их между сессиями.</p><dl class="spec"><div><dt>Роль</dt><dd>продукт и архитектура</dd></div><div><dt>Период</dt><dd>с сентября 2026</dd></div><div><dt>Стек</dt><dd>Next.js 16, SQLite, MCP</dd></div><div><dt>Обращений агентов</dt><dd>727 за полторы недели</dd></div></dl></div></div>
 <section class="blk task"><div class="wrap two"><p class="lbl">Задача</p><div><p>Агентство отказывается от Jira, и мне нужен был свой инструмент. У клиентов двухнедельные спринты, у меня свой темп, и в одном ритме эти дорожки не живут.</p><p>Хотелось видеть обе дорожки рядом и заранее знать крайний момент, когда нужно отдать работу, чтобы она попала в нужный спринт клиента. И держать по каждому проекту базу проверенных фактов, из которой <span class="nw">ИИ-агенты</span> берут данные для текстов.</p></div></div></section>
 <section class="blk "><div class="wrap two"><p class="lbl">Что сделал</p><div><ol class="p-list small"><li><span class="p-year"><time datetime="2026-09-10">10 сентября 2026</time></span><span class="p-node" aria-hidden="true"></span><div><p>Первая версия в работе: таймлайн с дорожками, окна передачи и риски.</p></div></li><li><span class="p-year"><time datetime="2026-09-10">10 сентября 2026</time></span><span class="p-node" aria-hidden="true"></span><div><p>Метрики проектов из Search Console, Метрики и Вебмастера, отчёты клиентам и база знаний со <span class="nw">стоп-словами</span>.</p></div></li><li><span class="p-year"><time datetime="2026-09-11">11 сентября 2026</time></span><span class="p-node" aria-hidden="true"></span><div><p><span class="nw">MCP-сервер</span> и <span class="nw">Telegram-бот</span>: задачи и факты заводятся прямо из рабочих сессий с <span class="nw">ИИ-агентами</span>.</p></div></li><li><span class="p-year"><time datetime="2026-09-14">14 сентября 2026</time></span><span class="p-node" aria-hidden="true"></span><div><p>Доступ для участников с изоляцией по проектам.</p></div></li><li><span class="p-year"><time datetime="2026-09-15">15 сентября 2026</time></span><span class="p-node" aria-hidden="true"></span><div><p>Канбан, напоминания, журнал действий с откатом и командная палитра.</p></div></li></ol></div></div></section>
 <section class="blk res"><div class="wrap">
@@ -89,13 +88,20 @@
     <p class="now-text">Работает на отдельном поддомене, в нём все мои проекты. Следующий шаг — уведомления для участников.</p>
   </div>
 </div></section>
-</main>
+<section class="blk case-note"><div class="wrap">
+  <p>Кейс из практики Егора Протасова, SEO Lead и проектного менеджера из Ростова-на-Дону.
+  Цифры на этой странице — из Google Search Console и Яндекс.Метрики, на 20 сентября 2026.
+  <a href="/" rel="author">Другие проекты и контакты</a>.</p>
+</div></section>
+</div>
+</div>
 
 <nav class="nextp" style="--bg:#241d4a;--fg:#f4f4f2;--fg2:rgba(244,244,242,.74)" aria-label="Следующий проект">
   <a href="/projects/ad-network/"><span class="np-lbl">Следующий проект</span>
     <span class="np-title">Международная рекламная сеть</span><span class="np-what">клики выросли вчетверо, позиция с 52 до 10</span>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5l7 7-7 7M21 12H3"/></svg></a>
 </nav>
+</main>
 <footer class="foot" id="contacts">
   <div class="wrap">
     <div class="f-top">
