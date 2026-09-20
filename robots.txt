@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Allow: /llms.txt
 
 Sitemap: https://egorprotasov.ru/sitemap.xml
+
+# Выжимка сайта для языковых моделей
+# llms.txt: https://egorprotasov.ru/llms.txt
