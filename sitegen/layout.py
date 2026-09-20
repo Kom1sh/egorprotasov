@@ -135,7 +135,9 @@ def page(*, head_html, body, site, own, client, nav_data, chart_js_v=None, stick
 <body>
 <a class="skip" href="#main">Перейти к содержимому</a>
 {bar}
+<main id="main">
 {body}
+</main>
 {footer(site, own, client)}
 {scripts}<script src="/assets/motion.js" defer></script><script src="/assets/menu.js" defer></script>
 <script>{AGE_JS}</script>

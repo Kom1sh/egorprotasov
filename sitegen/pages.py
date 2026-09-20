@@ -61,10 +61,13 @@ def _own_section(p, img):
 
 
 def _client_list(client):
+    """Ссылка только на названии: если в ссылку завернуть всю строку, извлекатели
+    принимают список за навигацию и выбрасывают его целиком."""
     rows = "".join(
-        f'<li><a href="{url(p)}"><span class="c-idx" aria-hidden="true">0{i + 1}</span>'
-        f'<span class="c-name">{inline(p["title"])}</span><span class="c-res">{inline(p["row"])}</span>'
-        f'<span class="c-when">{esc(p["home_when"])}</span></a></li>' for i, p in enumerate(client))
+        f'<li><span class="c-idx" aria-hidden="true">0{i + 1}</span>'
+        f'<span class="c-name"><a href="{url(p)}">{inline(p["title"])}</a></span>'
+        f'<span class="c-res">{inline(p["row"])}</span>'
+        f'<span class="c-when">{esc(p["home_when"])}</span></li>' for i, p in enumerate(client))
     return f'<ul class="c-list">{rows}</ul>'
 
 
@@ -124,9 +127,12 @@ def home(site, own, client, img, chart_html, traces, age, nav):
 
 # ——— страница проекта ———
 
-def _spec_strip(spec):
+def _spec_strip(spec, lead="", note=""):
+    """Лид и спецификация уже на чёрном: внутри цветной шапки их выбрасывают извлекатели текста."""
     items = "".join(f"<div><dt>{esc(k)}</dt><dd>{inline(v)}</dd></div>" for k, v in spec)
-    return f'<div class="spec-strip"><div class="wrap"><dl class="spec">{items}</dl></div></div>'
+    return (f'<div class="spec-strip"><div class="wrap">'
+            f'<p class="lead-line">{lead}</p>{note}'
+            f'<dl class="spec">{items}</dl></div></div>')
 
 
 def _block(label, inner, cls=""):
@@ -164,22 +170,20 @@ def project(p, *, img, result_extra, next_p, asof, trace=""):
 
     style = (f"--bg:{p['color']};--fg:{p['fg']};--fg2:{p['fg2']};"
              f"--run:{p.get('run', '#bfe828')}")
-    return f"""<header class="ph{'' if media else ' no-media'}" id="top" style="{style}">
+    return f"""<div class="case">
+<section class="ph{'' if media else ' no-media'}" id="top" style="{style}">
   {backdrop}
   <div class="wrap">
     <a class="ph-back" href="/#projects">{ICON_SET["back"]}<span>Все проекты</span></a>
     <p class="ph-kind">{kind}</p>
     <h1>{inline(p["title"])}</h1>
-    <div class="ph-sub">
-      <div><p class="ph-lead">{inline(p["lead"])}</p>{note}</div>
-      <div>{site_link}</div>
-    </div>
+    <div class="ph-sub">{site_link}</div>
   </div>
   {media}
-</header>
+</section>
 
-<main id="main">
-{_spec_strip(p["spec"])}
+<div class="ph-body">
+{_spec_strip(p["spec"], inline(p["lead"]), note)}
 {_block("Задача", "".join(f"<p>{inline(t)}</p>" for t in p["task"]), cls="task")}
 {_block("Что сделал", _work_list(p["done"]))}
 <section class="blk res"><div class="wrap">
@@ -195,7 +199,13 @@ def project(p, *, img, result_extra, next_p, asof, trace=""):
     <p class="now-text">{inline(p["now"])}</p>
   </div>
 </div></section>
-</main>
+<section class="blk case-note"><div class="wrap">
+  <p>Кейс из практики Егора Протасова, SEO Lead и проектного менеджера из Ростова-на-Дону.
+  Цифры на этой странице — из Google Search Console и Яндекс.Метрики, на {esc(asof)}.
+  <a href="/" rel="author">Другие проекты и контакты</a>.</p>
+</div></section>
+</div>
+</div>
 
 <nav class="nextp" style="--bg:{next_p['color']};--fg:{next_p['fg']};--fg2:{next_p['fg2']}" aria-label="Следующий проект">
   <a href="{url(next_p)}"><span class="np-lbl">Следующий проект</span>
@@ -264,11 +274,11 @@ def redirect(to):
 
 
 def not_found():
-    return """<main id="main"><section class="blk nf"><div class="wrap">
+    return """<section class="blk nf"><div class="wrap">
   <p class="lbl">404</p>
   <h1 class="cap"><b>Такой страницы нет.</b> Возможно, адрес изменился после переделки сайта</h1>
   <p class="nf-links"><a class="ph-site" href="/"><span>На главную</span></a></p>
-</div></section></main>"""
+</div></section>"""
 
 
 def sitemap(urls, updated):
