@@ -1,27 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://egorprotasov.ru/</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://egorprotasov.ru/cases/adtech/</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egorprotasov.ru/cases/p2p-lending/</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egorprotasov.ru/cases/crypto/</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-</urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://egorprotasov.ru/</loc><lastmod>2026-09-20</lastmod></url><url><loc>https://egorprotasov.ru/projects/mapka/</loc><lastmod>2026-09-20</lastmod></url><url><loc>https://egorprotasov.ru/projects/techkio/</loc><lastmod>2026-09-20</lastmod></url><url><loc>https://egorprotasov.ru/projects/mediachef/</loc><lastmod>2026-09-20</lastmod></url><url><loc>https://egorprotasov.ru/projects/ultracker/</loc><lastmod>2026-09-20</lastmod></url><url><loc>https://egorprotasov.ru/projects/ad-network/</loc><lastmod>2026-09-20</lastmod></url><url><loc>https://egorprotasov.ru/projects/crypto-exchange/</loc><lastmod>2026-09-20</lastmod></url><url><loc>https://egorprotasov.ru/projects/rental-india/</loc><lastmod>2026-09-20</lastmod></url><url><loc>https://egorprotasov.ru/projects/plumbing-network/</loc><lastmod>2026-09-20</lastmod></url></urlset>
