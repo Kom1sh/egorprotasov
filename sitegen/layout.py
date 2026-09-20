@@ -17,10 +17,23 @@ MAIL_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" widt
              'stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>')
 
 
-def head(*, title, description, path, og_image, og_type, jsonld, css_v, noindex=False):
+def head(*, title, description, path, og_image, og_type, jsonld, css_v, noindex=False,
+         image_alt="", modified="", author="Егор Протасов"):
     url = SITE + path
-    robots = '<meta name="robots" content="noindex, follow">' if noindex else ""
+    robots = ('<meta name="robots" content="noindex, follow">' if noindex else
+              '<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">')
     ld = json.dumps(jsonld, ensure_ascii=False, separators=(",", ":")) if jsonld else ""
+    extra = [f'<meta property="og:image:alt" content="{esc(image_alt or title)}">',
+             f'<meta name="author" content="{esc(author)}">']
+    if og_type == "article" and modified:
+        extra += [f'<meta property="article:modified_time" content="{modified}">',
+                  f'<meta property="article:published_time" content="{modified}">',
+                  f'<meta property="article:author" content="{SITE}/">']
+    if og_type == "profile":
+        extra += ['<meta property="profile:first_name" content="Егор">',
+                  '<meta property="profile:last_name" content="Протасов">',
+                  '<meta property="profile:username" content="Kom1sh">']
+    extra_html = "\n".join(extra)
     return f"""<!doctype html>
 <html lang="ru">
 <head>
@@ -29,7 +42,8 @@ def head(*, title, description, path, og_image, og_type, jsonld, css_v, noindex=
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}">
 <link rel="canonical" href="{url}">
-{robots}<meta name="theme-color" content="#000000">
+{robots}
+<meta name="theme-color" content="#000000">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -44,6 +58,8 @@ def head(*, title, description, path, og_image, og_type, jsonld, css_v, noindex=
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+{extra_html}
+<link rel="alternate" type="text/plain" href="{SITE}/llms.txt" title="Версия сайта для языковых моделей">
 {f'<script type="application/ld+json">{ld}</script>' if ld else ''}
 </head>"""
 

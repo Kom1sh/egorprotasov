@@ -2,11 +2,10 @@
 import datetime as dt
 import re
 
-from .hero import ICON_SET, hero, path_section
+from .hero import ICON_SET, hero, lap_backdrop, path_section, project_backdrop
 from .images import picture
 from .text import esc, inline, num, plain
 
-STATUS = {"up": "растёт", "hold": "держится", "down": "упал", "wip": "в работе"}
 MONTHS_GEN = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
               "сентября", "октября", "ноября", "декабря"]
 MONTHS_NOM = ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август",
@@ -142,8 +141,9 @@ def _work_list(done):
     return f'<ol class="p-list small">{li}</ol>'
 
 
-def project(p, *, img, result_extra, next_p, asof):
+def project(p, *, img, result_extra, next_p, asof, trace=""):
     kind = "Свой проект" if p["kind"] == "own" else "Клиентский проект"
+    backdrop = project_backdrop(trace) if trace else lap_backdrop()
     site_link = ""
     if p.get("site"):
         site_link = (f'<a class="ph-site" href="{esc(p["site"])}" rel="noopener">{ICON_SET["link"]}'
@@ -162,10 +162,13 @@ def project(p, *, img, result_extra, next_p, asof):
                         '<ol class="failed">' + "".join(f"<li>{inline(t)}</li>" for t in p["failed"]) + "</ol>")
     result = "".join(f"<p>{inline(t)}</p>" for t in p["result"])
 
-    return f"""<header class="ph{'' if media else ' no-media'}" id="top" style="--bg:{p['color']};--fg:{p['fg']};--fg2:{p['fg2']}">
+    style = (f"--bg:{p['color']};--fg:{p['fg']};--fg2:{p['fg2']};"
+             f"--run:{p.get('run', '#bfe828')}")
+    return f"""<header class="ph{'' if media else ' no-media'}" id="top" style="{style}">
+  {backdrop}
   <div class="wrap">
     <a class="ph-back" href="/#projects">{ICON_SET["back"]}<span>Все проекты</span></a>
-    <p class="ph-kind">{kind}, {STATUS[p["status"]]}</p>
+    <p class="ph-kind">{kind}</p>
     <h1>{inline(p["title"])}</h1>
     <div class="ph-sub">
       <div><p class="ph-lead">{inline(p["lead"])}</p>{note}</div>

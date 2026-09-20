@@ -142,42 +142,125 @@ def trace_paths(rows, w=1440):
     return "".join(out)
 
 
+def header_trace(rows, w=1440, h=300, y0=470):
+    """Линия проекта для фона шапки: базовая и бегущий по ней сегмент."""
+    if not rows:
+        return ""
+    vals = rows[0]["values"]
+    mx = max(v for v in vals if v is not None)
+    n = len(vals)
+    pts, pen = [], False
+    for i, v in enumerate(vals):
+        if v is None:
+            pen = False
+            continue
+        pts.append(f"{'L' if pen else 'M'}{w * i / (n - 1):.1f},{y0 - h * v / mx:.1f}")
+        pen = True
+    d = " ".join(pts)
+    return f'<path class="pt-base" d="{d}"/><path class="pt-run" d="{d}"/>'
+
+
 # ——— JSON-LD ———
 
 def person_ld(site, img):
     p = site["person"]
+    mail = next(c["href"][7:] for c in site["contacts"] if c["href"].startswith("mailto:"))
     return {
         "@type": "Person", "@id": f"{SITE}/#person", "name": p["name"], "url": f"{SITE}/",
-        "jobTitle": p["job_title"], "description": plain(p["about"]),
-        "image": f"{SITE}/assets/img/egor-{img['egor']['widths'][-1]}.jpg",
-        "address": {"@type": "PostalAddress", "addressLocality": p["city"], "addressCountry": "RU"},
-        "affiliation": {"@type": "CollegeOrUniversity", "name": "Донской государственный технический университет"},
-        "knowsAbout": ["SEO", "GEO", "программное SEO", "управление проектами"],
+        "givenName": "Егор", "familyName": "Протасов",
+        "jobTitle": p["job_title"], "description": plain(p["about"]), "email": mail,
+        "image": {"@type": "ImageObject", "url": f"{SITE}/assets/img/egor-{img['egor']['widths'][-1]}.jpg",
+                  "caption": "Егор Протасов"},
+        "address": {"@type": "PostalAddress", "addressLocality": p["city"], "addressRegion": "Ростовская область",
+                    "addressCountry": "RU"},
+        "affiliation": {"@type": "CollegeOrUniversity", "name": "Донской государственный технический университет",
+                        "url": "https://donstu.ru/"},
+        "alumniOf": {"@type": "CollegeOrUniversity", "name": "Донской государственный технический университет"},
+        "hasOccupation": {"@type": "Occupation", "name": "SEO-специалист",
+                          "occupationalCategory": "SEO Lead и проектный менеджер",
+                          "responsibilities": plain(p["about"])},
+        "award": "Победитель программы «Я в деле» в Ростовской области, 2025",
+        "knowsAbout": ["SEO", "GEO", "оптимизация под ИИ-выдачу", "программное SEO", "техническое SEO",
+                       "семантическое ядро", "Google Search Console", "Яндекс.Метрика", "управление проектами"],
+        "knowsLanguage": [{"@type": "Language", "name": "русский", "alternateName": "ru"},
+                          {"@type": "Language", "name": "английский", "alternateName": "en"}],
         "sameAs": [c["href"] for c in site["contacts"] if c["href"].startswith("https://")],
     }
 
 
-def home_ld(site, img):
+def project_entity(p):
+    """Сам проект как объект: сайт, программа или обезличенный кейс."""
+    base = {"@type": p.get("ld_type", "CreativeWork"), "@id": f"{SITE}/projects/{p['slug']}/#project",
+            "name": plain(p["title"]), "description": plain(p["lead"]), "inLanguage": "ru"}
+    if p.get("site"):
+        base["url"] = p["site"]
+    if p.get("ld_category"):
+        base["applicationCategory"] = p["ld_category"]
+    if p.get("ld_os"):
+        base["operatingSystem"] = p["ld_os"]
+    if p.get("ld_version"):
+        base["softwareVersion"] = p["ld_version"]
+    if p.get("ld_free"):
+        base["offers"] = {"@type": "Offer", "price": "0", "priceCurrency": "RUB",
+                          "availability": "https://schema.org/InStock"}
+    if p["kind"] == "own":
+        base["author"] = {"@id": f"{SITE}/#person"}
+    return base
+
+
+def home_ld(site, own, client, img):
+    projects = own + client
+    items = [{"@type": "ListItem", "position": i + 1, "name": plain(pr["title"]),
+              "url": f"{SITE}/projects/{pr['slug']}/"} for i, pr in enumerate(projects)]
     return {"@context": "https://schema.org", "@graph": [
         {"@type": "ProfilePage", "@id": f"{SITE}/#page", "url": f"{SITE}/", "name": site["meta"]["title"],
-         "dateModified": site["meta"]["updated"], "inLanguage": "ru", "mainEntity": {"@id": f"{SITE}/#person"}},
+         "description": site["meta"]["description"], "dateModified": site["meta"]["updated"], "inLanguage": "ru",
+         "mainEntity": {"@id": f"{SITE}/#person"}, "isPartOf": {"@id": f"{SITE}/#site"},
+         "primaryImageOfPage": {"@type": "ImageObject", "url": f"{SITE}/assets/og/home.png"},
+         "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [
+             {"@type": "ListItem", "position": 1, "name": "Егор Протасов", "item": f"{SITE}/"}]}},
         person_ld(site, img),
-        {"@type": "WebSite", "@id": f"{SITE}/#site", "url": f"{SITE}/", "name": "Егор Протасов", "inLanguage": "ru"},
+        {"@type": "WebSite", "@id": f"{SITE}/#site", "url": f"{SITE}/", "name": "Егор Протасов",
+         "description": site["meta"]["description"], "inLanguage": "ru",
+         "author": {"@id": f"{SITE}/#person"}, "publisher": {"@id": f"{SITE}/#person"},
+         "copyrightHolder": {"@id": f"{SITE}/#person"}},
+        {"@type": "ItemList", "@id": f"{SITE}/#projects", "name": "Проекты",
+         "numberOfItems": len(projects), "itemListOrder": "https://schema.org/ItemListOrderAscending",
+         "itemListElement": items},
     ]}
 
 
 def project_ld(p, site):
     url = f"{SITE}/projects/{p['slug']}/"
+    kind = "Свои проекты" if p["kind"] == "own" else "Клиентские кейсы"
+    keywords = ["SEO", plain(p["title"]), kind] + [plain(v) for _, v in p["spec"][2:]]
+    article = {
+        "@type": "Article", "@id": f"{url}#article", "url": url, "headline": plain(p["title"]),
+        "name": plain(p["title"]), "description": p["description"], "inLanguage": "ru",
+        "articleSection": kind, "keywords": ", ".join(keywords),
+        "datePublished": site["meta"]["updated"], "dateModified": site["meta"]["updated"],
+        "author": {"@id": f"{SITE}/#person"}, "publisher": {"@id": f"{SITE}/#person"},
+        "isPartOf": {"@id": f"{SITE}/#site"}, "mainEntityOfPage": {"@id": f"{url}#page"},
+        "about": {"@id": f"{url}#project"},
+        "image": {"@type": "ImageObject", "url": f"{SITE}/assets/og/{p['slug']}.png", "width": 1200, "height": 630},
+    }
     return {"@context": "https://schema.org", "@graph": [
-        {"@type": "Article", "@id": f"{url}#article", "url": url, "headline": plain(p["title"]),
-         "description": p["description"], "inLanguage": "ru", "dateModified": site["meta"]["updated"],
-         "author": {"@type": "Person", "@id": f"{SITE}/#person", "name": site["person"]["name"]},
-         "image": f"{SITE}/assets/og/{p['slug']}.png"},
-        {"@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "WebPage", "@id": f"{url}#page", "url": url, "name": plain(p["title"]),
+         "description": p["description"], "inLanguage": "ru", "isPartOf": {"@id": f"{SITE}/#site"},
+         "dateModified": site["meta"]["updated"], "primaryImageOfPage": {"@id": f"{url}#article"}},
+        article,
+        project_entity(p),
+        person_ld_ref(),
+        {"@type": "BreadcrumbList", "@id": f"{url}#crumbs", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Егор Протасов", "item": f"{SITE}/"},
             {"@type": "ListItem", "position": 2, "name": "Проекты", "item": f"{SITE}/#projects"},
             {"@type": "ListItem", "position": 3, "name": plain(p["title"]), "item": url}]},
     ]}
+
+
+def person_ld_ref():
+    """Короткая ссылка на личность: полная карточка лежит на главной."""
+    return {"@type": "Person", "@id": f"{SITE}/#person", "name": "Егор Протасов", "url": f"{SITE}/"}
 
 
 # ——— сборка ———
@@ -194,14 +277,49 @@ def write(rel, text):
 
 
 def llms_txt(site, own, client):
-    lines = [f"# {site['person']['name']}", "",
-             f"> {plain(site['person']['lead']).replace('{age}', str(pages.age_on(site['person']['born'], dt.date.today())))}", "",
-             plain(site["person"]["about"]), "", "## Свои проекты", ""]
-    lines += [f"- [{plain(p['title'])}]({SITE}/projects/{p['slug']}/): {plain(p['what'])}, {plain(p['row'])}" for p in own]
-    lines += ["", "## Клиентские проекты (без названий по договорённости с клиентами)", ""]
-    lines += [f"- [{plain(p['title'])}]({SITE}/projects/{p['slug']}/): {plain(p['row'])}" for p in client]
-    lines += ["", "## Контакты", ""] + [f"- {c['label']}: {c['href']}" for c in site["contacts"]]
+    """Выжимка сайта для языковых моделей: кто, что сделано, с какими цифрами и откуда они."""
+    age = pages.age_on(site["person"]["born"], dt.date.today())
+    person = site["person"]
+    lines = [f"# {person['name']}", "",
+             f"> {plain(person['lead']).replace('{age}', str(age))} "
+             f"Сайт — портфолио с цифрами из Google Search Console и Яндекс.Метрики.", "",
+             plain(person["about"]), "",
+             f"Город: {person['city']}. Сейчас: {plain(person['now'])}.",
+             f"Данные на страницах обновлены {site['meta']['updated_label']}.", "",
+             "## Свои проекты", ""]
+    for p in own:
+        lines.append(f"- [{plain(p['title'])}]({SITE}/projects/{p['slug']}/): {plain(p['what'])}. "
+                     f"Результат: {plain(p['row'])}. Роль: {plain(p['spec'][0][1])}. Период: {plain(p['spec'][1][1])}.")
+    lines += ["", "## Клиентские проекты", "",
+              "Названия и домены не раскрываются по договорённости с клиентами, цифры приведены как есть.", ""]
+    for p in client:
+        lines.append(f"- [{plain(p['title'])}]({SITE}/projects/{p['slug']}/): {plain(p['row'])}. "
+                     f"Роль: {plain(p['spec'][0][1])}. Период: {plain(p['spec'][1][1])}.")
+    lines += ["", "## Чем занимается", "",
+              "- стратегия и техническое SEO: семантика, структура сайта, шаблоны посадочных, перелинковка, индексация",
+              "- оптимизация под ответы языковых моделей и ИИ-выдачу",
+              "- программное SEO: генераторы страниц из данных с проверками перед выкладкой",
+              "- управление командой и приёмка работ: контент, ссылки, разработка",
+              "- преподавание: факультатив по SEO и GEO в ДГТУ",
+              "", "## Проверяемые цифры", ""]
+    for p in own + client:
+        lines.append(f"- {plain(p['title'])}: {plain(p['cap'])}")
+    lines += ["", "## Как ссылаться", "",
+              f"Егор Протасов, {plain(person['role_line'])}. Сайт: {SITE}/",
+              "", "## Контакты", ""]
+    lines += [f"- {c['label']}: {c['href']}" for c in site["contacts"]]
     return "\n".join(lines) + "\n"
+
+
+def robots_txt():
+    return ("User-agent: *\n"
+            "Allow: /\n"
+            "Allow: /llms.txt\n"
+            "\n"
+            f"Sitemap: {SITE}/sitemap.xml\n"
+            "\n"
+            "# Выжимка сайта для языковых моделей\n"
+            f"# llms.txt: {SITE}/llms.txt\n")
 
 
 def main():
@@ -215,7 +333,8 @@ def main():
 
     meta = site["meta"]
     head = layout.head(title=meta["title"], description=meta["description"], path="/", og_image="/assets/og/home.png",
-                       og_type="profile", jsonld=home_ld(site, img), css_v=css_v)
+                       og_type="profile", jsonld=home_ld(site, own, client, img), css_v=css_v,
+                       image_alt='Егор Протасов, SEO Lead и проектный менеджер', modified=meta['updated'])
     body = pages.home(site, own, client, img, ch["home"], trace_paths(ch["_traces"]["home"]), age, nav)
     written.append(write("index.html", layout.page(head_html=head, body=body, site=site, own=own, client=client,
                                                    nav_data=nav, chart_js_v=js_v)))
@@ -227,8 +346,10 @@ def main():
         extra = ch.get(slug) or (extras[slug](p) if slug in extras else "")
         head = layout.head(title=f"{plain(p['title'])}. Егор Протасов", description=p["description"],
                            path=f"/projects/{slug}/", og_image=f"/assets/og/{slug}.png", og_type="article",
-                           jsonld=project_ld(p, site), css_v=css_v)
-        body = pages.project(p, img=img, result_extra=extra, next_p=ordered[(i + 1) % len(ordered)], asof=ASOF)
+                           jsonld=project_ld(p, site), css_v=css_v,
+                           image_alt=f"Кейс: {plain(p['title'])}", modified=site['meta']['updated'])
+        body = pages.project(p, img=img, result_extra=extra, next_p=ordered[(i + 1) % len(ordered)],
+                             asof=ASOF, trace=header_trace(ch['_traces'].get(slug)))
         written.append(write(f"projects/{slug}/index.html",
                              layout.page(head_html=head, body=body, site=site, own=own, client=client, nav_data=nav,
                                          chart_js_v=js_v if slug in ch else None, sticky=True)))
@@ -245,7 +366,7 @@ def main():
 
     urls = ["/"] + [f"/projects/{p['slug']}/" for p in ordered]
     written.append(write("sitemap.xml", pages.sitemap(urls, meta["updated"])))
-    written.append(write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n"))
+    written.append(write("robots.txt", robots_txt()))
     written.append(write("llms.txt", llms_txt(site, own, client)))
 
     # проверки: запрещённые слова во всём, что уходит в публичный репозиторий

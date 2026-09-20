@@ -40,6 +40,19 @@ def blueprint(traces):
             f'<g class="grid">{grid}</g>{lap}<g class="traces">{traces}</g></svg>')
 
 
+def project_backdrop(paths, box="0 0 1440 520", fit="none"):
+    """Фон шапки проекта: его собственная линия роста, по ней идёт светящийся сегмент."""
+    if not paths:
+        return ""
+    return (f'<svg class="ph-bp" viewBox="{box}" preserveAspectRatio="{fit}" aria-hidden="true">{paths}</svg>')
+
+
+def lap_backdrop():
+    """Запасной узор для проектов без рядов данных: тот же контур круга, что на главной."""
+    return project_backdrop(f'<path class="pt-base" d="{LAP}"/><path class="pt-run" d="{LAP}"/>',
+                            box="0 0 1440 1200", fit="xMidYMid slice")
+
+
 def sticky_header(nav, home="#top"):
     cols = "".join(
         f'<div><p class="lbl">{title}</p><ul>'
