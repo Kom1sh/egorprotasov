@@ -130,6 +130,9 @@ h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
 .shot { margin: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .32), 0 0 0 1px rgba(0, 0, 0, .1); background: #fff;
   transform: translateY(18px); transition: transform .9s cubic-bezier(.2,.7,.2,1); }
 .proj.in .shot { transform: none; }
+/* снимок занимает всю рамку: иначе справа остаётся её белый фон */
+.shot picture { display: block; }
+.shot img { width: 100%; height: auto; }
 .shot.ui svg { display: block; width: 100%; height: auto; }
 .vert { writing-mode: vertical-rl; font-weight: 800; letter-spacing: -.04em; text-transform: uppercase; line-height: .8;
   justify-self: end; align-self: start; white-space: nowrap; opacity: .92; }
