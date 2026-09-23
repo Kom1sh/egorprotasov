@@ -32,9 +32,6 @@ h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
 /* ——— первый экран: чертёж ——— */
 .hero { position: relative; overflow: hidden; padding-bottom: 150px; --p: 0; }
 .bp { position: absolute; top: 0; left: 50%; width: 1700px; height: 1200px; transform: translateX(-50%); pointer-events: none; }
-.bp .grid { transform: translate3d(0, calc(var(--p) * -90px), 0); }
-.bp .g-v, .bp .g-h { stroke: rgba(255, 255, 255, .05); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.bp .g-h { stroke: rgba(255, 255, 255, .032); }
 
 .bp .traces { transform: translate3d(0, calc(var(--p) * -160px), 0); }
 .bp .t1, .bp .t2 { fill: none; stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1;
