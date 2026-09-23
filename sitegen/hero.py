@@ -28,16 +28,14 @@ LAP = ("M260 880 L900 880 C 1040 880, 1120 820, 1120 750 C 1120 690, 1060 650, 9
 
 
 def blueprint(traces):
-    """Фон: тонкая сетка чертежа, контур круга и линии роста проектов."""
-    grid = "".join(f'<line class="g-v" x1="{x}" x2="{x}" y1="0" y2="1200"/>' for x in range(60, 1440, 60))
-    grid += "".join(f'<line class="g-h" x1="0" x2="1440" y1="{y}" y2="{y}"/>' for y in range(60, 1200, 60))
+    """Фон первого экрана: контур круга и линии роста проектов на чистом чёрном."""
     lap = (f'<g class="lap">'
            f'<path class="lap-base" d="{LAP}"/>'
            f'<path class="lap-run" d="{LAP}"/>'
            f'<g class="lap-start"><line x1="400" y1="860" x2="400" y2="900"/>'
            f'<text x="400" y="924" text-anchor="middle">старт</text></g></g>')
     return (f'<svg class="bp" viewBox="0 0 1440 1200" preserveAspectRatio="xMidYMin slice" aria-hidden="true">'
-            f'<g class="grid">{grid}</g>{lap}<g class="traces">{traces}</g></svg>')
+            f'{lap}<g class="traces">{traces}</g></svg>')
 
 
 def project_backdrop(paths, box="0 0 1440 520", fit="none"):
