@@ -353,8 +353,8 @@ def robots_txt():
 
 def main():
     site, own, client, programs = load()
-    # кадры программ: вырезка уже в 2x, в вёрстке нужны 1x и 2x
-    images.WIDTHS.update({f["img"]: [f["w"], f["w"] * 2] for p in programs for f in p["figs"]})
+    # кадры программ (вырезка уже в 2x) и иконки: в вёрстке нужны 1x и 2x
+    images.WIDTHS.update(software.image_widths(programs))
     img = images.build(SRC / "img", ROOT / "assets" / "img")
     ch = charts(site)
     css_v, js_v = ver(ROOT / "assets" / "site.css"), ver(ROOT / "assets" / "chart.js")

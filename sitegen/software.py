@@ -1,16 +1,17 @@
-"""Посадочная программы: первый экран с настоящим кадром, «как работает» на кадрах с камерой
-и выносками, зачем, что умеет, в работе, другие программы, связь. И полоса «Программы» для главной.
+"""Посадочная программы: первый экран с иконкой и настоящим кадром, «как работает» на читаемых
+вырезках с подписями словами, зачем, что умеет, в работе, другие программы, связь.
+И полоса «Программы» для главной.
 
-Камера по кадру считается здесь, в процентах: без скриптов и на телефоне каждая фигура уже стоит
-на месте своего шага, скрипт только переключает шаги и запускает переходы.
+Кадры — вырезки из настоящей программы, где всё закрытое закрыто ещё в ней самой. Каждая вырезка —
+один понятный элемент, к нему рамка и короткая подпись: что здесь видно.
 """
 from .hero import ICON_SET
 from .pages import _work_list
 from .text import esc, inline
 
-ENTER = 1.18     # фигура входит чуть шире, чем стоит камера
-DISPLAY_W = 720  # ширина окна фигуры в «Как работает», CSS-пиксели
-HERO_W = 1160    # ширина кадра на первом экране
+WRAP_W = 1160    # ширина колонки сайта
+ZOOM = 1.35      # во сколько раз вырезка может быть крупнее себя в программе: текст читается, но не мылится
+ICON_W = 96
 
 TG_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.4c-.9.3-.9 1.6 0 1.9l4.7 1.5 1.8 5.6c.3.8 '
            '1.3 1 1.9.4l2.6-2.5 4.7 3.5c.7.5 1.7.1 1.9-.7l3.1-15c.2-1-.7-1.8-1.6-1.4Z" fill="currentColor" stroke="none"/></svg>')
@@ -24,106 +25,75 @@ def _pct(v):
     return f"{v:.3f}".rstrip("0").rstrip(".") + "%"
 
 
-def _wider(c, W, H, f=ENTER):
-    w, h = min(W, c["w"] * f), min(H, c["h"] * f)
-    x = max(0, min(W - w, c["x"] - (w - c["w"]) / 2))
-    y = max(0, min(H - h, c["y"] - (h - c["h"]) / 2))
-    return {"x": x, "y": y, "w": w, "h": h}
+def display_w(f):
+    return min(WRAP_W, round(f["w"] * ZOOM))
 
 
-def figure_geometry(f):
-    """Всё, что нужно вёрстке фигуры, в процентах окна: где лежит картинка, откуда въезжает камера,
-    где рамка выноски и с какой стороны номер."""
-    W, H, c, m = f["w"], f["h"], f["cam"], f["mark"]
-    R = {"x": 0, "y": 0, "w": W, "h": H} if f.get("wide") else _wider(c, W, H)
-    s = c["w"] / R["w"]
-    mx, my = (m["x"] - c["x"]) / c["w"] * 100, (m["y"] - c["y"]) / c["h"] * 100
-    mw, mh = m["w"] / c["w"] * 100, m["h"] / c["h"] * 100
-    return {
-        "img": {"width": W / c["w"] * 100, "left": -c["x"] / c["w"] * 100, "top": -c["y"] / c["h"] * 100},
-        "enter": {"tx": (c["x"] - R["x"] * s) / W * 100, "ty": (c["y"] - R["y"] * s) / H * 100, "s": s},
-        "mark": {"left": mx, "top": my, "width": mw, "height": mh},
-        "right": (m["x"] + m["w"] / 2) > (c["x"] + c["w"] / 2),
-        "cy": my + mh / 2,
-    }
-
-
-def _picture(f, alt, display_w=DISPLAY_W, eager=False):
+def _picture(f, alt, eager=False):
     name, w, h = f["img"], f["w"], f["h"]
-    k = w / f["cam"]["w"]
-    sizes = f"(max-width: 960px) {round(100 * k)}vw, {round(display_w * k)}px"
+    dw = display_w(f)
+    sizes = f"(max-width: 960px) calc(100vw - 40px), {dw}px"
     webp = f"/assets/img/{name}-{w}.webp {w}w, /assets/img/{name}-{w * 2}.webp {w * 2}w"
     jpg = f"/assets/img/{name}-{w}.jpg {w}w, /assets/img/{name}-{w * 2}.jpg {w * 2}w"
     load = 'fetchpriority="high"' if eager else 'loading="lazy"'
-    return (f'<source type="image/webp" srcset="{webp}" sizes="{sizes}">'
+    return (f'<picture class="sf-img"><source type="image/webp" srcset="{webp}" sizes="{sizes}">'
             f'<img src="/assets/img/{name}-{w * 2}.jpg" srcset="{jpg}" sizes="{sizes}" width="{w}" height="{h}" '
-            f'alt="{esc(alt)}" {load} decoding="async">')
+            f'alt="{esc(alt)}" {load} decoding="async"></picture>')
 
 
-def _alt(p, f):
-    return f"{p['title']}, настоящий кадр: {f['cap']}. Цифры методики и найденные адреса закрыты в самой программе"
+def tag_place(f):
+    """Подпись стоит над кадром, чтобы не закрывать текст программы; ножка идёт вниз к рамке.
+    Если рамка у правого края, подпись прижата вправо."""
+    m, w, h = f["mark"], f["w"], f["h"]
+    right = (m["x"] + m["w"] / 2) / w > 0.6
+    anchor = (m["x"] + m["w"] - 22) / w * 100 if right else (m["x"] + 22) / w * 100
+    horiz = f"right:{_pct(100 - (m['x'] + m['w']) / w * 100)}" if right else f"left:{_pct(m['x'] / w * 100)}"
+    stem = f"left:{_pct(anchor)};height:calc({_pct(m['y'] / h * 100)} + 7px)"
+    return (" r" if right else ""), horiz, stem
 
 
-def _fit_cam(c, aspect):
-    """Камера под заданную пропорцию: по центру прежней, без выхода за её края."""
-    w = min(c["w"], c["h"] * aspect)
-    h = w / aspect
-    return {"x": c["x"] + (c["w"] - w) / 2, "y": c["y"] + (c["h"] - h) / 2, "w": w, "h": h}
-
-
-def _shot(p, f, cls, display_w, eager=False, aspect=None):
-    """Кадр, стоящий на месте камеры, без движения: первый экран и миниатюры.
-    aspect — общая пропорция для миниатюр, чтобы в ряду они были одной высоты."""
-    if aspect:
-        f = {**f, "cam": _fit_cam(f["cam"], aspect)}
-    g = figure_geometry(f)
-    im = g["img"]
-    return (f'<div class="{cls}" style="aspect-ratio:{f["cam"]["w"]:.1f}/{f["cam"]["h"]:.1f}"><div class="shot-vp">'
-            f'<picture class="how-img" style="width:{_pct(im["width"])};left:{_pct(im["left"])};top:{_pct(im["top"])}">'
-            f'{_picture(f, _alt(p, f), display_w, eager)}</picture></div></div>')
-
-
-def _fig(p, i, f):
-    g = figure_geometry(f)
-    n = i + 1
-    im, en, mk = g["img"], g["enter"], g["mark"]
-    side = " r" if g["right"] else ""
-    inner = (f'style="top:{_pct(g["cy"])};left:{_pct(mk["left"] + mk["width"])};right:0"' if g["right"]
-             else f'style="top:{_pct(g["cy"])};left:0;width:{_pct(mk["left"])}"')
-    return f"""<figure class="how-fig{' wide' if f.get('wide') else ''}" style="--tx:{_pct(en['tx'])};--ty:{_pct(en['ty'])};--s:{en['s']:.4f}">
-      <div class="how-box" style="aspect-ratio:{f['cam']['w']}/{f['cam']['h']}">
-        <div class="how-vp">
-          <picture class="how-img" style="width:{_pct(im['width'])};left:{_pct(im['left'])};top:{_pct(im['top'])}">{_picture(f, _alt(p, f))}</picture>
-          <span class="how-mark" style="left:{_pct(mk['left'])};top:{_pct(mk['top'])};width:{_pct(mk['width'])};height:{_pct(mk['height'])}" aria-hidden="true"></span>
-          <span class="how-lead in{side}" {inner} aria-hidden="true"></span>
-        </div>
-        <span class="how-lead out{side}" style="top:{_pct(g['cy'])}" aria-hidden="true"></span>
-        <span class="how-ball{side}" style="top:{_pct(g['cy'])}" aria-hidden="true">{n}</span>
+def frame(p, f, caption, eager=False):
+    """Вырезка из программы с рамкой и подписью словами."""
+    m, w, h = f["mark"], f["w"], f["h"]
+    side, pos, stem = tag_place(f)
+    alt = f"{p['title']}, настоящий кадр: {f['tag']}. Цифры методики и найденные адреса закрыты в самой программе"
+    return f"""<figure class="sf" style="max-width:{display_w(f)}px">
+      <div class="sf-box" style="aspect-ratio:{w}/{h}">
+        {_picture(f, alt, eager)}
+        <span class="sf-mark" style="left:{_pct(m['x'] / w * 100)};top:{_pct(m['y'] / h * 100)};width:{_pct(m['w'] / w * 100)};height:{_pct(m['h'] / h * 100)}" aria-hidden="true"></span>
+        <span class="sf-stem" style="{stem}" aria-hidden="true"></span>
+        <span class="sf-tag{side}" style="{pos}"><i aria-hidden="true"></i>{esc(f['tag'])}</span>
       </div>
-      <figcaption><span>{esc(f['cap'])}</span><span>{esc(p['run_date'])}</span></figcaption>
+      <figcaption>{inline(caption)}</figcaption>
     </figure>"""
 
 
-def _cells(sheets, skip=None):
+def icon(p, size=ICON_W, eager=False):
+    s = p["slug"]
+    load = 'fetchpriority="high"' if eager else 'loading="lazy"'
+    return (f'<picture class="app-icon"><source type="image/webp" srcset="/assets/img/icon-{s}-{size}.webp 1x, '
+            f'/assets/img/icon-{s}-{size * 2}.webp 2x"><img src="/assets/img/icon-{s}-{size * 2}.jpg" '
+            f'srcset="/assets/img/icon-{s}-{size}.jpg 1x, /assets/img/icon-{s}-{size * 2}.jpg 2x" '
+            f'width="{size}" height="{size}" alt="Иконка {esc(p["title"])}" {load} decoding="async"></picture>')
+
+
+def _apps(sheets, skip=None):
     cells = []
     for s in sheets:
         if skip and s["slug"] == skip["slug"]:
             continue
-        f = s["figs"][s["hero"]]
-        cells.append(f'<a class="more-cell" href="{url(s)}" style="--prog:{s["color"]}">'
-                     f'{_shot(s, f, "more-shot", 560, aspect=1.6)}'
-                     f'<p class="more-t">{esc(s["title"])}</p><p class="more-w">{inline(s["what"].capitalize())}</p></a>')
-    return f'<div class="more-row n{len(cells)}">{"".join(cells)}</div>'
+        cells.append(f'<a class="app" href="{url(s)}" style="--prog:{s["color"]}">{icon(s)}'
+                     f'<p class="app-t">{esc(s["title"])}</p><p class="app-w">{inline(s["what"].capitalize())}</p></a>')
+    return f'<div class="apps n{len(cells)}">{"".join(cells)}</div>'
 
 
 def page(p, *, img, sheets):
     """img — метаданные картинок из images.build: здесь не нужны, оставлены для единообразия с pages.project."""
-    hero_f = p["figs"][p["hero"]]
     steps = "".join(
-        f"""<li class="how-item" data-i="{i}">
-    <div class="how-text"><p class="step-n">Шаг {i + 1}</p><h3>{inline(f['title'])}</h3><p class="how-p">{inline(f['text'])}</p></div>
-    {_fig(p, i, f)}
-  </li>""" for i, f in enumerate(p["figs"]))
+        f"""<li class="st">
+    <div class="st-head"><div><p class="step-n">Шаг {i + 1}</p><h3>{inline(f['title'])}</h3></div><p class="st-p">{inline(f['text'])}</p></div>
+    {frame(p, f, f"Настоящий кадр, {p['run_date']}.")}
+  </li>""" for i, f in enumerate(p["steps"]))
     abilities = "".join(f'<li><span class="can-n">0{i + 1}</span><h3>{inline(a)}</h3><p>{inline(b)}</p></li>'
                         for i, (a, b) in enumerate(p["abilities"]))
     facts = "".join(f"<p>{inline(t)}</p>" for t in p["facts"])
@@ -133,28 +103,18 @@ def page(p, *, img, sheets):
 <section class="sw-hero" id="top">
   <div class="wrap hero-text">
     <a class="sw-back" href="/#programs">{ICON_SET['back']}<span>Все программы</span></a>
-    <p class="lbl">Своя программа</p>
-    <h1>{esc(p['title'])}</h1>
-    <p class="hero-promise">{inline(p['promise'])}</p>
-    <p class="hero-meta">{inline(p['in_use'])}</p>
+    <div class="hero-id">{icon(p, eager=True)}<div><p class="lbl">Своя программа</p><h1>{esc(p['title'])}</h1></div></div>
+    <div class="hero-side"><p class="hero-promise">{inline(p['promise'])}</p><p class="hero-meta">{inline(p['in_use'])}</p></div>
   </div>
-  <div class="wrap"><figure class="hero-shot">{_shot(p, hero_f, "hero-box", HERO_W, eager=True)}
-    <figcaption>Настоящий кадр программы, {esc(p['run_date'])}. Цифры методики и найденные адреса закрыты в ней самой.</figcaption>
-  </figure></div>
+  <div class="wrap hero-shot">{frame(p, p['hero'], p['hero']['caption'], eager=True)}</div>
 </section>
 
-<section class="sw-how" id="how">
-  <div class="how-track" style="--n:{len(p['figs'])}">
-    <div class="how-stick">
-      <div class="wrap">
-        <div class="how-head"><p class="lbl">Как работает</p></div>
-        <ol class="how-list">
+<section class="sw-how" id="how"><div class="wrap">
+  <p class="lbl">Как работает</p>
+  <ol class="st-list">
   {steps}
-        </ol>
-      </div>
-    </div>
-  </div>
-</section>
+  </ol>
+</div></section>
 
 <section class="sw-why"><div class="wrap">
   <p class="lbl">Зачем</p>
@@ -174,7 +134,7 @@ def page(p, *, img, sheets):
 
 <section class="sw-more"><div class="wrap">
   <p class="lbl">Другие программы</p>
-  {_cells(sheets, skip=p)}
+  {_apps(sheets, skip=p)}
 </div></section>
 
 <section class="sw-talk"><div class="wrap">
@@ -192,8 +152,17 @@ def home_band(sheets):
     return f"""<section class="sw-band" id="programs"><div class="wrap">
   <p class="lbl">Программы</p>
   <h2 class="cap"><b>Три программы,</b> которые я написал для своей работы: от поиска ниши до проверки готового сайта</h2>
-  {_cells(sheets)}
+  {_apps(sheets)}
 </div></section>"""
 
 
-__all__ = ["page", "home_band", "figure_geometry", "url"]
+def image_widths(programs):
+    """Ширины картинок для images.build: вырезки в 1x и 2x, иконки под вёрстку."""
+    out = {f"icon-{p['slug']}": [ICON_W, ICON_W * 2] for p in programs}
+    for p in programs:
+        for f in [p["hero"]] + p["steps"]:
+            out[f["img"]] = [f["w"], f["w"] * 2]
+    return out
+
+
+__all__ = ["page", "home_band", "frame", "icon", "image_widths", "url"]

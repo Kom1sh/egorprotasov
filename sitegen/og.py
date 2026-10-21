@@ -101,26 +101,18 @@ color-mix(in srgb,var(--prog) 16%,#000) 45%,#000 75%)}
 h1{margin:24px 0 22px;font-size:96px;line-height:.92;letter-spacing:-.05em;font-weight:800;color:#fff}
 .pr{margin:0;font-size:27px;line-height:1.34;color:#e2e2e0}
 .url{position:absolute;left:64px;bottom:44px;font-size:20px;color:#8a8a88}
-.shot{position:absolute;left:660px;top:72px;width:640px;border-radius:14px;overflow:hidden;background:#121316;
-box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.12)}
-.shot .v{position:relative}
-.shot img{position:absolute;display:block}"""
+.shot{position:absolute;right:70px;top:50%;width:300px;height:300px;transform:translateY(-50%);
+filter:drop-shadow(0 30px 50px rgba(0,0,0,.6))}"""
 
 
 def software(root, programs):
-    """Превью посадочных программ: название, обещание и настоящий кадр на фоне цвета программы."""
-    from .software import figure_geometry
+    """Превью посадочных программ: название, обещание и иконка программы на фоне её цвета."""
     root = pathlib.Path(root)
     out = root / "assets" / "og"
     out.mkdir(parents=True, exist_ok=True)
     tmp = pathlib.Path(tempfile.mkdtemp(prefix="og-sw-"))
     for p in programs:
-        f = p["figs"][p["hero"]]
-        im = figure_geometry(f)["img"]
-        src_img = (root / "src" / "img" / f"{f['img']}.png").as_uri()
-        shot = (f'<div class="shot"><div class="v" style="aspect-ratio:{f["cam"]["w"]}/{f["cam"]["h"]}">'
-                f'<img src="{src_img}" alt="" style="width:{im["width"]:.3f}%;left:{im["left"]:.3f}%;top:{im["top"]:.3f}%">'
-                f'</div></div>')
+        shot = f'<img class="shot" src="{(root / "src" / "img" / f"icon-{p["slug"]}.png").as_uri()}" alt="">'
         html = (f'<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{SW_CSS}</style></head>'
                 f'<body style="--prog:{p["color"]}"><div class="t"><p class="lbl">Своя программа</p>'
                 f'<h1>{esc(p["title"])}</h1><p class="pr">{esc(plain(p["promise"]))}</p></div>{shot}'
