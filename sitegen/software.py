@@ -52,20 +52,62 @@ def tag_place(f):
     return (" r" if right else ""), horiz, stem
 
 
-def frame(p, f, caption, eager=False):
-    """Вырезка из программы с рамкой и подписью словами."""
+def _mark(m, w, h):
+    return (f'<span class="sf-mark" style="left:{_pct(m["x"] / w * 100)};top:{_pct(m["y"] / h * 100)};'
+            f'width:{_pct(m["w"] / w * 100)};height:{_pct(m["h"] / h * 100)}" aria-hidden="true"></span>')
+
+
+def frame(p, f, caption="", eager=False, panel=False):
+    """Вырезка из программы с рамкой и подписью словами. panel — снимок элемента без полей:
+    кладётся на тёмную подложку окна программы."""
     m, w, h = f["mark"], f["w"], f["h"]
     side, pos, stem = tag_place(f)
     alt = f"{p['title']}, настоящий кадр: {f['tag']}. Цифры методики и найденные адреса закрыты в самой программе"
-    return f"""<figure class="sf" style="max-width:{display_w(f)}px">
-      <div class="sf-box" style="aspect-ratio:{w}/{h}">
+    box = f"""<div class="sf-box" style="aspect-ratio:{w}/{h}">
         {_picture(f, alt, eager)}
-        <span class="sf-mark" style="left:{_pct(m['x'] / w * 100)};top:{_pct(m['y'] / h * 100)};width:{_pct(m['w'] / w * 100)};height:{_pct(m['h'] / h * 100)}" aria-hidden="true"></span>
+        {_mark(m, w, h)}
         <span class="sf-stem" style="{stem}" aria-hidden="true"></span>
         <span class="sf-tag{side}" style="{pos}"><i aria-hidden="true"></i>{esc(f['tag'])}</span>
-      </div>
-      <figcaption>{inline(caption)}</figcaption>
+      </div>"""
+    if panel:
+        box = f'<div class="sf-panel">{box}</div>'
+    cap = f"<figcaption>{inline(caption)}</figcaption>" if caption else ""
+    return f"""<figure class="sf{' on-panel' if panel else ''}" style="max-width:{display_w(f) + (56 if panel else 0)}px">
+      {box}
+      {cap}
     </figure>"""
+
+
+def hero_shot(p):
+    """Общий план: окно программы целиком, на нём рамка; поверх угла — увеличенная вставка этого места."""
+    wnd, ins = p["hero"]["window"], p["hero"]["inset"]
+    inset_w = min(700, round(ins["w"] * 1.55))
+    wnd_f = {**wnd, "cam": {"w": wnd["w"]}}
+    ins_f = {**ins, "cam": {"w": ins["w"]}}
+    alt_w = f"{p['title']}: окно программы целиком, настоящий кадр. Цифры методики и найденные адреса закрыты в самой программе"
+    alt_i = f"{p['title']}, крупно: {ins['tag']}"
+    return f"""<figure class="win">
+      <div class="win-box" style="aspect-ratio:{wnd['w']}/{wnd['h']}">
+        {_picture(wnd_f, alt_w, eager=True)}
+        {_mark(wnd['mark'], wnd['w'], wnd['h'])}
+      </div>
+      <div class="inset" style="width:{inset_w}px">
+        <span class="sf-tag"><i aria-hidden="true"></i>{esc(ins['tag'])}</span>
+        <div class="inset-box" style="aspect-ratio:{ins['w']}/{ins['h']}">{_picture(ins_f, alt_i, eager=True)}</div>
+      </div>
+      <figcaption>{inline(p['hero']['caption'])}</figcaption>
+    </figure>"""
+
+
+def best_block(p):
+    rows, facts = [], []
+    for b in p["best"]:
+        if "img" in b:
+            rows.append(f'<div class="best-row"><div class="best-text"><h3>{inline(b["title"])}</h3><p>{inline(b["text"])}</p></div>'
+                        f'{frame(p, b, panel=True)}</div>')
+        else:
+            facts.append(f'<li><h3>{inline(b["title"])}</h3><p>{inline(b["text"])}</p></li>')
+    return "".join(rows) + (f'<ul class="best-facts">{"".join(facts)}</ul>' if facts else "")
 
 
 def icon(p, size=ICON_W, eager=False):
@@ -94,8 +136,6 @@ def page(p, *, img, sheets):
     <div class="st-head"><div><p class="step-n">Шаг {i + 1}</p><h3>{inline(f['title'])}</h3></div><p class="st-p">{inline(f['text'])}</p></div>
     {frame(p, f, f"Настоящий кадр, {p['run_date']}.")}
   </li>""" for i, f in enumerate(p["steps"]))
-    abilities = "".join(f'<li><span class="can-n">0{i + 1}</span><h3>{inline(a)}</h3><p>{inline(b)}</p></li>'
-                        for i, (a, b) in enumerate(p["abilities"]))
     facts = "".join(f"<p>{inline(t)}</p>" for t in p["facts"])
     done = _work_list([{"date": d["date"], "text": d["text"]} for d in p["done"]])
     lead, punch = p["manifesto"][0], p["manifesto"][1]
@@ -106,7 +146,7 @@ def page(p, *, img, sheets):
     <div class="hero-id">{icon(p, eager=True)}<div><p class="lbl">Своя программа</p><h1>{esc(p['title'])}</h1></div></div>
     <div class="hero-side"><p class="hero-promise">{inline(p['promise'])}</p><p class="hero-meta">{inline(p['in_use'])}</p></div>
   </div>
-  <div class="wrap hero-shot">{frame(p, p['hero'], p['hero']['caption'], eager=True)}</div>
+  <div class="wrap hero-shot">{hero_shot(p)}</div>
 </section>
 
 <section class="sw-how" id="how"><div class="wrap">
@@ -116,15 +156,15 @@ def page(p, *, img, sheets):
   </ol>
 </div></section>
 
+<section class="sw-best"><div class="wrap">
+  <p class="lbl">Чем крута</p>
+  {best_block(p)}
+</div></section>
+
 <section class="sw-why"><div class="wrap">
   <p class="lbl">Зачем</p>
   <p class="why-lead">{inline(lead)}</p>
   <p class="why-punch">{inline(punch)}</p>
-</div></section>
-
-<section class="sw-can"><div class="wrap">
-  <p class="lbl">Что умеет</p>
-  <ol class="can-list">{abilities}</ol>
 </div></section>
 
 <section class="sw-work"><div class="wrap two">
@@ -160,7 +200,7 @@ def image_widths(programs):
     """Ширины картинок для images.build: вырезки в 1x и 2x, иконки под вёрстку."""
     out = {f"icon-{p['slug']}": [ICON_W, ICON_W * 2] for p in programs}
     for p in programs:
-        for f in [p["hero"]] + p["steps"]:
+        for f in [p["hero"]["window"], p["hero"]["inset"]] + p["steps"] + [b for b in p["best"] if "img" in b]:
             out[f["img"]] = [f["w"], f["w"] * 2]
     return out
 

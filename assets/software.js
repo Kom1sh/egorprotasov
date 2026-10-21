@@ -4,7 +4,7 @@
   const hero = document.querySelector('.sw-hero');
   if (hero) requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add('go')));
 
-  const steps = document.querySelectorAll('.sw-how .st');
+  const steps = document.querySelectorAll('.sw-how .st, .sw-best .best-row');
   if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
     steps.forEach((s) => s.classList.add('in'));
     return;

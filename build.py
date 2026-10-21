@@ -271,7 +271,7 @@ def software_ld(p, site):
          "applicationCategory": "BusinessApplication", "applicationSubCategory": "SEO",
          "operatingSystem": "macOS, Windows, Linux", "inLanguage": "ru", "dateCreated": p["since"],
          "author": {"@id": f"{SITE}/#person"}, "creator": {"@id": f"{SITE}/#person"},
-         "featureList": [plain(a) for a, _ in p["abilities"]],
+         "featureList": [plain(b["title"]) for b in p["best"]],
          "image": {"@type": "ImageObject", "url": og, "width": 1200, "height": 630}},
         person_ld_ref(),
         {"@type": "BreadcrumbList", "@id": f"{url}#crumbs", "itemListElement": [

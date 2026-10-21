@@ -32,25 +32,36 @@ class Page(unittest.TestCase):
         for p in self.programs:
             with self.subTest(slug=p["slug"]):
                 html = self.page(p)
-                for marker in ('class="sw-hero"', 'class="sw-how"', 'class="sw-why"', 'class="sw-can"',
+                for marker in ('class="sw-hero"', 'class="sw-how"', 'class="sw-best"', 'class="sw-why"',
                                'class="sw-work"', 'class="sw-more"', 'class="sw-talk"'):
                     self.assertIn(marker, html)
                 self.assertEqual(html.count('<li class="st"'), 3)
                 self.assertNotIn("how-fig", html)
 
-    def test_hero_has_icon_real_frame_and_words(self):
+    def test_hero_shows_whole_window_and_zoomed_inset(self):
         for p in self.programs:
             with self.subTest(slug=p["slug"]):
                 html = self.page(p)
                 hero = html[html.index('class="sw-hero"'):html.index('class="sw-how"')]
                 self.assertIn(f'/assets/img/icon-{p["slug"]}-', hero)
-                self.assertIn(f'/assets/img/{p["hero"]["img"]}-', hero)
-                self.assertIn(p["hero"]["tag"], hero)
+                self.assertIn(f'/assets/img/{p["hero"]["window"]["img"]}-', hero)
+                self.assertIn(f'/assets/img/{p["hero"]["inset"]["img"]}-', hero)
+                self.assertIn(p["hero"]["inset"]["tag"], hero)
                 self.assertIn("<h1>", hero)
+
+    def test_best_block_has_real_frames_where_given(self):
+        for p in self.programs:
+            with self.subTest(slug=p["slug"]):
+                html = self.page(p)
+                best = html[html.index('class="sw-best"'):html.index('class="sw-why"')]
+                for b in p["best"]:
+                    self.assertIn(b["title"].split()[0], best)
+                    if "img" in b:
+                        self.assertIn(f'/assets/img/{b["img"]}-', best)
 
     def test_every_tag_sits_inside_its_crop(self):
         for p in self.programs:
-            for f in [p["hero"]] + p["steps"]:
+            for f in p["steps"] + [b for b in p["best"] if "img" in b]:
                 with self.subTest(slug=p["slug"], img=f["img"]):
                     m = f["mark"]
                     self.assertGreaterEqual(m["x"], -1)
