@@ -1,50 +1,17 @@
-"""Проверки посадочных программ: чертежи, страница, стоп-слова.
+"""Проверки посадочных программ: страница, геометрия кадров, стоп-слова.
 
     python3 -m unittest discover -s tests
 """
 import pathlib
 import sys
+import tomllib
 import unittest
-import xml.etree.ElementTree as ET
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from sitegen import drawings  # noqa: E402
-
-SLUGS = ("emd-finder", "strata", "site-audit")
-
-
-class Drawings(unittest.TestCase):
-    def test_each_drawing_is_valid_svg_with_six_callouts(self):
-        for slug in SLUGS:
-            with self.subTest(slug=slug):
-                svg = drawings.DRAWINGS[slug]()
-                root = ET.fromstring(svg)
-                self.assertTrue(root.tag.endswith("svg"))
-                calls = [g for g in root.iter() if g.get("class") == "call"]
-                self.assertEqual(sorted(int(g.get("data-n")) for g in calls), [1, 2, 3, 4, 5, 6])
-
-    def test_lines_are_normalised_for_drawing_in(self):
-        for slug in SLUGS:
-            with self.subTest(slug=slug):
-                root = ET.fromstring(drawings.DRAWINGS[slug]())
-                lines = [e for e in root.iter() if "ln" in (e.get("class") or "").split()]
-                self.assertGreater(len(lines), 20)
-                self.assertTrue(all(e.get("pathLength") == "1" for e in lines))
-
-    def test_thumb_has_no_callouts_and_no_motion(self):
-        for slug in SLUGS:
-            with self.subTest(slug=slug):
-                svg = drawings.thumb(slug)
-                ET.fromstring(svg)
-                self.assertNotIn('class="call"', svg)
-                self.assertNotIn("jig", svg)
-                self.assertNotIn("fall", svg)
-
 
 def _programs():
-    import tomllib
     ps = [tomllib.loads(f.read_text(encoding="utf-8")) for f in sorted((ROOT / "src" / "projects").glob("*.toml"))]
     return sorted((p for p in ps if p["kind"] == "software"), key=lambda p: p["sheet"])
 
@@ -60,25 +27,33 @@ class Page(unittest.TestCase):
         self.programs = _programs()
         self.img = _img_meta(self.programs)
 
-    def test_three_programs_in_sheet_order(self):
+    def test_three_programs_in_order(self):
         self.assertEqual([p["slug"] for p in self.programs], ["emd-finder", "strata", "site-audit"])
 
-    def test_page_has_every_block(self):
+    def test_page_has_every_block_and_no_drawing(self):
         for p in self.programs:
             with self.subTest(slug=p["slug"]):
                 html = self.software.page(p, img=self.img, sheets=self.programs)
-                for marker in ('class="sw-sheet"', 'class="sw-how"', 'class="sw-why"', 'class="sw-can"',
-                               'class="sw-work"', 'class="sw-set"', 'class="sw-talk"'):
+                for marker in ('class="sw-hero"', 'class="sw-how"', 'class="sw-why"', 'class="sw-can"',
+                               'class="sw-work"', 'class="sw-more"', 'class="sw-talk"'):
                     self.assertIn(marker, html)
                 self.assertEqual(html.count('class="how-item'), 3)
-                self.assertEqual(html.count('<li class="lg"'), 6)
-                self.assertIn(f"лист {p['sheet']} из 3", html)
+                self.assertNotIn('class="machine', html)
+                self.assertNotIn("Фиг.", html)
 
-    def test_current_sheet_is_not_a_link_to_itself(self):
+    def test_hero_shows_a_real_frame_of_this_program(self):
         for p in self.programs:
             with self.subTest(slug=p["slug"]):
                 html = self.software.page(p, img=self.img, sheets=self.programs)
-                s = html[html.index('class="sw-set"'):]
+                hero = html[html.index('class="sw-hero"'):html.index('class="sw-how"')]
+                self.assertIn(f'/assets/img/{p["figs"][p["hero"]]["img"]}-', hero)
+                self.assertIn("<h1>", hero)
+
+    def test_other_programs_link_out_but_not_to_itself(self):
+        for p in self.programs:
+            with self.subTest(slug=p["slug"]):
+                html = self.software.page(p, img=self.img, sheets=self.programs)
+                s = html[html.index('class="sw-more"'):]
                 self.assertNotIn(f'href="/projects/{p["slug"]}/"', s)
                 for other in self.programs:
                     if other is not p:

@@ -92,32 +92,38 @@ def _ico(png32_path, ico_path):
 
 
 SW_CSS = """*{box-sizing:border-box}html,body{margin:0;width:1200px;height:630px;overflow:hidden}
-body{--paper:#eeebe3;--ink2:#161513;--ink3:#4a463e;--ink4:#857f71;background:#eeebe3;color:#161513;
-font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;
-display:grid;grid-template-columns:520px 1fr;gap:30px;padding:58px 64px 52px;align-items:center}
-.lbl{display:flex;align-items:center;gap:12px;font-size:17px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#857f71}
-.lbl:before{content:"";width:28px;height:1.5px;background:#161513}
-h1{font-size:92px;line-height:.92;letter-spacing:-.05em;font-weight:800;margin:26px 0 22px}
-p{font-size:26px;line-height:1.34;color:#4a463e;margin:0}
-.url{position:absolute;left:64px;bottom:46px;font-size:20px;color:#857f71}
-.top{position:absolute;left:64px;top:44px;font-size:20px;color:#4a463e}
-.top b{color:#161513}
-.d{align-self:center}"""
+body{position:relative;color:#f4f4f2;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+-webkit-font-smoothing:antialiased;background:radial-gradient(110% 90% at 85% 0%,color-mix(in srgb,var(--prog) 50%,#000) 0%,
+color-mix(in srgb,var(--prog) 16%,#000) 45%,#000 75%)}
+.t{position:absolute;left:64px;top:62px;width:560px}
+.lbl{display:flex;align-items:center;gap:12px;margin:0;font-size:17px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#9aa95c}
+.lbl:before{content:"";width:28px;height:1.5px;background:#bfe828}
+h1{margin:24px 0 22px;font-size:96px;line-height:.92;letter-spacing:-.05em;font-weight:800;color:#fff}
+.pr{margin:0;font-size:27px;line-height:1.34;color:#e2e2e0}
+.url{position:absolute;left:64px;bottom:44px;font-size:20px;color:#8a8a88}
+.shot{position:absolute;left:660px;top:72px;width:640px;border-radius:14px;overflow:hidden;background:#121316;
+box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.12)}
+.shot .v{position:relative}
+.shot img{position:absolute;display:block}"""
 
 
 def software(root, programs):
-    """Превью посадочных программ: лист кальки с чертежом в цвете программы."""
-    from .drawings import thumb
+    """Превью посадочных программ: название, обещание и настоящий кадр на фоне цвета программы."""
+    from .software import figure_geometry
     root = pathlib.Path(root)
     out = root / "assets" / "og"
     out.mkdir(parents=True, exist_ok=True)
     tmp = pathlib.Path(tempfile.mkdtemp(prefix="og-sw-"))
-    machine_css = (root / "assets" / "software.css").read_text(encoding="utf-8")
     for p in programs:
-        html = (f'<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{machine_css}{SW_CSS}</style></head>'
-                f'<body style="--prog:{p["color"]}"><div><p class="lbl">Своя программа, лист {p["sheet"]} из {len(programs)}</p>'
-                f'<h1>{esc(p["title"])}</h1><p>{esc(plain(p["promise"]))}</p></div>'
-                f'<div class="d">{thumb(p["slug"])}</div>'
+        f = p["figs"][p["hero"]]
+        im = figure_geometry(f)["img"]
+        src_img = (root / "src" / "img" / f"{f['img']}.png").as_uri()
+        shot = (f'<div class="shot"><div class="v" style="aspect-ratio:{f["cam"]["w"]}/{f["cam"]["h"]}">'
+                f'<img src="{src_img}" alt="" style="width:{im["width"]:.3f}%;left:{im["left"]:.3f}%;top:{im["top"]:.3f}%">'
+                f'</div></div>')
+        html = (f'<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{SW_CSS}</style></head>'
+                f'<body style="--prog:{p["color"]}"><div class="t"><p class="lbl">Своя программа</p>'
+                f'<h1>{esc(p["title"])}</h1><p class="pr">{esc(plain(p["promise"]))}</p></div>{shot}'
                 f'<div class="url">egorprotasov.ru/projects/{p["slug"]}/</div></body></html>')
         src = tmp / f"{p['slug']}.html"
         src.write_text(html, encoding="utf-8")

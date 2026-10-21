@@ -1,25 +1,11 @@
-// Посадочная программы: прорисовка листа и блок «Как работает» — камера едет по настоящему кадру,
-// потом рисуется выноска. На широком экране блок держится на месте и шаги меняет прокрутка,
-// на узком каждая фигура проигрывается, когда появляется на экране.
+// Посадочная программы: на первом экране настоящий кадр проявляется линией сканирования, в блоке
+// «Как работает» камера едет по кадру, потом рисуется выноска. На широком экране блок держится
+// на месте и шаги меняет прокрутка, на узком каждая фигура проигрывается, когда появляется на экране.
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const sheet = document.querySelector('.sw-sheet');
-  if (sheet) {
-    requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('go')));
-    if (!reduce) {
-      let ticking = false;
-      addEventListener('scroll', () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          const r = sheet.getBoundingClientRect();
-          sheet.style.setProperty('--p', Math.min(1, Math.max(0, -r.top / Math.max(1, r.height))).toFixed(3));
-          ticking = false;
-        });
-      }, { passive: true });
-    }
-  }
+  const hero = document.querySelector('.sw-hero');
+  if (hero) requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add('go')));
 
   const how = document.querySelector('.sw-how');
   if (!how) return;

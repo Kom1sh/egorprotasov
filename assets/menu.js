@@ -1,5 +1,5 @@
 // Липкая шапка появляется после первого экрана; круглая кнопка открывает разделы.
-// На посадочных программ (body.sw) шапка видна сразу, а над калькой перекрашивается.
+// На посадочных программ (body.sw) шапка видна сразу.
 (() => {
   const bar = document.getElementById('bar');
   const btn = bar && bar.querySelector('.index');
@@ -7,17 +7,8 @@
   if (!bar || !btn || !menu) return;
 
   const always = document.body.classList.contains('sw');
-  const toned = [...document.querySelectorAll('[data-tone]')];
-  const onScroll = () => {
-    bar.classList.toggle('show', always || scrollY > innerHeight * 0.65);
-    if (!toned.length) return;
-    // тон того блока, что сейчас под шапкой
-    const y = bar.offsetHeight / 2;
-    const under = toned.find((s) => { const r = s.getBoundingClientRect(); return r.top <= y && r.bottom > y; });
-    bar.classList.toggle('on-paper', !!under && under.dataset.tone === 'paper');
-  };
+  const onScroll = () => bar.classList.toggle('show', always || scrollY > innerHeight * 0.65);
   addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', onScroll);
   onScroll();
 
   const setOpen = (open) => {
