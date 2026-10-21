@@ -16,7 +16,7 @@ import sys
 import tomllib
 
 from sitegen import chart as C
-from sitegen import guard, images, layout, pages
+from sitegen import guard, images, layout, pages, software
 from sitegen.text import plain
 
 ROOT = pathlib.Path(__file__).resolve().parent
@@ -31,7 +31,8 @@ def load():
     projects = [tomllib.loads(p.read_text(encoding="utf-8")) for p in sorted((SRC / "projects").glob("*.toml"))]
     own = sorted((p for p in projects if p["kind"] == "own"), key=lambda p: p["order"])
     client = sorted((p for p in projects if p["kind"] == "client"), key=lambda p: p["order"])
-    return site, own, client
+    programs = sorted((p for p in projects if p["kind"] == "software"), key=lambda p: p["sheet"])
+    return site, own, client, programs
 
 
 def series(name, key, dates, start=None):
@@ -258,6 +259,28 @@ def project_ld(p, site):
     ]}
 
 
+def software_ld(p, site):
+    """Программа без цены и ссылки на скачивание: её не продают, её показывают."""
+    url = f"{SITE}/projects/{p['slug']}/"
+    og = f"{SITE}/assets/og/{p['slug']}.png"
+    return {"@context": "https://schema.org", "@graph": [
+        {"@type": "WebPage", "@id": f"{url}#page", "url": url, "name": p["seo_title"], "description": p["description"],
+         "inLanguage": "ru", "isPartOf": {"@id": f"{SITE}/#site"}, "dateModified": site["meta"]["updated"],
+         "about": {"@id": f"{url}#app"}, "primaryImageOfPage": {"@type": "ImageObject", "url": og}},
+        {"@type": "SoftwareApplication", "@id": f"{url}#app", "name": p["title"], "description": plain(p["promise"]),
+         "applicationCategory": "BusinessApplication", "applicationSubCategory": "SEO",
+         "operatingSystem": "macOS, Windows, Linux", "inLanguage": "ru", "dateCreated": p["since"],
+         "author": {"@id": f"{SITE}/#person"}, "creator": {"@id": f"{SITE}/#person"},
+         "featureList": [plain(a) for a, _ in p["abilities"]],
+         "image": {"@type": "ImageObject", "url": og, "width": 1200, "height": 630}},
+        person_ld_ref(),
+        {"@type": "BreadcrumbList", "@id": f"{url}#crumbs", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Егор Протасов", "item": f"{SITE}/"},
+            {"@type": "ListItem", "position": 2, "name": "Программы", "item": f"{SITE}/#programs"},
+            {"@type": "ListItem", "position": 3, "name": p["title"], "item": url}]},
+    ]}
+
+
 def person_ld_ref():
     """Короткая ссылка на личность: полная карточка лежит на главной."""
     return {"@type": "Person", "@id": f"{SITE}/#person", "name": "Егор Протасов", "url": f"{SITE}/"}
@@ -276,7 +299,7 @@ def write(rel, text):
     return path
 
 
-def llms_txt(site, own, client):
+def llms_txt(site, own, client, programs=()):
     """Выжимка сайта для языковых моделей: кто, что сделано, с какими цифрами и откуда они."""
     age = pages.age_on(site["person"]["born"], dt.date.today())
     person = site["person"]
@@ -290,6 +313,12 @@ def llms_txt(site, own, client):
     for p in own:
         lines.append(f"- [{plain(p['title'])}]({SITE}/projects/{p['slug']}/): {plain(p['what'])}. "
                      f"Результат: {plain(p['row'])}. Роль: {plain(p['spec'][0][1])}. Период: {plain(p['spec'][1][1])}.")
+    if programs:
+        lines += ["", "## Программы", "",
+                  "Программы, которые Егор написал для своей SEO-работы. Ими пользуются коллеги, публично они не продаются.", ""]
+        for p in programs:
+            lines.append(f"- [{p['title']}]({SITE}/projects/{p['slug']}/): {plain(p['promise'])} "
+                         f"Работает с {pages.fmt_date(p['since'])}.")
     lines += ["", "## Клиентские проекты", "",
               "Названия и домены не раскрываются по договорённости с клиентами, цифры приведены как есть.", ""]
     for p in client:
@@ -323,21 +352,27 @@ def robots_txt():
 
 
 def main():
-    site, own, client = load()
+    site, own, client, programs = load()
+    # кадры программ: вырезка уже в 2x, в вёрстке нужны 1x и 2x
+    images.WIDTHS.update({f["img"]: [f["w"], f["w"] * 2] for p in programs for f in p["figs"]})
     img = images.build(SRC / "img", ROOT / "assets" / "img")
     ch = charts(site)
     css_v, js_v = ver(ROOT / "assets" / "site.css"), ver(ROOT / "assets" / "chart.js")
+    sw_css = f"/assets/software.css?v={ver(ROOT / 'assets' / 'software.css')}"
+    sw_js = f"/assets/software.js?v={ver(ROOT / 'assets' / 'software.js')}"
     age = pages.age_on(site["person"]["born"], dt.date.today())
-    nav = layout.nav(own, client)
+    nav = layout.nav(own, client, programs)
     written = []
 
     meta = site["meta"]
     head = layout.head(title=meta["title"], description=meta["description"], path="/", og_image="/assets/og/home.png",
                        og_type="profile", jsonld=home_ld(site, own, client, img), css_v=css_v,
-                       image_alt='Егор Протасов, SEO Lead и проектный менеджер', modified=meta['updated'])
-    body = pages.home(site, own, client, img, ch["home"], trace_paths(ch["_traces"]["home"]), age, nav)
+                       image_alt='Егор Протасов, SEO Lead и проектный менеджер', modified=meta['updated'],
+                       extra_css=[sw_css] if programs else ())
+    body = pages.home(site, own, client, img, ch["home"], trace_paths(ch["_traces"]["home"]), age, nav,
+                      programs_html=software.home_band(programs) if programs else "")
     written.append(write("index.html", layout.page(head_html=head, body=body, site=site, own=own, client=client,
-                                                   nav_data=nav, chart_js_v=js_v)))
+                                                   nav_data=nav, chart_js_v=js_v, programs=programs)))
 
     ordered = own + client
     extras = {"mediachef": lambda p: pages.bars(p["sources"], "Откуда приходят на сайт")}
@@ -352,22 +387,48 @@ def main():
                              asof=ASOF, trace=header_trace(ch['_traces'].get(slug)))
         written.append(write(f"projects/{slug}/index.html",
                              layout.page(head_html=head, body=body, site=site, own=own, client=client, nav_data=nav,
-                                         chart_js_v=js_v if slug in ch else None, sticky=True)))
+                                         chart_js_v=js_v if slug in ch else None, sticky=True, programs=programs)))
+
+    # посадочные программ
+    sw_pages = []
+    for p in programs:
+        slug = p["slug"]
+        head = layout.head(title=p["seo_title"], description=p["description"], path=f"/projects/{slug}/",
+                           og_image=f"/assets/og/{slug}.png", og_type="article", jsonld=software_ld(p, site),
+                           css_v=css_v, image_alt=f"{p['title']}: лист с чертежом программы",
+                           modified=site["meta"]["updated"], extra_css=[sw_css])
+        body = software.page(p, img=img, sheets=programs)
+        path = write(f"projects/{slug}/index.html",
+                     layout.page(head_html=head, body=body, site=site, own=own, client=client, nav_data=nav,
+                                 sticky=True, programs=programs, body_cls="sw", extra_js=[sw_js]))
+        written.append(path)
+        sw_pages.append(path)
 
     head = layout.head(title="Страница не найдена. Егор Протасов", description="Такой страницы нет.", path="/404.html",
                        og_image="/assets/og/home.png", og_type="website", jsonld=None, css_v=css_v, noindex=True)
     written.append(write("404.html", layout.page(head_html=head, body=pages.not_found(), site=site, own=own,
-                                                 client=client, nav_data=nav, sticky=True)))
+                                                 client=client, nav_data=nav, sticky=True, programs=programs)))
 
     # старые адреса кейсов
     for old, new in (("cases/adtech", "/projects/ad-network/"), ("cases/crypto", "/projects/crypto-exchange/"),
                      ("cases/p2p-lending", "/")):
         written.append(write(f"{old}/index.html", pages.redirect(new)))
 
-    urls = ["/"] + [f"/projects/{p['slug']}/" for p in ordered]
+    urls = ["/"] + [f"/projects/{p['slug']}/" for p in own + programs + client]
     written.append(write("sitemap.xml", pages.sitemap(urls, meta["updated"])))
     written.append(write("robots.txt", robots_txt()))
-    written.append(write("llms.txt", llms_txt(site, own, client)))
+    written.append(write("llms.txt", llms_txt(site, own, client, programs)))
+
+    # страницы программ не называют источники данных, стек и раздачу
+    # проверяется содержимое страницы, без общего подвала сайта (там рассказано, на чём собран сам сайт)
+    main_of = lambda html: html[html.index('<main id="main">'):html.index("</main>")]
+    leaks = {str(p.relative_to(ROOT)): h for p in sw_pages
+             if (h := guard.software_stop_hits(main_of(p.read_text(encoding="utf-8"))))}
+    if leaks:
+        print("СБОРКА ОСТАНОВЛЕНА: на страницах программ лишнее (источники данных, стек, раздача):")
+        for f, h in leaks.items():
+            print(f"  {f}: {', '.join(h)}")
+        sys.exit(1)
 
     # проверки: запрещённые слова во всём, что уходит в публичный репозиторий
     to_check = written + list(SRC.rglob("*.toml")) + list(SRC.rglob("*.csv"))
@@ -385,6 +446,7 @@ def main():
     if "--og" in sys.argv:
         from sitegen import og
         og.build(ROOT, site, own + client, ch["_traces"])
+        og.software(ROOT, programs)
 
     print(f"готово: {len(written)} файлов, предупреждений по тексту {len(warnings)}")
 

@@ -91,6 +91,42 @@ def _ico(png32_path, ico_path):
     ico_path.write_bytes(header + entry + data)
 
 
+SW_CSS = """*{box-sizing:border-box}html,body{margin:0;width:1200px;height:630px;overflow:hidden}
+body{--paper:#eeebe3;--ink2:#161513;--ink3:#4a463e;--ink4:#857f71;background:#eeebe3;color:#161513;
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;
+display:grid;grid-template-columns:520px 1fr;gap:30px;padding:58px 64px 52px;align-items:center}
+.lbl{display:flex;align-items:center;gap:12px;font-size:17px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#857f71}
+.lbl:before{content:"";width:28px;height:1.5px;background:#161513}
+h1{font-size:92px;line-height:.92;letter-spacing:-.05em;font-weight:800;margin:26px 0 22px}
+p{font-size:26px;line-height:1.34;color:#4a463e;margin:0}
+.url{position:absolute;left:64px;bottom:46px;font-size:20px;color:#857f71}
+.top{position:absolute;left:64px;top:44px;font-size:20px;color:#4a463e}
+.top b{color:#161513}
+.d{align-self:center}"""
+
+
+def software(root, programs):
+    """Превью посадочных программ: лист кальки с чертежом в цвете программы."""
+    from .drawings import thumb
+    root = pathlib.Path(root)
+    out = root / "assets" / "og"
+    out.mkdir(parents=True, exist_ok=True)
+    tmp = pathlib.Path(tempfile.mkdtemp(prefix="og-sw-"))
+    machine_css = (root / "assets" / "software.css").read_text(encoding="utf-8")
+    for p in programs:
+        html = (f'<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{machine_css}{SW_CSS}</style></head>'
+                f'<body style="--prog:{p["color"]}"><div><p class="lbl">Своя программа, лист {p["sheet"]} из {len(programs)}</p>'
+                f'<h1>{esc(p["title"])}</h1><p>{esc(plain(p["promise"]))}</p></div>'
+                f'<div class="d">{thumb(p["slug"])}</div>'
+                f'<div class="url">egorprotasov.ru/projects/{p["slug"]}/</div></body></html>')
+        src = tmp / f"{p['slug']}.html"
+        src.write_text(html, encoding="utf-8")
+        _render(src, out / f"{p['slug']}.png", 1200, 630)
+        subprocess.run(["sips", "-s", "format", "png", str(out / f"{p['slug']}.png")], capture_output=True, check=True)
+        print(f"  превью: assets/og/{p['slug']}.png")
+    shutil.rmtree(tmp, ignore_errors=True)
+
+
 def build(root, site, projects, traces):
     root = pathlib.Path(root)
     out = root / "assets" / "og"

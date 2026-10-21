@@ -25,6 +25,9 @@ h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
   text-transform: uppercase; color: var(--lime-mute); margin: 0 0 20px; }
 .lbl::before { content: ""; width: 22px; height: 1px; background: var(--lime); opacity: .7; }
 
+/* слова через дефис не рвутся: «по-человечески», «SEO-агентство» (разметку ставит sitegen/text.py) */
+.nw { white-space: nowrap; }
+
 /* появление при прокрутке */
 .rv { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2,.7,.2,1) var(--d, 0ms), transform .7s cubic-bezier(.2,.7,.2,1) var(--d, 0ms); }
 .rv.in { opacity: 1; transform: none; }
@@ -214,7 +217,7 @@ h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
   transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease; }
 .soc svg { width: 22px; height: 22px; fill: currentColor; }
 .soc:hover { background: var(--lime); color: #000; border-color: var(--lime); transform: translateY(-2px); }
-.f-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; padding: 56px 0; }
+.f-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 32px; padding: 56px 0; }
 .f-nav a { display: block; font-size: 16px; line-height: 2; color: #cfcfcf; transition: color .15s ease; }
 .f-nav a:hover { color: var(--lime); }
 .f-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 28px; padding-top: 28px; border-top: 1px solid var(--hair);

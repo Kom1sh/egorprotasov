@@ -71,7 +71,7 @@ def _client_list(client):
     return f'<ul class="c-list">{rows}</ul>'
 
 
-def home(site, own, client, img, chart_html, traces, age, nav):
+def home(site, own, client, img, chart_html, traces, age, nav, programs_html=""):
     person = site["person"]
     q = site["quote"]
     age_html = '<b data-born="' + person["born"] + f'">{age}</b>'
@@ -102,6 +102,8 @@ def home(site, own, client, img, chart_html, traces, age, nav):
 </section>
 
 {''.join(_own_section(p, img) for p in own)}
+
+{programs_html}
 
 <section class="clients" id="clients">
   <div class="wrap">

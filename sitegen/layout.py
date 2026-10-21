@@ -18,7 +18,7 @@ MAIL_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" widt
 
 
 def head(*, title, description, path, og_image, og_type, jsonld, css_v, noindex=False,
-         image_alt="", modified="", author="Егор Протасов"):
+         image_alt="", modified="", author="Егор Протасов", extra_css=()):
     url = SITE + path
     robots = ('<meta name="robots" content="noindex, follow">' if noindex else
               '<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">')
@@ -34,6 +34,7 @@ def head(*, title, description, path, og_image, og_type, jsonld, css_v, noindex=
                   '<meta property="profile:last_name" content="Протасов">',
                   '<meta property="profile:username" content="Kom1sh">']
     extra_html = "\n".join(extra)
+    css_links = "".join(f'<link rel="stylesheet" href="{h}">' for h in extra_css)
     return f"""<!doctype html>
 <html lang="ru">
 <head>
@@ -47,7 +48,7 @@ def head(*, title, description, path, og_image, og_type, jsonld, css_v, noindex=
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/site.css?v={css_v}">
+<link rel="stylesheet" href="/assets/site.css?v={css_v}">{css_links}
 <meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="Егор Протасов">
 <meta property="og:locale" content="ru_RU">
@@ -80,14 +81,19 @@ def socials(site):
     return "".join(out)
 
 
-def nav(own, client):
-    """Разделы в шапке: свои проекты, клиентские, обо мне."""
-    return [("Своё", [(p["nav_label"], f"/projects/{p['slug']}/") for p in own]),
+def nav(own, client, programs=()):
+    """Разделы в шапке: свои проекты, программы, клиентские, обо мне."""
+    cols = [("Своё", [(p["nav_label"], f"/projects/{p['slug']}/") for p in own])]
+    if programs:
+        cols.append(("Программы", [(p["nav_label"], f"/projects/{p['slug']}/") for p in programs]))
+    return cols + [
             ("Клиенты", [(p["nav_label"], f"/projects/{p['slug']}/") for p in client]),
             ("Обо мне", [("путь", "/#path"), ("вне работы", "/#life"), ("контакты", "/#contacts")])]
 
 
-def footer(site, own, client):
+def footer(site, own, client, programs=()):
+    sw_links = "".join(f'<a href="/projects/{p["slug"]}/">{inline(p["nav_label"])}</a>' for p in programs)
+    sw_col = f'<div><p class="lbl">Программы</p>{sw_links}</div>' if programs else ""
     own_links = "".join(f'<a href="/projects/{p["slug"]}/">{inline(p["nav_label"])}</a>' for p in own)
     cl_links = "".join(f'<a href="/projects/{p["slug"]}/">{inline(p["nav_label"])}</a>' for p in client)
     contacts = "".join(f'<a href="{esc(c["href"])}">{esc(c["foot_label"])}</a>'
@@ -100,7 +106,7 @@ def footer(site, own, client):
       <div class="f-soc">{socials(site)}</div>
     </div>
     <div class="f-nav">
-      <div><p class="lbl">Своё</p>{own_links}</div>
+      <div><p class="lbl">Своё</p>{own_links}</div>{sw_col}
       <div><p class="lbl">Клиенты</p>{cl_links}</div>
       <div><p class="lbl">Обо мне</p><a href="/#path">Путь</a><a href="/#life">Вне работы</a>
         <a href="https://kom1sh.github.io/seo-course/">Факультатив по SEO и GEO</a></div>
@@ -127,18 +133,23 @@ ym({counter},'init',{{ssr:true,webvisor:true,clickmap:true,accurateTrackBounce:t
 <noscript><div><img src="https://mc.yandex.ru/watch/{counter}" style="position:absolute;left:-9999px" alt=""></div></noscript>"""
 
 
-def page(*, head_html, body, site, own, client, nav_data, chart_js_v=None, sticky=False):
-    """sticky — липкая шапка отдельно: на главной она уже внутри первого экрана."""
+def page(*, head_html, body, site, own, client, nav_data, chart_js_v=None, sticky=False, programs=(),
+         body_cls="", extra_js=()):
+    """sticky — липкая шапка отдельно: на главной она уже внутри первого экрана.
+    body_cls и extra_js — для посадочных программ: своя шапка над калькой и своё движение."""
     bar = sticky_header(nav_data, home="/") if sticky else ""
     scripts = f'<script src="/assets/chart.js?v={chart_js_v}" defer></script>' if chart_js_v else ""
+    scripts += "".join(f'<script src="{src}" defer></script>' for src in extra_js)
+    cls = f' class="{body_cls}"' if body_cls else ""
     return f"""{head_html}
-<body>
+<body{cls}>
+<script>document.documentElement.classList.add('js')</script>
 <a class="skip" href="#main">Перейти к содержимому</a>
 {bar}
 <main id="main">
 {body}
 </main>
-{footer(site, own, client)}
+{footer(site, own, client, programs)}
 {scripts}<script src="/assets/motion.js" defer></script><script src="/assets/menu.js" defer></script>
 <script>{AGE_JS}</script>
 {metrika(site.get("analytics", {}).get("metrika"))}

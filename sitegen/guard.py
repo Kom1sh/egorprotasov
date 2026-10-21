@@ -33,6 +33,20 @@ STYLE_RULES = [
 ]
 
 
+# Страницы программ не называют источники данных, стек и раздачу: по ним программу можно повторить.
+# Ищется в тексте и в адресах ссылок, без разметки и стилей.
+SOFTWARE_STOP = re.compile(
+    r"ahrefs|semrush|wayback|web\.archive|archive\.org|веб-архив|lighthouse|pagespeed|search console|"
+    r"playwright|puppeteer|chromium|python|node\.js|\bnode\b|fastapi|sqlite|ollama|e5-small|\bpbn\b|"
+    r"get\.egorprotasov|ключ подключения", re.I)
+_HREF = re.compile(r'href="([^"]*)"')
+
+
+def software_stop_hits(html):
+    text = _TAGS.sub(" ", _SCRIPT.sub(" ", html)) + " " + " ".join(_HREF.findall(html))
+    return sorted({m.group(0).lower() for m in SOFTWARE_STOP.finditer(text)})
+
+
 def _h(s):
     return hashlib.sha256(s.encode()).hexdigest()[:20]
 
