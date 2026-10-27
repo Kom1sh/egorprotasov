@@ -458,25 +458,24 @@ body.shot-lap .ph-body { padding-top: 220px; }
 .c-go { pointer-events: none; }
 
 /* ——— телефон: первый экран на всю высоту ———
-   разделы — в кнопке шапки, она видна сразу. Три зоны: цитата крупно сверху, имя посередине
-   в контуре круга, «Связаться» снизу во всю ширину. «Сейчас» на телефоне не показываем — это есть в «Пути» */
+   разделы — в кнопке шапки, она видна сразу. Цитата крупно ровно по центру экрана (поровну свободного места
+   сверху и снизу), имя, роль и «Связаться» — одной группой внизу. «Сейчас» на телефоне не показываем —
+   это есть в «Пути». Контур круга на узком экране читается то прямой через текст, то целой фигуркой — убран */
 @media (max-width: 960px) {
   .bar { transform: none; }
   .hero-top { display: none; }
   .hero { padding-bottom: 40px; }
-  .hero-mid { min-height: 100svh; padding: 118px 22px 34px; display: flex; flex-direction: column; justify-content: space-between; }
+  .hero-mid { min-height: 100svh; padding: 84px 22px 34px; display: flex; flex-direction: column; }
+  .quote { margin: auto 0; }
   .quote p { font-size: clamp(40px, 14vw, 64px); line-height: .94; }
   .quote p .l { max-width: 6.6em; margin: 0 auto; text-wrap: balance; }
   .quote footer { margin-top: 22px; font-size: 11px; letter-spacing: .2em; }
-  .who-line { margin-top: 0; font-size: 26px; }
-  .who-role { margin-top: 10px; font-size: 11px; letter-spacing: .18em; line-height: 1.7; }
-  .hero-act { margin-top: 0; }
+  .who-line { margin-top: 0; font-size: 24px; }
+  .who-role { margin-top: 8px; font-size: 11px; letter-spacing: .18em; line-height: 1.7; }
+  .hero-act { margin-top: 26px; }
   .hero-act .now { display: none; }
   .hero-act .btn-contact { width: 100%; justify-content: center; padding: 18px 28px; font-size: 17px; }
-  /* контур круга целиком вокруг имени, а не одной прямой через экран */
-  /* ширина 125vw — контур помещается в экран с полями; центр — там, где встаёт блок с именем */
-  .bp { width: 125vw; height: calc(125vw / 1.2); top: calc(50svh + 105px - 55vw); }
-  .bp .lap-start, .bp .traces { display: none; }
+  .bp .lap { display: none; }
 
   /* меню разделов: две колонки под шапкой, длинное — прокручивается */
   .overlay { place-items: start center; padding: 112px 22px 40px; }
