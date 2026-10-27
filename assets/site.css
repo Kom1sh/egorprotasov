@@ -246,10 +246,14 @@ h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
   .c-when { text-align: left; }
   .p-list li { grid-template-columns: 62px 28px minmax(0, 1fr); gap: 0 14px; }
   .p-year { font-size: 30px; text-align: left; padding-top: 6px; }
-  .p-list p { font-size: 18px; }
+  /* под текст пункта на узком экране остаётся ~170px: «автогенерируемых» в одну строку не влезает */
+  .p-list p { font-size: 18px; -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 12 5 4; overflow-wrap: break-word; }
   .life-row { grid-template-columns: 1fr; gap: 32px; }
   .f-top { flex-direction: column; align-items: flex-start; }
-  .f-nav { grid-template-columns: 1fr 1fr; }
+  /* колонки строго пополам: адрес почты и подпись «Программы» не раздвигают подвал шире экрана */
+  .f-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; }
+  .f-nav > div:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .f-nav a { overflow-wrap: anywhere; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
