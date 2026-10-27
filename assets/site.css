@@ -460,7 +460,7 @@ body.shot-lap .ph-body { padding-top: 220px; }
 /* ——— телефон: первый экран на всю высоту ———
    разделы — в кнопке шапки, она видна сразу. Цитата крупно ровно по центру экрана (поровну свободного места
    сверху и снизу), имя, роль и «Связаться» — одной группой внизу. «Сейчас» на телефоне не показываем —
-   это есть в «Пути». Контур круга на узком экране читается то прямой через текст, то целой фигуркой — убран */
+   это есть в «Пути» */
 @media (max-width: 960px) {
   .bar { transform: none; }
   .hero-top { display: none; }
@@ -475,7 +475,9 @@ body.shot-lap .ph-body { padding-top: 220px; }
   .hero-act { margin-top: 26px; }
   .hero-act .now { display: none; }
   .hero-act .btn-contact { width: 100%; justify-content: center; padding: 18px 28px; font-size: 17px; }
-  .bp .lap { display: none; }
+  /* контур круга крупно и только правой половиной: верхняя прямая — под цитатой, S-изгибы проходят
+     через середину экрана к имени, по ним бежит лаймовый отрезок; целиком трасса не видна */
+  .bp { width: 333vw; height: 277.5vw; left: -180.8vw; transform: none; top: calc(50svh - 23px - 89.3vw); }
 
   /* меню разделов: две колонки под шапкой, длинное — прокручивается */
   .overlay { place-items: start center; padding: 112px 22px 40px; }
