@@ -67,11 +67,19 @@ def _client_list(client):
         f'<li><span class="c-idx" aria-hidden="true">0{i + 1}</span>'
         f'<span class="c-name"><a href="{url(p)}">{inline(p["title"])}</a></span>'
         f'<span class="c-res">{inline(p["row"])}</span>'
-        f'<span class="c-when">{esc(p["home_when"])}</span></li>' for i, p in enumerate(client))
+        f'<span class="c-when">{esc(p["home_when"])}</span>'
+        f'<span class="c-go" aria-hidden="true">{ICON_SET["next"]}</span></li>' for i, p in enumerate(client))
     return f'<ul class="c-list">{rows}</ul>'
 
 
-def home(site, own, client, img, chart_html, traces, age, nav, programs_html=""):
+def _hero_photo(img):
+    """Портрет первого экрана: резкий поверх размытой копии самого себя — градиент из цветов фото."""
+    return ('<div class="hero-photo">'
+            f'<div class="hp-glow" aria-hidden="true">{picture(img, "egor-cut", "", display_w=560, eager=True)}</div>'
+            f'{picture(img, "egor-cut", "Егор Протасов", display_w=560, eager=True, cls="hp-img")}</div>')
+
+
+def home(site, own, client, img, chart_html, traces, age, nav, programs_html="", hero_photo=True):
     person = site["person"]
     q = site["quote"]
     age_html = '<b data-born="' + person["born"] + f'">{age}</b>'
@@ -82,15 +90,21 @@ def home(site, own, client, img, chart_html, traces, age, nav, programs_html="")
                    (it["photo"], it["photo_alt"], it.get("fig", ""), it.get("caption", "")) if it.get("photo") else None)
                   for i, it in enumerate(site["path"])]
 
-    return f"""{hero(quote_lines=[(c, esc(t)) for c, t in q["lines"]], quote_author=esc(q["author"]),
-                     name_line=esc(person["name"]), role=esc(person["role_line"]),
-                     now_text=inline(person["now"]), traces=traces, nav=nav)}
-  <div class="bio">
+    if hero_photo:
+        bio_html = f'<div class="bio solo"><div class="bio-text">{bio}</div></div>'
+    else:
+        bio_html = f"""<div class="bio">
     <div class="bio-text">{bio}</div>
     <div class="rule" aria-hidden="true"><i></i></div>
     <figure class="portrait">{picture(img, "egor", "Егор Протасов", display_w=380, eager=True)}
       <figcaption><span class="nm">{esc(person["name"])}</span><span class="rl">{esc(person["role_line"])}</span></figcaption></figure>
-  </div>
+  </div>"""
+
+    return f"""{hero(quote_lines=[(c, esc(t)) for c, t in q["lines"]], quote_author=esc(q["author"]),
+                     name_line=esc(person["name"]), role=inline(person["role_line"]),
+                     now_text=inline(person["now"]), traces=traces, nav=nav,
+                     photo=_hero_photo(img) if hero_photo else "")}
+  {bio_html}
 </header>
 
 <section class="tele" id="telemetry">
@@ -109,6 +123,7 @@ def home(site, own, client, img, chart_html, traces, age, nav, programs_html="")
   <div class="wrap">
     <p class="lbl">Клиентские проекты</p>
     <h2 class="cap">{inline(site["clients_caption"])}</h2>
+    <p class="cap-note">{inline(site["clients_note"])}</p>
     {_client_list(client)}
   </div>
 </section>
@@ -117,7 +132,7 @@ def home(site, own, client, img, chart_html, traces, age, nav, programs_html="")
 
 <section class="life" id="life">
   <div class="wrap life-row">
-    <figure class="life-photo"><span class="fr" aria-hidden="true"></span>{picture(img, life["photo"], life["photo_alt"], display_w=800)}</figure>
+    <figure class="life-photo">{picture(img, life["photo"], life["photo_alt"], display_w=800)}</figure>
     <div>
       <p class="lbl">Вне работы</p>
       <p class="life-lead">{inline(life["lead"])}</p>

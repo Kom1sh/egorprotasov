@@ -12,12 +12,17 @@ from .text import esc
 # ширины, которые реально используются в вёрстке (1x и 2x)
 WIDTHS = {
     "egor": [380, 760],
-    "winners": [520, 1040],
+    "egor-cut": [560, 1120],  # портрет первого экрана с прозрачным фоном (WebP хранит альфу)
+    "winners": [560, 1120],
     "track": [800, 1600],
     "mapka-shot": [1240, 1800],
     "techkio-shot": [1240, 1800],
     "mediachef-shot": [1240, 1800],
 }
+
+
+# JPEG прозрачности не держит, а sips заливает её белым: запасной JPEG берём с готовой версии на чёрном
+JPEG_FROM = {"egor-cut": "egor.jpg"}
 
 
 def _dims(path):
@@ -42,9 +47,10 @@ def build(src_dir, out_dir):
             w = min(w, w0)
             meta[name]["widths"].append(w)
             jpg, webp = out_dir / f"{name}-{w}.jpg", out_dir / f"{name}-{w}.webp"
-            if not jpg.exists() or jpg.stat().st_mtime < src.stat().st_mtime:
+            jsrc = src_dir / JPEG_FROM[name] if name in JPEG_FROM else src
+            if not jpg.exists() or jpg.stat().st_mtime < max(src.stat().st_mtime, jsrc.stat().st_mtime):
                 subprocess.run(["sips", "-s", "format", "jpeg", "-s", "formatOptions", "82",
-                                "--resampleWidth", str(w), str(src), "--out", str(jpg)],
+                                "--resampleWidth", str(w), str(jsrc), "--out", str(jpg)],
                                capture_output=True, check=True)
             if not webp.exists() or webp.stat().st_mtime < src.stat().st_mtime:
                 subprocess.run(["cwebp", "-quiet", "-q", "80", "-resize", str(w), "0", str(src), "-o", str(webp)],

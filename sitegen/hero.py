@@ -59,7 +59,7 @@ def sticky_header(nav, home="#top"):
     return f"""<header class="bar" id="bar">
   <a class="plate" href="{home}" aria-label="Егор Протасов, на главную">{LOGO}<span>Протасов</span></a>
   <button class="index" type="button" aria-expanded="false" aria-controls="index-menu">
-    <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="index-lbl">Разделы</span>
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="index-lbl"><span class="when-closed">Разделы</span><span class="when-open">Закрыть</span></span>
   </button>
 </header>
 <div class="overlay" id="index-menu" hidden>
@@ -69,15 +69,17 @@ def sticky_header(nav, home="#top"):
 </div>"""
 
 
-def hero(*, quote_lines, quote_author, name_line, role, now_text, traces, nav):
+def hero(*, quote_lines, quote_author, name_line, role, now_text, traces, nav, photo=""):
+    """photo — разметка портрета, который растворяется в градиенте из собственных цветов (пусто — без него)."""
     cols = "".join(
         f'<div><p class="lbl">{title}</p><ul>'
         + "".join(f'<li><a href="{href}"><i aria-hidden="true"></i>{label}</a></li>' for label, href in items)
         + "</ul></div>" for title, items in nav)
     q = "".join(f'<span class="{cls}">{text}</span>' for cls, text in quote_lines)
     return f"""{sticky_header(nav)}
-<header class="hero" id="top">
+<header class="hero{' has-photo' if photo else ''}" id="top">
   {blueprint(traces)}
+  {photo}
   <div class="hero-top">
     <a class="logo" href="#top" aria-label="Егор Протасов">{LOGO}<span>Протасов</span></a>
     <nav class="menu top" aria-label="Разделы">{cols}</nav>
@@ -102,8 +104,7 @@ def path_section(items, img=None):
         ph = ""
         if photo:
             cap = f'<figcaption><b>рис. {photo[2]}</b> {photo[3]}</figcaption>' if photo[3] else ""
-            ph = (f'<figure class="p-photo"><span class="fr" aria-hidden="true"></span>'
-                  f'{picture(img, photo[0], photo[1], display_w=520)}{cap}</figure>')
+            ph = f'<figure class="p-photo">{picture(img, photo[0], photo[1], display_w=560)}{cap}</figure>'
         rows.append(f'<li{" class=cont" if not year else ""}><span class="p-year">{year}</span>'
                     f'<span class="p-node" aria-hidden="true"></span><div><p>{text}</p>{ph}</div></li>')
     return f"""<section class="path-sec" id="path">
