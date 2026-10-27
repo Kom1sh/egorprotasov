@@ -69,17 +69,15 @@ def sticky_header(nav, home="#top"):
 </div>"""
 
 
-def hero(*, quote_lines, quote_author, name_line, role, now_text, traces, nav, photo=""):
-    """photo — разметка портрета, который растворяется в градиенте из собственных цветов (пусто — без него)."""
+def hero(*, quote_lines, quote_author, name_line, role, now_text, traces, nav):
     cols = "".join(
         f'<div><p class="lbl">{title}</p><ul>'
         + "".join(f'<li><a href="{href}"><i aria-hidden="true"></i>{label}</a></li>' for label, href in items)
         + "</ul></div>" for title, items in nav)
     q = "".join(f'<span class="{cls}">{text}</span>' for cls, text in quote_lines)
     return f"""{sticky_header(nav)}
-<header class="hero{' has-photo' if photo else ''}" id="top">
+<header class="hero" id="top">
   {blueprint(traces)}
-  {photo}
   <div class="hero-top">
     <a class="logo" href="#top" aria-label="Егор Протасов">{LOGO}<span>Протасов</span></a>
     <nav class="menu top" aria-label="Разделы">{cols}</nav>

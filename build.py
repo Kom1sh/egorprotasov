@@ -3,7 +3,6 @@
 
     python3 build.py          # страницы, картинки, sitemap, проверки
     python3 build.py --og     # плюс превью для соцсетей и иконки (нужен Google Chrome)
-    python3 build.py --preview  # плюс _preview/classic/ — главная без портрета на первом экране, для сравнения
 
 Контент — src/site.toml и src/projects/*.toml, ряды для графиков — src/data/*.csv,
 исходные фото — src/img. Результат пишется в корень репозитория, его отдаёт GitHub Pages.
@@ -374,13 +373,6 @@ def main():
                       programs_html=software.home_band(programs) if programs else "")
     written.append(write("index.html", layout.page(head_html=head, body=body, site=site, own=own, client=client,
                                                    nav_data=nav, chart_js_v=js_v, programs=programs)))
-    if "--preview" in sys.argv:
-        # прежний первый экран без портрета — для сравнения, только локально (_preview/ в .gitignore)
-        classic = pages.home(site, own, client, img, ch["home"], trace_paths(ch["_traces"]["home"]), age, nav,
-                             programs_html=software.home_band(programs) if programs else "", hero_photo=False)
-        write("_preview/classic/index.html", layout.page(head_html=head, body=classic, site=site, own=own,
-                                                         client=client, nav_data=nav, chart_js_v=js_v,
-                                                         programs=programs))
 
     ordered = own + client
     extras = {"mediachef": lambda p: pages.bars(p["sources"], "Откуда приходят на сайт")}

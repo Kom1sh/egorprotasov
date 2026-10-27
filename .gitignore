@@ -2,4 +2,3 @@
 *.tmp.png
 .DS_Store
 __pycache__/
-_preview/

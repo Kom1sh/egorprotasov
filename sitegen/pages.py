@@ -72,14 +72,7 @@ def _client_list(client):
     return f'<ul class="c-list">{rows}</ul>'
 
 
-def _hero_photo(img):
-    """Портрет первого экрана: резкий поверх размытой копии самого себя — градиент из цветов фото."""
-    return ('<div class="hero-photo">'
-            f'<div class="hp-glow" aria-hidden="true">{picture(img, "egor-cut", "", display_w=560, eager=True)}</div>'
-            f'{picture(img, "egor-cut", "Егор Протасов", display_w=560, eager=True, cls="hp-img")}</div>')
-
-
-def home(site, own, client, img, chart_html, traces, age, nav, programs_html="", hero_photo=True):
+def home(site, own, client, img, chart_html, traces, age, nav, programs_html=""):
     person = site["person"]
     q = site["quote"]
     age_html = '<b data-born="' + person["born"] + f'">{age}</b>'
@@ -90,21 +83,15 @@ def home(site, own, client, img, chart_html, traces, age, nav, programs_html="",
                    (it["photo"], it["photo_alt"], it.get("fig", ""), it.get("caption", "")) if it.get("photo") else None)
                   for i, it in enumerate(site["path"])]
 
-    if hero_photo:
-        bio_html = f'<div class="bio solo"><div class="bio-text">{bio}</div></div>'
-    else:
-        bio_html = f"""<div class="bio">
+    return f"""{hero(quote_lines=[(c, esc(t)) for c, t in q["lines"]], quote_author=esc(q["author"]),
+                     name_line=esc(person["name"]), role=inline(person["role_line"]),
+                     now_text=inline(person["now"]), traces=traces, nav=nav)}
+  <div class="bio">
     <div class="bio-text">{bio}</div>
     <div class="rule" aria-hidden="true"><i></i></div>
     <figure class="portrait">{picture(img, "egor", "Егор Протасов", display_w=380, eager=True)}
-      <figcaption><span class="nm">{esc(person["name"])}</span><span class="rl">{esc(person["role_line"])}</span></figcaption></figure>
-  </div>"""
-
-    return f"""{hero(quote_lines=[(c, esc(t)) for c, t in q["lines"]], quote_author=esc(q["author"]),
-                     name_line=esc(person["name"]), role=inline(person["role_line"]),
-                     now_text=inline(person["now"]), traces=traces, nav=nav,
-                     photo=_hero_photo(img) if hero_photo else "")}
-  {bio_html}
+      <figcaption><span class="nm">{esc(person["name"])}</span><span class="rl">{inline(person["role_line"])}</span></figcaption></figure>
+  </div>
 </header>
 
 <section class="tele" id="telemetry">
