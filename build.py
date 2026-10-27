@@ -16,7 +16,7 @@ import sys
 import tomllib
 
 from sitegen import chart as C
-from sitegen import guard, images, layout, pages, software
+from sitegen import cv, guard, images, layout, pages, software
 from sitegen.text import plain
 
 ROOT = pathlib.Path(__file__).resolve().parent
@@ -28,6 +28,7 @@ ASOF = "20 сентября 2026"
 
 def load():
     site = tomllib.loads((SRC / "site.toml").read_text(encoding="utf-8"))
+    site["cv"] = tomllib.loads((SRC / "cv.toml").read_text(encoding="utf-8"))
     projects = [tomllib.loads(p.read_text(encoding="utf-8")) for p in sorted((SRC / "projects").glob("*.toml"))]
     own = sorted((p for p in projects if p["kind"] == "own"), key=lambda p: p["order"])
     client = sorted((p for p in projects if p["kind"] == "client"), key=lambda p: p["order"])
@@ -433,6 +434,9 @@ def main():
     # проверки: запрещённые слова во всём, что уходит в публичный репозиторий
     to_check = written + list(SRC.rglob("*.toml")) + list(SRC.rglob("*.csv"))
     bad = {str(p.relative_to(ROOT)): h for p in to_check if (h := guard.forbidden_hits(p.read_text(encoding="utf-8")))}
+    # CV проверяется до печати: PDF сразу уходит в публичный репозиторий
+    if h := guard.forbidden_hits(cv.html(site, site["cv"], own, client, programs, ASOF)):
+        bad["CV (src/cv.toml + проекты)"] = h
     if bad:
         print("СБОРКА ОСТАНОВЛЕНА: на страницах запрещённые слова (названия клиентов или агентства):")
         for f in bad:
@@ -440,6 +444,8 @@ def main():
         sys.exit(1)
     warnings = [(str(p.relative_to(ROOT)), w) for p in written if p.suffix == ".html"
                 for w in guard.style_warnings(p.read_text(encoding="utf-8"))]
+    _, cv_warns = cv.build(ROOT, site, site["cv"], own, client, programs, ASOF)
+    warnings += [("CV", w) for w in cv_warns]
     for f, w in warnings:
         print(f"  предупреждение {f}: {w}")
 

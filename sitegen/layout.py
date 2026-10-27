@@ -98,6 +98,8 @@ def footer(site, own, client, programs=()):
     cl_links = "".join(f'<a href="/projects/{p["slug"]}/">{inline(p["nav_label"])}</a>' for p in client)
     contacts = "".join(f'<a href="{esc(c["href"])}">{esc(c["foot_label"])}</a>'
                        for c in site["contacts"] if c.get("foot_label"))
+    if cv := site.get("cv"):
+        contacts += f'<a href="/{cv["file"]}" download="{esc(cv["download_name"])}">CV в PDF</a>'
     return f"""<footer class="foot" id="contacts">
   <div class="wrap">
     <div class="f-top">
@@ -137,7 +139,7 @@ def page(*, head_html, body, site, own, client, nav_data, chart_js_v=None, stick
          body_cls="", extra_js=()):
     """sticky — липкая шапка отдельно: на главной она уже внутри первого экрана.
     body_cls и extra_js — для посадочных программ: своя шапка над калькой и своё движение."""
-    bar = sticky_header(nav_data, home="/") if sticky else ""
+    bar = sticky_header(nav_data, home="/", cv=site.get("cv")) if sticky else ""
     scripts = f'<script src="/assets/chart.js?v={chart_js_v}" defer></script>' if chart_js_v else ""
     scripts += "".join(f'<script src="{src}" defer></script>' for src in extra_js)
     cls = f' class="{body_cls}"' if body_cls else ""

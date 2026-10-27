@@ -85,7 +85,7 @@ def home(site, own, client, img, chart_html, traces, age, nav, programs_html="")
 
     return f"""{hero(quote_lines=[(c, esc(t)) for c, t in q["lines"]], quote_author=esc(q["author"]),
                      name_line=esc(person["name"]), role=inline(person["role_line"]),
-                     now_text=inline(person["now"]), traces=traces, nav=nav)}
+                     now_text=inline(person["now"]), traces=traces, nav=nav, cv=site.get("cv"))}
   <div class="bio">
     <div class="bio-text">{bio}</div>
     <div class="rule" aria-hidden="true"><i></i></div>

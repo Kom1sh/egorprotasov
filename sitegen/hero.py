@@ -1,4 +1,5 @@
 """Первый экран: контур круга, цитата вместо имени, липкая шапка. И «Путь» с осью."""
+from .text import esc
 
 LIME = "#bfe828"
 
@@ -18,7 +19,16 @@ ICON_SET = {
     "cube": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>',
     "wave": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h2M7 8v8M11 4v16M15 7v10M19 10v4M21 12h0"/></svg>',
     "board": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg>',
+    "download": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>',
 }
+
+
+def cv_link(cv, cls, label=None, tag=""):
+    """Ссылка на CV в PDF (src/cv.toml): файл сохраняется под человеческим именем."""
+    if not cv:
+        return ""
+    return (f'<a class="{cls}" href="/{cv["file"]}" download="{esc(cv["download_name"])}">{ICON_SET["download"]}'
+            f'<span>{esc(label or cv["button"])}</span>{tag}</a>')
 
 # Контур гоночного круга: по нему идёт светящийся сегмент.
 LAP = ("M260 880 L900 880 C 1040 880, 1120 820, 1120 750 C 1120 690, 1060 650, 990 644 "
@@ -51,35 +61,39 @@ def lap_backdrop():
                             box="0 0 1440 1200", fit="xMidYMid slice")
 
 
-def sticky_header(nav, home="#top"):
+def sticky_header(nav, home="#top", cv=None):
     cols = "".join(
         f'<div><p class="lbl">{title}</p><ul>'
         + "".join(f'<li><a href="{href}"><i aria-hidden="true"></i>{label}</a></li>' for label, href in items)
         + "</ul></div>" for title, items in nav)
     return f"""<header class="bar" id="bar">
   <a class="plate" href="{home}" aria-label="Егор Протасов, на главную">{LOGO}<span>Протасов</span></a>
+  {cv_link(cv, "bar-cv", "CV")}
   <button class="index" type="button" aria-expanded="false" aria-controls="index-menu">
     <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="index-lbl"><span class="when-closed">Разделы</span><span class="when-open">Закрыть</span></span>
   </button>
 </header>
 <div class="overlay" id="index-menu" hidden>
   <div class="ov-inner"><nav class="menu" aria-label="Разделы">{cols}</nav>
-    <div class="ov-foot"><a class="btn-contact" href="https://t.me/Kom1sh"><span>Написать в Telegram</span></a></div>
+    <div class="ov-foot"><a class="btn-contact" href="https://t.me/Kom1sh"><span>Написать в Telegram</span></a>
+      {cv_link(cv, "ov-cv")}</div>
   </div>
 </div>"""
 
 
-def hero(*, quote_lines, quote_author, name_line, role, now_text, traces, nav):
+def hero(*, quote_lines, quote_author, name_line, role, now_text, traces, nav, cv=None):
+    """cv — src/cv.toml: на десктопе ссылка под логотипом, на телефоне — кнопка под «Связаться»."""
     cols = "".join(
         f'<div><p class="lbl">{title}</p><ul>'
         + "".join(f'<li><a href="{href}"><i aria-hidden="true"></i>{label}</a></li>' for label, href in items)
         + "</ul></div>" for title, items in nav)
     q = "".join(f'<span class="{cls}">{text}</span>' for cls, text in quote_lines)
-    return f"""{sticky_header(nav)}
+    return f"""{sticky_header(nav, cv=cv)}
 <header class="hero" id="top">
   {blueprint(traces)}
   <div class="hero-top">
-    <a class="logo" href="#top" aria-label="Егор Протасов">{LOGO}<span>Протасов</span></a>
+    <div class="top-id"><a class="logo" href="#top" aria-label="Егор Протасов">{LOGO}<span>Протасов</span></a>
+      {cv_link(cv, "cv-link", tag='<small>PDF</small>')}</div>
     <nav class="menu top" aria-label="Разделы">{cols}</nav>
   </div>
   <div class="hero-mid">
@@ -90,6 +104,7 @@ def hero(*, quote_lines, quote_author, name_line, role, now_text, traces, nav):
       <a class="btn-contact" href="https://t.me/Kom1sh">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.4c-.9.3-.9 1.6 0 1.9l4.7 1.5 1.8 5.6c.3.8 1.3 1 1.9.4l2.6-2.5 4.7 3.5c.7.5 1.7.1 1.9-.7l3.1-15c.2-1-.7-1.8-1.6-1.4Z" fill="currentColor" stroke="none"/></svg>
         <span>Связаться</span></a>
+      {cv_link(cv, "btn-cv")}
       <p class="now"><span class="badge">Сейчас</span>{now_text}</p>
     </div>
   </div>"""
