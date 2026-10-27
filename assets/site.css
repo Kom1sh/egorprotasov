@@ -457,21 +457,26 @@ body.shot-lap .ph-body { padding-top: 220px; }
 .c-name a::after { content: ""; position: absolute; inset: 0; }
 .c-go { pointer-events: none; }
 
-/* ——— телефон: первый экран как на десктопе ———
-   разделы — в кнопке шапки, она видна сразу; цитата во всю ширину двумя строками */
+/* ——— телефон: первый экран на всю высоту ———
+   разделы — в кнопке шапки, она видна сразу. Три зоны: цитата крупно сверху, имя посередине
+   в контуре круга, «Связаться» снизу во всю ширину. «Сейчас» на телефоне не показываем — это есть в «Пути» */
 @media (max-width: 960px) {
   .bar { transform: none; }
   .hero-top { display: none; }
-  .hero-mid { padding: 0 20px; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
   .hero { padding-bottom: 40px; }
-  .quote p { font-size: clamp(28px, 8.8vw, 64px); }
-  .quote footer { margin-top: 20px; font-size: 11px; letter-spacing: .2em; }
-  .who-line { margin-top: 34px; font-size: 22px; }
-  .who-role { font-size: 11px; letter-spacing: .18em; line-height: 1.7; }
-  .hero-act { flex-direction: column; gap: 16px; margin-top: 28px; }
-  /* «Сейчас»: метка сверху, текст под ней — без пилюли, которая ломается на две строки */
-  .now { flex-direction: column; gap: 9px; max-width: 300px; padding: 9px 22px 15px; border-radius: 18px;
-    line-height: 1.55; letter-spacing: .11em; text-align: center; }
+  .hero-mid { min-height: 100svh; padding: 118px 22px 34px; display: flex; flex-direction: column; justify-content: space-between; }
+  .quote p { font-size: clamp(40px, 14vw, 64px); line-height: .94; }
+  .quote p .l { max-width: 6.6em; margin: 0 auto; text-wrap: balance; }
+  .quote footer { margin-top: 22px; font-size: 11px; letter-spacing: .2em; }
+  .who-line { margin-top: 0; font-size: 26px; }
+  .who-role { margin-top: 10px; font-size: 11px; letter-spacing: .18em; line-height: 1.7; }
+  .hero-act { margin-top: 0; }
+  .hero-act .now { display: none; }
+  .hero-act .btn-contact { width: 100%; justify-content: center; padding: 18px 28px; font-size: 17px; }
+  /* контур круга целиком вокруг имени, а не одной прямой через экран */
+  /* ширина 125vw — контур помещается в экран с полями; центр — там, где встаёт блок с именем */
+  .bp { width: 125vw; height: calc(125vw / 1.2); top: calc(50svh + 105px - 55vw); }
+  .bp .lap-start, .bp .traces { display: none; }
 
   /* меню разделов: две колонки под шапкой, длинное — прокручивается */
   .overlay { place-items: start center; padding: 112px 22px 40px; }
